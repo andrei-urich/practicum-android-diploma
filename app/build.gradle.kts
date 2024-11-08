@@ -87,8 +87,6 @@ dependencies {
 
     implementation("androidx.constraintlayout:constraintlayout:2.2.0")
 
-    implementation ("androidx.recyclerview:recyclerview:1.3.2")
-    implementation ("androidx.recyclerview:recyclerview-selection:1.1.0")
-
-    implementation ("com.android.support:cardview-v7:28.0.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
 }
