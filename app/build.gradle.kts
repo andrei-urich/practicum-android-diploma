@@ -44,6 +44,7 @@ dependencies {
     val retrofit2Version = "2.9.0"
     val navigationVersion = "2.5.3"
     val roomVersion = "2.5.1"
+    val lifecycleVersion = "2.8.6"
 
     implementation(libs.androidX.core)
     implementation(libs.androidX.appCompat)
@@ -77,4 +78,17 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
+
+    implementation("com.google.android.material:material:1.12.0")
+
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+
+    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
+
+    implementation ("androidx.recyclerview:recyclerview:1.3.2")
+    implementation ("androidx.recyclerview:recyclerview-selection:1.1.0")
+
+    implementation ("com.android.support:cardview-v7:28.0.0")
 }
