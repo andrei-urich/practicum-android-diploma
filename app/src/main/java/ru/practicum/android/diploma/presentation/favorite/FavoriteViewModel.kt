@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 
 class FavoriteViewModel : ViewModel() {
 
-    private fun getLiveData() {
+    fun getLiveData() {
         println("пустая ВМ")
     }
 }

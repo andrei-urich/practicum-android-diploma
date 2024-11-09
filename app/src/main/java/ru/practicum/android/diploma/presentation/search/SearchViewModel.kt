@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 
 class SearchViewModel : ViewModel() {
 
-    private fun getLiveData() {
+    fun getLiveData() {
         println("пустая ВМ")
     }
 }
