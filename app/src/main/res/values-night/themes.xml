@@ -1,7 +1,19 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary -->
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorOnPrimary">@color/white_universal</item>
+        <!-- Secondary -->
+        <item name="colorSecondary">@color/black_universal</item>
+        <item name="colorOnSecondary">@color/white_universal</item>
+        <!-- Основные фрагменты интерфейса -->
+        <item name="backgroundColor">@color/black_universal</item>
+        <item name="itemIconTint">@color/grey</item>
+        <item name="android:textColorHint">@color/white_universal</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="hintTextColor">@color/light_grey</item>
+        <item name="android:statusBarColor">@color/black_universal</item>
+        <item name="android:background">@color/black_universal</item>
     </style>
 </resources>
