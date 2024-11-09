@@ -3,18 +3,15 @@
     <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary -->
         <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryVariant">@color/grey</item>
         <item name="colorOnPrimary">@color/white_universal</item>
         <!-- Secondary -->
-        <item name="colorSecondary">@color/white_universal</item>
-        <item name="colorOnSecondary">@color/black_universal</item>
-        <!-- Основные фрагменты интерфейса -->
-        <item name="backgroundColor">@color/white_day_night</item>
-        <item name="itemIconTint">@color/light_grey</item>
-        <item name="android:textColorHint">@color/grey</item>
-        <item name="android:textColor">@color/black_universal</item>
-        <item name="hintTextColor">@color/grey</item>
-        <item name="android:statusBarColor">@color/white_universal</item>
-        <item name="android:background">@color/white_universal</item>
+        <item name="colorSecondary">@color/black_day_night</item>
+        <item name="colorSecondaryVariant">@color/white_day_night</item>
+        <item name="colorOnSecondary">@color/light_grey</item>
+        <!-- StatusBar color -->
+        <item name="android:statusBarColor">?attr/colorSecondaryVariant</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.PracticumAndroidDiploma" parent="Base.Theme.PracticumAndroidDiploma" />
