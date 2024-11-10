@@ -2,9 +2,10 @@ package ru.practicum.android.diploma.data.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "fav_vacancies")
+@Entity(tableName = "fav_vacancies", indices = [Index("vacancyId", unique = true)])
 data class FavVacancyEntity(
     // preview
     val name: String,
@@ -20,7 +21,8 @@ data class FavVacancyEntity(
     val description: String = "",
     val keySkills: String = "",
     val type: String,
+    val vacancyId: String = "",
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "fav_vacancy_id")
-    val id: Int = 0
+    @ColumnInfo(name = "inner_vacancy_id")
+    val innerId: Int = 0
 )
