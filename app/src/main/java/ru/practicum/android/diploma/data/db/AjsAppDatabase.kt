@@ -5,6 +5,6 @@ import androidx.room.RoomDatabase
 
 @Database(
     version = 1,
-    entities = []
+    entities = [FavVacancyEntity::class]
 )
 abstract class AjsAppDatabase : RoomDatabase()
