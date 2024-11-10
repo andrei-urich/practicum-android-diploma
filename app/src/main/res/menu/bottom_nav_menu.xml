@@ -4,7 +4,6 @@
         android:id="@+id/searchFragment"
         android:icon="@drawable/main_menu_icon"
         android:title="@string/main_bottom_nav" />
-
     <item
         android:id="@+id/favoriteFragment"
         android:icon="@drawable/favorite_menu"
