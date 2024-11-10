@@ -10,7 +10,7 @@ interface FavVacancyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavVacancy(favVacancy: FavVacancyEntity)
 
-    @Query("DELETE from fav_vacancies WHERE fav_vacancy_id LIKE :favVacancyId")
+    @Query("DELETE from fav_vacancies WHERE vacancyId LIKE :favVacancyId")
     suspend fun deleteFavVacancyFromDB(favVacancyId: Int)
 
     @Query("SELECT * from fav_vacancies")
