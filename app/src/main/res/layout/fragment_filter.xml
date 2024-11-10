@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.search.SearchFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         style="@style/ToolbarTitleText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/search_title_tv">
-
+        app:layout_constraintTop_toTopOf="parent">
         <ImageView
-            android:id="@+id/searchFilter"
-            android:layout_height="wrap_content"
+            android:id="@+id/backFromFilter"
             android:layout_width="wrap_content"
-            android:src="@drawable/filter_off_icon"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_back_icon"
             app:tint="?attr/colorSecondary"
-            android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/space_20"/>
+            android:layout_marginEnd="@dimen/space_16"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ToolbarTitleText"
+            android:layout_marginStart="@dimen/space_16"
+            android:text="@string/filter_settings_title_tv" />
     </com.google.android.material.appbar.MaterialToolbar>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
