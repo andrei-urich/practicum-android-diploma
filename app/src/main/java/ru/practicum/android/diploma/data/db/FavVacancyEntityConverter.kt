@@ -10,8 +10,8 @@ class FavVacancyEntityConverter {
         }
     }
 
-    fun map(vacancy:String): FavVacancyEntity{
+    fun map(vacancy: String): FavVacancyEntity {
         /* 2DO заменить String на класс Vacancy */
-        return FavVacancyEntity(vacancy,vacancy,vacancy, type = vacancy)
+        return FavVacancyEntity(vacancy, vacancy, vacancy, type = vacancy)
     }
 }
