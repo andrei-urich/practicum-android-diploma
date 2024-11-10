@@ -43,7 +43,7 @@ android {
 dependencies {
     val retrofit2Version = "2.9.0"
     val navigationVersion = "2.5.3"
-    val roomVersion = "2.5.1"
+    val roomVersion = "2.6.1"
     val lifecycleVersion = "2.8.6"
 
     implementation(libs.androidX.core)
