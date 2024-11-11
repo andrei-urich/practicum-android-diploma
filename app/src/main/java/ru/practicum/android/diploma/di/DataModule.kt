@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.data.utils.InternetAccessChecker
 val dataModule = module {
     single { InternetAccessChecker() }
     single {
-        Room.databaseBuilder(androidContext(), AjsAppDatabase::class.java, "ajsdatabase.db")
+        Room.databaseBuilder(androidContext(), AjsAppDatabase::class.java, "database.db")
             .fallbackToDestructiveMigration()
             .build()
     }
