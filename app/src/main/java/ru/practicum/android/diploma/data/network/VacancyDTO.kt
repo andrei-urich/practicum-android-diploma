@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.data.search
+package ru.practicum.android.diploma.data.network
 
 import ru.practicum.android.diploma.util.EMPTY_STRING
 
