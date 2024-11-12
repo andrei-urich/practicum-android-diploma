@@ -4,9 +4,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.utils.InternetAccessChecker
 import ru.practicum.android.diploma.util.ACCESS_TOKEN
-import ru.practicum.android.diploma.util.RESULT_CODE_ERROR
-import ru.practicum.android.diploma.util.RESULT_CODE_NOT_FOUND
-import ru.practicum.android.diploma.util.RESULT_CODE_OK
 
 class RetrofitNetworkClient(
     private val apiService: AppAPI,
@@ -28,12 +25,18 @@ class RetrofitNetworkClient(
                 }
 
                 else -> {
-                    resultCode = RESULT_CODE_NOT_FOUND
+                    resultCode = RESULT_CODE_BAD_REQUEST
                 }
             }
         } else {
-            resultCode = RESULT_CODE_ERROR
+            resultCode = RESULT_CODE_OFFLINE
         }
         return Response().apply { resultCode }
+    }
+
+    companion object {
+        const val RESULT_CODE_OK = 200
+        const val RESULT_CODE_BAD_REQUEST = 400
+        const val RESULT_CODE_OFFLINE = -1
     }
 }
