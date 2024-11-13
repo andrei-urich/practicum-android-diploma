@@ -71,7 +71,7 @@ dependencies {
 
     // Di libraries
     implementation(libs.koin.android)
-    
+
     // region Unit tests
     testImplementation(libs.unitTests.junit)
     // endregion
@@ -80,13 +80,4 @@ dependencies {
     androidTestImplementation(libs.uiTests.junitExt)
     androidTestImplementation(libs.uiTests.espressoCore)
     // endregion
-
-
-
-
-
-
-
-
-
 }

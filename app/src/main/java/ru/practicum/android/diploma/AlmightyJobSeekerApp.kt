@@ -13,7 +13,7 @@ class AlmightyJobSeekerApp : Application() {
         super.onCreate()
 
         startKoin {
-            androidContext(this@AjsApp)
+            androidContext(this@AlmightyJobSeekerApp)
             modules(dataModule, interactorModule, repositoryModule, viewModelModule)
         }
     }
