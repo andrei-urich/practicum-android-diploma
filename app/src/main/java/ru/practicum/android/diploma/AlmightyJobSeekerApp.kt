@@ -8,12 +8,12 @@ import ru.practicum.android.diploma.di.interactorModule
 import ru.practicum.android.diploma.di.repositoryModule
 import ru.practicum.android.diploma.di.viewModelModule
 
-class AjsApp : Application() {
+class AlmightyJobSeekerApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
         startKoin {
-            androidContext(this@AjsApp)
+            androidContext(this@AlmightyJobSeekerApp)
             modules(dataModule, interactorModule, repositoryModule, viewModelModule)
         }
     }
