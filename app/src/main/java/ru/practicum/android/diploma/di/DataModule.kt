@@ -6,16 +6,19 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.data.db.AjsAppDatabase
+import ru.practicum.android.diploma.data.db.FavVacancyEntityConverter
 import ru.practicum.android.diploma.data.network.AppAPI
 import ru.practicum.android.diploma.data.utils.InternetAccessChecker
 
 val dataModule = module {
     single { InternetAccessChecker() }
+    // DB
     single {
         Room.databaseBuilder(androidContext(), AjsAppDatabase::class.java, "database.db")
             .fallbackToDestructiveMigration()
             .build()
     }
+    factory { FavVacancyEntityConverter() }
 
     single<AppAPI> {
         Retrofit.Builder()
