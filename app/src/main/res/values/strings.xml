@@ -1,3 +1,91 @@
 <resources>
-    <string name="app_name">Practicum-Android-Diploma</string>
+    <string name="app_name">Almighty job seeker</string>
+
+    <!-- общие ошибки -->
+    <string name="internet_throwable_tv">Нет интернета</string>
+    <string name="toast_internet_throwable">Проверьте подключение к интернету</string>
+    <string name="toast_unknown_error">Произошла ошибка</string>
+    <string name="server_throwable_tv">Ошибка сервера</string>
+    <string name="load_vacancy_throwable_tv">Не удалось получить\nсписок вакансий</string>
+
+    <!-- bottom navigation -->
+    <string name="main_bottom_nav">Главная</string>
+    <string name="favorite_bottom_nav">Избранное</string>
+    <string name="about_bottom_nav">Команда</string>
+
+    <!-- экран поиска вакансий -->
+    <string name="search_title_tv">Поиск вакансий</string>
+    <string name="hint_search_vacancy_et">Введите запрос</string>
+    <string name="no_vacancies_found_title">Таких вакансий нет</string>
+
+    <!-- для адаптера поиска, вакансия + страна, пример: Разработчик, Москва -->
+    <string name="vacancy_item_title" translatable="false">%1$s, %2$s</string>
+
+    <!-- фильтры -->
+    <string name="filter_settings_title_tv">Настройки фильтрации</string>
+    <string name="place_of_work_btn">Место работы</string>
+    <string name="industry_btn">Отрасль</string>
+    <string name="expected_salary_hint_et">Ожидаемая зарплата</string>
+    <string name="amount_hint_et">Введите сумму</string>
+    <string name="hide_without_salary_tv">Не показывать без зарплаты</string>
+    <string name="apply_btn">Применить</string>
+    <string name="reset_btn">Сбросить</string>
+
+    <!-- выбор места работы -->
+    <string name="choosing_place_of_work_title_tv">Выбор места работы</string>
+    <string name="country_btn">Страна</string>
+    <string name="area_btn">Регион</string>
+    <string name="accept_btn">Выбрать</string>
+
+    <!-- выбор страны -->
+    <string name="choosing_country_title_tv">Выбор страны</string>
+
+    <!-- выбор региона -->
+    <string name="choosing_area_title_tv">Выбор региона</string>
+    <string name="hint_choosing_area_et">Введите регион</string>
+    <string name="nothing_found_choosing_area_tv">Такого региона нет</string>
+    <string name="search_throwable_choosing_area_tv">Не удалось получить\nсписок</string>
+
+    <!-- выбор отрасли -->
+    <string name="choosing_industry_title_tv">Выбор отрасли</string>
+    <string name="choosing_industry_hint_tet">Введите отрасль</string>
+
+    <!-- детали вакансии -->
+    <string name="vacancy_detail_title_tv">Вакансия</string>
+    <string name="required_experience_tv">Требуемый опыт</string>
+    <string name="job_description_tv">Описание вакансии</string>
+    <string name="responsibilities_tv">Обязанности</string>
+    <string name="requirements_tv">Требования</string>
+    <string name="work_conditions_tv">Условия</string>
+    <string name="key_skills_tv">Ключевые навыки</string>
+    <string name="share_vacancy">Поделиться вакансией</string>
+    <string name="add_favorite_vacancy">Добавить в избранное</string>
+    <string name="salary_not_found">Зарплата не указана</string>
+    <string name="salary_from">от %1$s %2$s</string>
+    <string name="salary_to">до %1$s %2$s</string>
+    <string name="salary_from_to">от %1$s до %2$s %3$s</string>
+
+    <!-- избранное -->
+    <string name="favorite_vacancy_title_tv">Избранное</string>
+    <string name="nothing_shown_vacancy_tv">Список пуст</string>
+
+    <!-- команда -->
+    <string name="about_title_tv">Команда</string>
+    <string name="workers_title_tv">Над приложением\nработали</string>
+    <string name="worker_1">Андрей Курышев</string>
+    <string name="worker_2">Вячеслав Иванов</string>
+    <string name="worker_3">Маркуш Казанцев</string>
+    <string name="worker_4">Дмитрий Кузнецов</string>
+
+    <!-- валютные обозначения -->
+    <string name="currency_symbol_azn">₼</string>
+    <string name="currency_symbol_byr">Br</string>
+    <string name="currency_symbol_eur">€</string>
+    <string name="currency_symbol_gel">₾</string>
+    <string name="currency_symbol_kgs">c</string>
+    <string name="currency_symbol_kzt">₸</string>
+    <string name="currency_symbol_rub">₽</string>
+    <string name="currency_symbol_uah">₴</string>
+    <string name="currency_symbol_usd">$</string>
+    <string name="currency_symbol_uzs">сум</string>
 </resources>
