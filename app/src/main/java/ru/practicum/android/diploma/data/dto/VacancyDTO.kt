@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.data.network
+package ru.practicum.android.diploma.data.dto
 
 import ru.practicum.android.diploma.util.EMPTY_STRING
 
