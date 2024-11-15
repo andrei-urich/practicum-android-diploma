@@ -1,17 +1,14 @@
 package ru.practicum.android.diploma.data.db
 
+import ru.practicum.android.diploma.domain.models.Vacancy
+
 class FavVacancyEntityConverter {
-    fun map(favVacancyEntity: FavVacancyEntity?): String? {
-        return if (favVacancyEntity != null) {
-            /* 2DO заменить String на класс Vacancy */
-            favVacancyEntity.name
-        } else {
-            null
-        }
+    fun map(favVacancyEntity: FavVacancyEntity): Vacancy {
+        return Vacancy(favVacancyEntity.name)
     }
 
-    fun map(vacancy: String): FavVacancyEntity {
-        /* 2DO заменить String на класс Vacancy */
-        return FavVacancyEntity(vacancy, vacancy, vacancy, type = vacancy)
+// 2DO Исправить конвертер после создания финальной версии Vacancy
+    fun map(vacancy: Vacancy): FavVacancyEntity {
+        return FavVacancyEntity(vacancy.name, vacancy.name, vacancy.name, type = vacancy.name)
     }
 }
