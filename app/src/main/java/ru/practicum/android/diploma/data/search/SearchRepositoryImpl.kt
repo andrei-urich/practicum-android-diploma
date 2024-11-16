@@ -22,10 +22,10 @@ class SearchRepositoryImpl(
                     val list = response.results
                     val vacancies = list.map {
                         VacancyShort(
-                            it.vacancyId,
+                            it.id,
                             it.name,
                             it.employer,
-                            it.areas,
+                            it.area,
                             it.salary
                         )
                     }

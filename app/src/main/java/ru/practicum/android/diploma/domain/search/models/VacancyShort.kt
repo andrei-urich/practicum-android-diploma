@@ -8,7 +8,7 @@ data class VacancyShort(
     val vacancyId: String?,
     val name: String?,
     val employer: String?,
-    val areas: String?,
+    val area: String?,
     val salary: String?,
     val currency: String? = EMPTY_STRING,
     val artLink: String? = EMPTY_STRING
@@ -27,7 +27,7 @@ data class VacancyShort(
         parcel.writeString(vacancyId)
         parcel.writeString(name)
         parcel.writeString(employer)
-        parcel.writeString(areas)
+        parcel.writeString(area)
         parcel.writeString(salary)
         parcel.writeString(currency)
         parcel.writeString(artLink)
