@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.domain.search.models.VacancyShort
 
-class VacanciesRecyclerViewAdapter(private val vacancyList: List<Vacancy>) :
+class VacanciesRecyclerViewAdapter(private val vacancyList: List<VacancyShort>) :
     RecyclerView.Adapter<VacanciesRecyclerViewHolder>() {
     private var onClickListener: OnClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VacanciesRecyclerViewHolder {
@@ -32,6 +32,6 @@ class VacanciesRecyclerViewAdapter(private val vacancyList: List<Vacancy>) :
     }
 
     interface OnClickListener {
-        fun onClick(position: Int, vacancy: Vacancy)
+        fun onClick(position: Int, vacancy: VacancyShort)
     }
 }
