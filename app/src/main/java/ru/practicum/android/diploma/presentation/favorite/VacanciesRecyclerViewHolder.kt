@@ -17,7 +17,7 @@ class VacanciesRecyclerViewHolder(parentView: View) : RecyclerView.ViewHolder(pa
     fun bind(vacancy: VacancyShort) {
         vacancyNameAndCityTV.text = itemView.context.getString(R.string.vacancy_item_title, vacancy.name, vacancy.area)
         companyNameTV.text = vacancy.employer
-        salaryTV.text = vacancy.salary
+        salaryTV.text = "${vacancy.salary} ${vacancy.currency}"
         Glide.with(itemView)
             .load(Uri.parse(vacancy.artLink))
             .placeholder(R.drawable.placeholder)
