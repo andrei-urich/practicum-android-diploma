@@ -30,7 +30,9 @@ class SearchRepositoryImpl(
                         )
                     }
                     emit(Resource.Success(vacancies))
-                } else emit(Resource.Error(response.resultCode))
+                } else {
+                    emit(Resource.Error(response.resultCode))
+                }
             }
 
             else -> emit(Resource.Error(response.resultCode))

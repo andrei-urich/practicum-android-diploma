@@ -23,7 +23,7 @@ class RetrofitNetworkClient(
                             dto.request
                         )
                     }
-                    return response.apply { resultCode=response.resultCode }
+                    return response.apply { resultCode = response.resultCode }
                 }
 
                 else -> {
