@@ -1,10 +1,33 @@
 package ru.practicum.android.diploma.presentation.favorite
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.favorite.interactors.GetFavoriteVacanciesListInteractor
+import ru.practicum.android.diploma.presentation.favorite.model.FavoritesScreenState
 
-class FavoriteViewModel : ViewModel() {
+class FavoriteViewModel(
+    private val getFavoriteVacanciesListInteractor: GetFavoriteVacanciesListInteractor,
+    private val dispatcherIO: CoroutineDispatcher
+) : ViewModel() {
+    private val favoriteVacanciesScreenStateLiveData =
+        MutableLiveData<FavoritesScreenState>(FavoritesScreenState.LoadingFavoriteScreen)
 
-    fun getLiveData() {
-        println("пустая ВМ")
+    fun getFavoriteVacanciesScreenStateLiveData(): LiveData<FavoritesScreenState> {
+        return favoriteVacanciesScreenStateLiveData
+    }
+
+    fun getFavoriteVacanciesList() {
+        viewModelScope.launch(dispatcherIO) {
+            getFavoriteVacanciesListInteractor.getFavVacanciesList().collect {
+                if (it.isEmpty())
+                    favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.EmptyFavoriteScreen)
+                else favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.FilledFavoriteScreen(it))
+            }
+        }
     }
 }
+
