@@ -5,13 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavoriteBinding
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
 import ru.practicum.android.diploma.presentation.favorite.FavoriteViewModel
 import ru.practicum.android.diploma.presentation.favorite.FavoritesScreenState
 import ru.practicum.android.diploma.presentation.favorite.VacanciesRecyclerViewAdapter
+import ru.practicum.android.diploma.ui.vacancydetails.VacancyDetailsFragment
+import ru.practicum.android.diploma.util.CLICK_FAVORITE_DEBOUNCE_DELAY
+import ru.practicum.android.diploma.util.debounce
 
 class FavoriteFragment : Fragment() {
     private var _binding: FragmentFavoriteBinding? = null
@@ -35,6 +41,19 @@ class FavoriteFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val favoriteRecyclerViewAdapter = VacanciesRecyclerViewAdapter(vacancyList)
         binding.favoritesRecyclerView.adapter = favoriteRecyclerViewAdapter
+        val onVacancyClickDebounce =
+            debounce<String?>(CLICK_FAVORITE_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) {
+                findNavController().navigate(
+                    R.id.action_favoriteFragment_to_vacancyDetailsFragment,
+                    VacancyDetailsFragment.createArgs(it)
+                )
+            }
+        favoriteRecyclerViewAdapter.setOnClickListener(object : VacanciesRecyclerViewAdapter.OnClickListener {
+            override fun onClick(position: Int, vacancy: VacancyShort) {
+                onVacancyClickDebounce(vacancy.vacancyId)
+            }
+
+        })
         viewModel.getFavoriteVacanciesScreenStateLiveData().observe(viewLifecycleOwner) {
             when (it) {
                 is FavoritesScreenState.LoadingFavoriteScreen -> loadingScreenState()

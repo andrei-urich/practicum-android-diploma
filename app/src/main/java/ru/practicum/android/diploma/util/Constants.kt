@@ -11,7 +11,10 @@ const val RESULT_CODE_BAD_REQUEST = 400
 const val RESULT_CODE_ERROR = -1
 const val CODE_200 = 200
 const val CODE_299 = 299
-const val DISPATCHER_IO_NAME = "dispatcherIO"
 
 // ---- Details Vacancy const ----
 const val DETAILS_VACANCY_ID = "vacancyID"
+
+// ---- Favorite Vacancy const ----
+const val DISPATCHER_IO_NAME = "dispatcherIO"
+const val CLICK_FAVORITE_DEBOUNCE_DELAY = 2000L
