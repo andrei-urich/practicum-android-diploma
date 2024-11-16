@@ -8,7 +8,7 @@
     android:paddingVertical="@dimen/space_8">
 
     <ImageView
-        android:id="@+id/employerLogoIv"
+        android:id="@+id/employerLogoIVRecycler"
         android:layout_width="@dimen/size_48"
         android:layout_height="@dimen/size_48"
         android:layout_gravity="center"
@@ -25,7 +25,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/vacancyNameAndCity"
+        android:id="@+id/vacancyNameAndCityTVRecycler"
         android:layout_width="@dimen/space_0"
         android:layout_height="wrap_content"
         android:fontFamily="@font/ys_display_medium"
@@ -33,13 +33,13 @@
         android:textColor="@color/black_day_night"
         android:textSize="@dimen/font_22"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/employerLogoIv"
+        app:layout_constraintStart_toEndOf="@+id/employerLogoIVRecycler"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="RtlSymmetry"
         tools:text="Требуется крутой разработчик, Пермь" />
 
     <TextView
-        android:id="@+id/companyName"
+        android:id="@+id/companyNameTVRecycler"
         android:layout_width="@dimen/space_0"
         android:layout_height="wrap_content"
         android:fontFamily="@font/ys_display_regular"
@@ -47,13 +47,13 @@
         android:textColor="@color/black_day_night"
         android:textSize="@dimen/font_16"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/vacancyNameAndCity"
-        app:layout_constraintTop_toBottomOf="@+id/vacancyNameAndCity"
+        app:layout_constraintStart_toStartOf="@+id/vacancyNameAndCityTVRecycler"
+        app:layout_constraintTop_toBottomOf="@+id/vacancyNameAndCityTVRecycler"
         tools:ignore="RtlSymmetry"
         tools:text="Google" />
 
     <TextView
-        android:id="@+id/salary"
+        android:id="@+id/salaryTVRecycler"
         android:layout_width="@dimen/space_0"
         android:layout_height="wrap_content"
         android:fontFamily="@font/ys_display_regular"
@@ -61,8 +61,8 @@
         android:textColor="@color/black_day_night"
         android:textSize="@dimen/font_16"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/vacancyNameAndCity"
-        app:layout_constraintTop_toBottomOf="@+id/companyName"
+        app:layout_constraintStart_toStartOf="@+id/vacancyNameAndCityTVRecycler"
+        app:layout_constraintTop_toBottomOf="@+id/companyNameTVRecycler"
         tools:ignore="RtlSymmetry"
         tools:text="от 40 000 до 200 000 ₽" />
 
