@@ -17,5 +17,5 @@ val favoriteDataModule = module {
             .build()
     }
     factory { FavVacancyEntityConverter() }
-    single<CoroutineDispatcher>(named(DISPATCHER_IO_NAME)){Dispatchers.IO}
+    single<CoroutineDispatcher>(named(DISPATCHER_IO_NAME)) { Dispatchers.IO }
 }

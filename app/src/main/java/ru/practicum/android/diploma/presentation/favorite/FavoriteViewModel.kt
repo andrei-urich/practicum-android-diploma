@@ -23,11 +23,10 @@ class FavoriteViewModel(
     fun getFavoriteVacanciesList() {
         viewModelScope.launch(dispatcherIO) {
             getFavoriteVacanciesListInteractor.getFavVacanciesList().collect {
-                if (it.isEmpty())
+                if (it.isEmpty()) {
                     favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.EmptyFavoriteScreen)
-                else favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.FilledFavoriteScreen(it))
+                } else { favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.FilledFavoriteScreen(it)) }
             }
         }
     }
 }
-
