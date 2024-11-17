@@ -8,6 +8,7 @@ import ru.practicum.android.diploma.di.favorite.favoriteInteractorModule
 import ru.practicum.android.diploma.di.favorite.favoriteRepositoryModule
 import ru.practicum.android.diploma.di.favorite.favoriteViewModelModule
 import ru.practicum.android.diploma.di.search.searchDataModule
+import ru.practicum.android.diploma.di.search.searchViewModelModule
 import ru.practicum.android.diploma.di.vacancydetails.vacancyDetailsDataModule
 import ru.practicum.android.diploma.di.vacancydetails.vacancyDetailsInteractorModule
 import ru.practicum.android.diploma.di.vacancydetails.vacancyDetailsRepositoryModule
@@ -28,7 +29,8 @@ class AlmightyJobSeekerApp : Application() {
                 vacancyDetailsDataModule,
                 vacancyDetailsRepositoryModule,
                 vacancyDetailsInteractorModule,
-                vacancyDetailsViewModelModule
+                vacancyDetailsViewModelModule,
+                searchViewModelModule
             )
         }
     }
