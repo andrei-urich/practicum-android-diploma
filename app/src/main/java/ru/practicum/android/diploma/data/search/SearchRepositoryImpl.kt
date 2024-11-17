@@ -11,6 +11,7 @@ import ru.practicum.android.diploma.domain.search.SearchRepository
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
 import ru.practicum.android.diploma.util.CODE_200
 import ru.practicum.android.diploma.util.CODE_299
+import ru.practicum.android.diploma.util.EMPTY_STRING
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient
@@ -28,10 +29,10 @@ class SearchRepositoryImpl(
                             name = it.name,
                             employer = it.employer.name,
                             area = it.area.name,
-                            salaryFrom = it.salary.from,
-                            salaryTo = it.salary.to,
-                            currency = it.salary.currency,
-                            logoLink = it.employer.logo
+                            salaryFrom = it.salary?.from,
+                            salaryTo = it.salary?.to,
+                            currency = it.salary?.currency,
+                            logoLink = it.employer.logo_urls?.original ?: EMPTY_STRING
                         )
                     }
                     emit(Resource.Success(vacancies))

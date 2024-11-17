@@ -109,12 +109,12 @@ class SearchFragment : Fragment() {
             }
 
             LOADING -> {
-                clearPlaceholders()
+                clearScreen(showCase)
                 binding.mainProgressBar.visibility = View.VISIBLE
             }
 
             SHOW_RESULT -> {
-                clearPlaceholders()
+                clearScreen(showCase)
                 binding.mainProgressBar.visibility = View.GONE
                 binding.vacancyListRv.adapter = searchAdapter
                 binding.vacancyListRv.layoutManager = LinearLayoutManager(requireActivity())
@@ -165,5 +165,4 @@ class SearchFragment : Fragment() {
         _viewBinding = null
         super.onDestroyView()
     }
-
 }
