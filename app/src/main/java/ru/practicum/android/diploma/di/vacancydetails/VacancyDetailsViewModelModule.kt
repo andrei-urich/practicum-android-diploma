@@ -7,6 +7,6 @@ import ru.practicum.android.diploma.presentation.vacancydetails.VacancyDetailsVi
 val vacancyDetailsViewModelModule = module {
 
     viewModel {
-        VacancyDetailsViewModel(get(), get())
+        VacancyDetailsViewModel(get())
     }
 }

@@ -7,6 +7,6 @@ import ru.practicum.android.diploma.domain.vacancydetails.impl.VacancyDetailsInt
 val vacancyDetailsInteractorModule = module {
 
     single<VacancyDetailsInteractor> {
-        VacancyDetailsInteractorImpl(get(), get())
+        VacancyDetailsInteractorImpl(get())
     }
 }
