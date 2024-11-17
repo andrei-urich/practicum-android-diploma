@@ -7,5 +7,3 @@ data class VacancyDTO(
     val employer: EmployerDTO,
     val salary: SalaryDTO?
 )
-
-
