@@ -8,6 +8,10 @@ import ru.practicum.android.diploma.di.favorite.favoriteInteractorModule
 import ru.practicum.android.diploma.di.favorite.favoriteRepositoryModule
 import ru.practicum.android.diploma.di.favorite.favoriteViewModelModule
 import ru.practicum.android.diploma.di.search.searchDataModule
+import ru.practicum.android.diploma.di.vacancydetails.vacancyDetailsDataModule
+import ru.practicum.android.diploma.di.vacancydetails.vacancyDetailsInteractorModule
+import ru.practicum.android.diploma.di.vacancydetails.vacancyDetailsRepositoryModule
+import ru.practicum.android.diploma.di.vacancydetails.vacancyDetailsViewModelModule
 
 class AlmightyJobSeekerApp : Application() {
     override fun onCreate() {
@@ -20,7 +24,11 @@ class AlmightyJobSeekerApp : Application() {
                 favoriteDataModule,
                 favoriteRepositoryModule,
                 favoriteInteractorModule,
-                favoriteViewModelModule
+                favoriteViewModelModule,
+                vacancyDetailsDataModule,
+                vacancyDetailsRepositoryModule,
+                vacancyDetailsInteractorModule,
+                vacancyDetailsViewModelModule
             )
         }
     }
