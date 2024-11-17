@@ -28,7 +28,9 @@ class SearchViewModel(
     fun getOpenTrigger(): LiveData<VacancyShort> = openTrigger
     fun getSearchText(searchText: String) {
         this.searchText = searchText
-        searchDebounce(searchText)
+        if (searchText.isNotBlank()) {
+            searchDebounce(searchText)
+        }
     }
 
     private fun request(request: String) {
@@ -36,7 +38,7 @@ class SearchViewModel(
             searchStateLiveData.postValue(SearchState.Loading)
             viewModelScope.launch {
                 interactor.search(
-                    EMPTY_STRING
+                    request
                 ).collect { pair ->
                     when (pair.first) {
                         null -> searchStateLiveData.postValue(

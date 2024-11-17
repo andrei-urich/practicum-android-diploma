@@ -2,9 +2,9 @@ package ru.practicum.android.diploma.data.search
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import ru.practicum.android.diploma.data.network.NetworkClient
-import ru.practicum.android.diploma.data.network.VacanciesResponse
-import ru.practicum.android.diploma.data.network.VacancySearchRequest
+import ru.practicum.android.diploma.data.search.network.NetworkClient
+import ru.practicum.android.diploma.data.search.network.VacanciesResponse
+import ru.practicum.android.diploma.data.search.network.VacancySearchRequest
 import ru.practicum.android.diploma.domain.search.Resource
 import ru.practicum.android.diploma.domain.search.SearchRepository
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
@@ -24,9 +24,9 @@ class SearchRepositoryImpl(
                         VacancyShort(
                             it.id,
                             it.name,
-                            it.employer,
-                            it.area,
-                            it.salary
+//                            it.employer,
+//                            it.area,
+//                            it.salary
                         )
                     }
                     emit(Resource.Success(vacancies))

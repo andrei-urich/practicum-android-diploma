@@ -30,7 +30,7 @@ class SearchFragment : Fragment() {
     private val binding get() = _viewBinding!!
     private var vacancies = mutableListOf<VacancyShort>()
     private val viewModel: SearchViewModel by viewModel()
-    private val searchAdapter = SearchAdapter(vacancies, viewModel::showVacancy)
+    private lateinit var searchAdapter: SearchAdapter
     private val inputMethodManager by lazy {
         requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
     }
@@ -46,6 +46,8 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        searchAdapter = SearchAdapter(vacancies, viewModel::showVacancy)
+
         binding.searchEditText.setText(searchText)
 
         val searchTextWatcher = object : TextWatcher {
