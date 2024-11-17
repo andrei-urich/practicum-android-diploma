@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.ui.search
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.VacancyItemBinding
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
+import ru.practicum.android.diploma.util.SalaryToString
 
 class VacancyViewHolder(
     private val binding: VacancyItemBinding,
@@ -15,7 +16,10 @@ class VacancyViewHolder(
     }
 
     fun bind(vacancy: VacancyShort) {
-        binding.vacancyNameAndCityTVRecycler.text = vacancy.name
-        binding.companyNameTVRecycler.text = vacancy.vacancyId
+        val title = vacancy.name + ", " + vacancy.area
+        val salary = SalaryToString.getSalary(vacancy)
+        binding.vacancyNameAndCityTVRecycler.text = title
+        binding.companyNameTVRecycler.text = vacancy.employer
+        binding.salaryTVRecycler.text = salary
     }
 }

@@ -19,7 +19,7 @@ class VacanciesRecyclerViewHolder(parentView: View) : RecyclerView.ViewHolder(pa
         companyNameTV.text = vacancy.employer
         salaryTV.text = "${vacancy.salary} ${vacancy.currency}"
         Glide.with(itemView)
-            .load(Uri.parse(vacancy.artLink))
+            .load(Uri.parse(vacancy.logoLink))
             .placeholder(R.drawable.placeholder)
             .error(R.drawable.placeholder)
             .fitCenter()

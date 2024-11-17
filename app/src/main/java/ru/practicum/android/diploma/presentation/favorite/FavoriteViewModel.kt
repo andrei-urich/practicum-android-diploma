@@ -8,6 +8,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.favorite.interactors.GetFavoriteVacanciesListInteractor
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
+import ru.practicum.android.diploma.util.CODE_200
+import ru.practicum.android.diploma.util.CODE_299
 
 class FavoriteViewModel(
     private val getFavoriteVacanciesListInteractor: GetFavoriteVacanciesListInteractor,
@@ -24,8 +26,8 @@ class FavoriteViewModel(
         favoriteVacanciesScreenStateLiveData.postValue(
             FavoritesScreenState.FilledFavoriteScreen(
                 listOf(
-                    VacancyShort("23", "developer", "yandex", "Spb", "100500", "Р"),
-                    VacancyShort("24", "developer2", "skillbox", "Msk", "500100", "$")
+                    VacancyShort("23", "developer", "yandex", "Spb", CODE_200, null, currency = "Р"),
+                    VacancyShort("24", "developer2", "skillbox", "Msk", CODE_299, null, currency = "$")
                 )
             )
 

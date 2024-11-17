@@ -48,8 +48,6 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         searchAdapter = SearchAdapter(vacancies, viewModel::showVacancy)
 
-        binding.searchEditText.setText(searchText)
-
         val searchTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 println()
@@ -57,7 +55,7 @@ class SearchFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchText = s.toString()
-                clearScreen(s)
+                //clearScreen(s)
                 viewModel.getSearchText(searchText)
             }
 
@@ -135,10 +133,8 @@ class SearchFragment : Fragment() {
 
     private fun clearScreen(s: CharSequence?) {
         if (s.isNullOrBlank()) {
-            binding.searchEditText.setText(EMPTY_STRING)
             clearPlaceholders()
             inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
-            binding.searchEditText.clearFocus()
         }
     }
 

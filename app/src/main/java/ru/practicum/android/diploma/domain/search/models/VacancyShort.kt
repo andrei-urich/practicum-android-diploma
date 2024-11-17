@@ -7,7 +7,11 @@ data class VacancyShort(
     val name: String?,
     val employer: String? = EMPTY_STRING,
     val area: String? = EMPTY_STRING,
-    val salary: String? = EMPTY_STRING,
+    val salaryTo: Int?,
+    val salaryFrom: Int?,
     val currency: String? = EMPTY_STRING,
-    val artLink: String? = EMPTY_STRING
+    val logoLink: String? = EMPTY_STRING,
+
+    // Оставил пока, чтобы ошибки не было в избранном (во вьюХолдере). Убрать
+    val salary: String? = EMPTY_STRING
 )
