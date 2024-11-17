@@ -1,25 +1,38 @@
 package ru.practicum.android.diploma.domain.vacancydetails.models
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import ru.practicum.android.diploma.data.vacancydetails.EmployerInfo
+import ru.practicum.android.diploma.data.vacancydetails.NameInfo
+import ru.practicum.android.diploma.data.vacancydetails.SalaryInfo
+import ru.practicum.android.diploma.data.vacancydetails.VacancyBase
 
-@Parcelize
-data class VacancyDetails(
-    val id: Int,
-    val name: String,
-    val employerName: String,
-    val employerLogoUrls: String,
-    val salaryFrom: Int?,
-    val salaryTo: Int?,
-    val salaryCurrency: String?,
-    val salaryGross: Boolean?,
-    val experience: String?,
-    val employment: String?,
-    val schedule: String?,
+class VacancyDetails(
+    hhID: String,
+    name: String,
+    isFavorite: Boolean,
+    employerInfo: EmployerInfo,
+    salaryInfo: SalaryInfo?,
+    val details: Details,
+) : VacancyBase(
+    hhID,
+    name,
+    isFavorite,
+    employerInfo,
+    salaryInfo
+)
+
+data class Details(
+    val address: Address?,
+    val experience: NameInfo?,
+    val employment: NameInfo?,
+    val schedule: NameInfo?,
     val description: String,
-    val keySkills: List<String>,
+    val keySkills: List<NameInfo>,
     val hhVacancyLink: String,
+)
+
+data class Address(
     val city: String?,
     val building: String?,
     val street: String?,
-) : Parcelable
+    val description: String?,
+)
