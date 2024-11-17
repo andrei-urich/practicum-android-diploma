@@ -11,7 +11,6 @@ interface AppAPI {
         "HH-User-Agent: ${HH_REQUEST_HEADER}",
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}"
     )
-
     @GET("/vacancies/")
     suspend fun search(
         @Query("text") text: String

@@ -22,7 +22,6 @@ class SearchRepositoryImpl(
             in CODE_200..CODE_299 -> {
                 if (response is VacanciesResponse) {
                     val result = response.items
-                    Log.d("MY", "response ${result.get(0).toString()}")
                     val vacancies: List<VacancyShort> = result.map {
                         VacancyShort(
                             vacancyId = it.id,

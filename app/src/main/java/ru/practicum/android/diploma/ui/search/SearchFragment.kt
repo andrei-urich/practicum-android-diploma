@@ -55,7 +55,6 @@ class SearchFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchText = s.toString()
-                //clearScreen(s)
                 viewModel.getSearchText(searchText)
             }
 

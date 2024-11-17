@@ -30,14 +30,12 @@ class SearchViewModel(
     fun getSearchText(searchText: String) {
         this.searchText = searchText
         if (searchText.isNotBlank()) {
-            Log.d("MY", searchText)
             searchDebounce(searchText)
         }
     }
 
     private fun request(request: String) {
         if (request.isNotEmpty()) {
-            Log.d("MY", "request ${request}")
             searchStateLiveData.postValue(SearchState.Loading)
             viewModelScope.launch {
                 interactor.search(
