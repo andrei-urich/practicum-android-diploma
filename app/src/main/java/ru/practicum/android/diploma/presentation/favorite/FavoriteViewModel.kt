@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.favorite.interactors.GetFavoriteVacanciesListInteractor
-import ru.practicum.android.diploma.presentation.favorite.model.FavoritesScreenState
+import ru.practicum.android.diploma.domain.search.models.VacancyShort
 
 class FavoriteViewModel(
     private val getFavoriteVacanciesListInteractor: GetFavoriteVacanciesListInteractor,
@@ -20,12 +20,26 @@ class FavoriteViewModel(
         return favoriteVacanciesScreenStateLiveData
     }
 
+    fun getTestList() {
+        favoriteVacanciesScreenStateLiveData.postValue(
+            FavoritesScreenState.FilledFavoriteScreen(
+                listOf(
+                    VacancyShort("23", "developer", "yandex", "Spb", "100500", "Р"),
+                    VacancyShort("24", "developer2", "skillbox", "Msk", "500100", "$")
+                )
+            )
+
+        )
+    }
+
     fun getFavoriteVacanciesList() {
         viewModelScope.launch(dispatcherIO) {
             getFavoriteVacanciesListInteractor.getFavVacanciesList().collect {
                 if (it.isEmpty()) {
                     favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.EmptyFavoriteScreen)
-                } else { favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.FilledFavoriteScreen(it)) }
+                } else {
+                    // favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.FilledFavoriteScreen(it))
+                }
             }
         }
     }
