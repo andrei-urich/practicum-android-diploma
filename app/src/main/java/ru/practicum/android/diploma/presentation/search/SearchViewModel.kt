@@ -21,14 +21,11 @@ class SearchViewModel(
     private var isClickAllowed = true
     private var searchText = EMPTY_STRING
     private var searchJob: Job? = null
-
     private var searchStateLiveData = MutableLiveData<SearchState>()
     private var openTrigger = SingleEventLiveData<VacancyShort>()
 
-
     fun getSearchStateLiveData(): LiveData<SearchState> = searchStateLiveData
     fun getOpenTrigger(): LiveData<VacancyShort> = openTrigger
-
     fun getSearchText(searchText: String) {
         this.searchText = searchText
         searchDebounce(searchText)

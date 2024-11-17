@@ -9,14 +9,10 @@ import ru.practicum.android.diploma.domain.search.models.VacancyShort
 class SearchAdapter(
     val vacancies: List<VacancyShort>,
     private val onItemClick: (VacancyShort) -> Unit
-) :
-    RecyclerView.Adapter<VacancyViewHolder>() {
-
-
+) : RecyclerView.Adapter<VacancyViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VacancyViewHolder {
         val binding =
             VacancyItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
         return VacancyViewHolder(binding) { position: Int ->
             if (position != RecyclerView.NO_POSITION) {
                 vacancies.getOrNull(position)?.let<VacancyShort, Unit> { vacancy ->
@@ -35,5 +31,4 @@ class SearchAdapter(
     override fun getItemCount(): Int {
         return vacancies.size
     }
-
 }
