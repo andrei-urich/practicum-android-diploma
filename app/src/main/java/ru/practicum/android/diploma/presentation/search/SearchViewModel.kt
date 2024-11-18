@@ -27,7 +27,6 @@ class SearchViewModel(
     private var openTrigger = SingleEventLiveData<VacancyShort>()
     private val pager = Pager()
 
-
     fun getSearchStateLiveData(): LiveData<SearchState> = searchStateLiveData
     fun getOpenTrigger(): LiveData<VacancyShort> = openTrigger
     fun getSearchText(searchText: String) {
@@ -41,7 +40,7 @@ class SearchViewModel(
         if (searchText.isNotEmpty()) {
             searchStateLiveData.postValue(SearchState.Loading)
             updatePager(searchText)
-            val request = makeRequest(searchText)
+            val request = constructRequest(searchText)
             viewModelScope.launch {
                 interactor.search(
                     request
@@ -53,7 +52,8 @@ class SearchViewModel(
 
                         else -> {
                             val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
-                            searchStateLiveData.postValue(SearchState.Content(vacancies))
+                            pager.vacancyList.addAll(vacancies)
+                            searchStateLiveData.postValue(SearchState.Content(pager.vacancyList))
                         }
                     }
                 }
@@ -61,7 +61,7 @@ class SearchViewModel(
         }
     }
 
-    private fun makeRequest(searchText: String): HashMap<String, String> {
+    private fun constructRequest(searchText: String): HashMap<String, String> {
         val options: HashMap<String, String> = HashMap()
         options["text"] = searchText
         if (pager.currentPage != 0) {
@@ -70,6 +70,11 @@ class SearchViewModel(
         options["per_page"] = PER_PAGE.toString()
         return options
     }
+
+    fun getNextPage() {
+        request(pager.searchText)
+    }
+
 
     fun showVacancy(vacancy: VacancyShort) {
         if (clickDebounce()) {
@@ -106,6 +111,7 @@ class SearchViewModel(
             pager.currentPage = ZERO
             pager.foundNumber = ZERO
             pager.lastPage = false
+            pager.vacancyList.clear()
         } else {
             if (pager.currentPage <= pager.pages) {
                 pager.currentPage++
@@ -117,6 +123,7 @@ class SearchViewModel(
 
     // Класс для хранения количества страниц, данных текущей страницы и кол-ва найденных вакансий в поиске
     inner class Pager(
+        val vacancyList: MutableList<VacancyShort> = mutableListOf<VacancyShort>(),
         var searchText: String = EMPTY_STRING,
         var foundNumber: Int = ZERO,
         var pages: Int = ZERO,
