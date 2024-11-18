@@ -39,7 +39,9 @@ class SearchFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _viewBinding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
@@ -101,7 +103,8 @@ class SearchFragment : Fragment() {
 
     private fun showVacancy(vacancyId: String?) {
         findNavController().navigate(
-            R.id.action_searchFragment_to_vacancyDetailsFragment, VacancyDetailsFragment.createArgs(vacancyId)
+            R.id.action_searchFragment_to_vacancyDetailsFragment,
+            VacancyDetailsFragment.createArgs(vacancyId)
         )
     }
 
