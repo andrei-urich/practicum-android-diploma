@@ -23,14 +23,9 @@ class SearchViewModel(
     private var searchJob: Job? = null
     private var searchStateLiveData = MutableLiveData<SearchState>()
     private var openTrigger = SingleEventLiveData<VacancyShort>()
-//    private var clearScreenState = MutableLiveData<Boolean>()
 
     fun getSearchStateLiveData(): LiveData<SearchState> = searchStateLiveData
     fun getOpenTrigger(): LiveData<VacancyShort> = openTrigger
-
-//    // Отвечает за очистку экрана после сброса поиска
-//    fun getClearScreenState(): LiveData<Boolean> = clearScreenState
-
     fun getSearchText(searchText: String) {
         this.searchText = searchText
         if (searchText.isNotBlank()) {
@@ -67,10 +62,6 @@ class SearchViewModel(
             }
         }
     }
-
-//    fun onSearchTextChanged(state: Boolean) {
-//       clearScreenState.postValue(state)
-//    }
 
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
