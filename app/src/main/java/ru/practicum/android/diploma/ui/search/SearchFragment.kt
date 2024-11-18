@@ -50,6 +50,8 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        startPlaceholderVisibility(true)
+
         val searchTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 println()
@@ -57,6 +59,12 @@ class SearchFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchText = s.toString()
+                if (binding.searchEditText.hasFocus() && s?.isEmpty() == true) {
+                    startPlaceholderVisibility(true)
+                    binding.vacancyListRv.visibility = View.GONE
+                } else {
+                    startPlaceholderVisibility(false)
+                }
                 viewModel.getSearchText(searchText)
             }
 
@@ -118,6 +126,7 @@ class SearchFragment : Fragment() {
                 binding.mainProgressBar.visibility = View.GONE
                 binding.vacancyListRv.adapter = searchAdapter
                 binding.vacancyListRv.layoutManager = LinearLayoutManager(requireActivity())
+
                 binding.vacancyListRv.visibility = View.VISIBLE
 
                 if (vacancies.isNotEmpty()) {
@@ -132,7 +141,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun clearScreen(s: CharSequence?) {
-        if (s.isNullOrBlank()) {
+        if (!s.isNullOrBlank()) {
             clearPlaceholders()
             inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
         }
@@ -158,6 +167,14 @@ class SearchFragment : Fragment() {
             binding.placeholderServerError.visibility = View.VISIBLE
             vacancies.clear()
             searchAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun startPlaceholderVisibility(flag: Boolean) {
+        if (flag) {
+            binding.placeholderImage.visibility = View.VISIBLE
+        } else {
+            binding.placeholderImage.visibility = View.GONE
         }
     }
 
