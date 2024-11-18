@@ -12,7 +12,9 @@ import ru.practicum.android.diploma.domain.search.models.VacancyShort
 import ru.practicum.android.diploma.presentation.SingleEventLiveData
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.EMPTY_STRING
+import ru.practicum.android.diploma.util.PER_PAGE
 import ru.practicum.android.diploma.util.SEARCH_DEBOUNCE_DELAY
+import ru.practicum.android.diploma.util.ZERO
 
 class SearchViewModel(
     private val interactor: SearchInteractor,
@@ -23,6 +25,8 @@ class SearchViewModel(
     private var searchJob: Job? = null
     private var searchStateLiveData = MutableLiveData<SearchState>()
     private var openTrigger = SingleEventLiveData<VacancyShort>()
+    private val pager = Pager()
+
 
     fun getSearchStateLiveData(): LiveData<SearchState> = searchStateLiveData
     fun getOpenTrigger(): LiveData<VacancyShort> = openTrigger
@@ -33,9 +37,11 @@ class SearchViewModel(
         }
     }
 
-    private fun request(request: String) {
-        if (request.isNotEmpty()) {
+    private fun request(searchText: String) {
+        if (searchText.isNotEmpty()) {
             searchStateLiveData.postValue(SearchState.Loading)
+            updatePager(searchText)
+            val request = makeRequest(searchText)
             viewModelScope.launch {
                 interactor.search(
                     request
@@ -53,6 +59,16 @@ class SearchViewModel(
                 }
             }
         }
+    }
+
+    private fun makeRequest(searchText: String): HashMap<String, String> {
+        val options: HashMap<String, String> = HashMap()
+        options["text"] = searchText
+        if (pager.currentPage != 0) {
+            options["page"] = pager.currentPage.toString()
+        }
+        options["per_page"] = PER_PAGE.toString()
+        return options
     }
 
     fun showVacancy(vacancy: VacancyShort) {
@@ -82,4 +98,30 @@ class SearchViewModel(
             request(searchText)
         }
     }
+
+    private fun updatePager(searchText: String) {
+        if (!pager.searchText.equals(searchText)) {
+            pager.searchText = searchText
+            pager.pages = ZERO
+            pager.currentPage = ZERO
+            pager.foundNumber = ZERO
+            pager.lastPage = false
+        } else {
+            if (pager.currentPage <= pager.pages) {
+                pager.currentPage++
+            } else {
+                pager.lastPage = true
+            }
+        }
+    }
+
+    // Класс для хранения количества страниц, данных текущей страницы и кол-ва найденных вакансий в поиске
+    inner class Pager(
+        var searchText: String = EMPTY_STRING,
+        var foundNumber: Int = ZERO,
+        var pages: Int = ZERO,
+        var currentPage: Int = ZERO,
+        var lastPage: Boolean = false
+    )
+
 }
