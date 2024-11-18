@@ -6,10 +6,13 @@ object SalaryToString {
     fun getSalary(
         vacancy: VacancyShort
     ): String {
+        if (vacancy.salaryFrom == null && vacancy.salaryTo == null) {
+            return "Зарплата не указана"
+        }
         var string = ""
         val string_: String
-        if (vacancy.salaryFrom != 0) string = "от " + vacancy.salaryFrom.toString()
-        if (vacancy.salaryTo != 0) {
+        if (vacancy.salaryFrom != null) string = "от " + vacancy.salaryFrom.toString()
+        if (vacancy.salaryTo != null) {
             string_ = "до " + vacancy.salaryTo.toString() + " " + vacancy.currency
             string += " " + string_
         } else {

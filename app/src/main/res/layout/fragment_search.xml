@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/searchScreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/searchScreen"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.search.SearchFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -17,12 +17,12 @@
 
         <ImageView
             android:id="@+id/searchFilter"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:src="@drawable/filter_off_icon"
-            app:tint="?attr/colorSecondary"
+            android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/space_20"/>
+            android:layout_marginEnd="@dimen/space_20"
+            android:src="@drawable/filter_off_icon"
+            app:tint="?attr/colorSecondary" />
     </com.google.android.material.appbar.MaterialToolbar>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -33,8 +33,8 @@
         android:layout_marginHorizontal="@dimen/space_16"
         android:layout_marginVertical="@dimen/space_8"
         android:minHeight="56dp"
-        app:endIconDrawable="@drawable/search_icon"
-        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/close_icon"
+        app:endIconMode="clear_text"
         app:expandedHintEnabled="false"
         app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,10 +44,21 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/searchEditText"
+            android:imeOptions="actionUnspecified"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/iconSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/space_16"
+        android:src="@drawable/search_icon"
+        app:layout_constraintBottom_toBottomOf="@id/searchLayoutField"
+        app:layout_constraintEnd_toEndOf="@id/searchLayoutField"
+        app:layout_constraintTop_toTopOf="@id/searchLayoutField" />
 
     <Button
         android:id="@+id/vacanciesFound"
@@ -82,11 +93,11 @@
         android:id="@+id/recyclerViewProgressBar"
         style="@style/progressBar"
         android:layout_marginBottom="@dimen/space_16"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vacancyListRv"
-        android:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@id/vacancyListRv" />
 
     <ProgressBar
         android:id="@+id/mainProgressBar"
