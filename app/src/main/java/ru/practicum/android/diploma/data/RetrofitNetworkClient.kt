@@ -16,13 +16,21 @@ class RetrofitNetworkClient(
     private val internetAccessChecker: InternetAccessChecker
 ) : NetworkClient {
     private var resultCode: Int = 0
+    private val options: HashMap<String, String> = HashMap()
 
     override suspend fun doRequest(dto: Any): Response {
         if (internetAccessChecker.isConnected()) {
             when (dto) {
                 is VacancySearchRequest -> {
+                    options["text"] = dto.text
+                    if (dto.page.isNotEmpty()) {
+                        options["page"] = dto.page
+                    }
+                    if (dto.perPage.isNotEmpty()) {
+                        options["per_page"] = dto.perPage
+                    }
                     val response = withContext(Dispatchers.IO) {
-                        apiService.search(dto.request)
+                        apiService.search(options)
                     }
                     return response.apply { resultCode = CODE_200 }
                 }
