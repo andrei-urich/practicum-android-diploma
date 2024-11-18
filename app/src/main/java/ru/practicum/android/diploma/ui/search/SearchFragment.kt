@@ -17,6 +17,7 @@ import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
 import ru.practicum.android.diploma.presentation.search.SearchState
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
+import ru.practicum.android.diploma.ui.vacancydetails.VacancyDetailsFragment
 import ru.practicum.android.diploma.util.CONNECTION_ERROR
 import ru.practicum.android.diploma.util.EMPTY_STRING
 import ru.practicum.android.diploma.util.ERROR
@@ -30,7 +31,9 @@ class SearchFragment : Fragment() {
     private val binding get() = _viewBinding!!
     private var vacancies = mutableListOf<VacancyShort>()
     private val viewModel: SearchViewModel by viewModel()
-    private val searchAdapter = SearchAdapter(vacancies, viewModel::showVacancy)
+    private val searchAdapter: SearchAdapter by lazy {
+        SearchAdapter(vacancies, viewModel::showVacancy)
+    }
     private val inputMethodManager by lazy {
         requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
     }
@@ -46,7 +49,6 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.searchEditText.setText(searchText)
 
         val searchTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -55,7 +57,6 @@ class SearchFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchText = s.toString()
-                clearScreen(s)
                 viewModel.getSearchText(searchText)
             }
 
@@ -90,13 +91,12 @@ class SearchFragment : Fragment() {
         viewModel.getOpenTrigger().observe(viewLifecycleOwner) { vacancy ->
             showVacancy(vacancy.vacancyId)
         }
-
     }
 
     private fun showVacancy(vacancyId: String?) {
-        println(vacancyId)
         findNavController().navigate(
-            R.id.action_searchFragment_to_vacancyDetailsFragment
+            R.id.action_searchFragment_to_vacancyDetailsFragment,
+            VacancyDetailsFragment.createArgs(vacancyId)
         )
     }
 
@@ -109,12 +109,12 @@ class SearchFragment : Fragment() {
             }
 
             LOADING -> {
-                clearPlaceholders()
+                clearScreen(showCase)
                 binding.mainProgressBar.visibility = View.VISIBLE
             }
 
             SHOW_RESULT -> {
-                clearPlaceholders()
+                clearScreen(showCase)
                 binding.mainProgressBar.visibility = View.GONE
                 binding.vacancyListRv.adapter = searchAdapter
                 binding.vacancyListRv.layoutManager = LinearLayoutManager(requireActivity())
@@ -133,10 +133,8 @@ class SearchFragment : Fragment() {
 
     private fun clearScreen(s: CharSequence?) {
         if (s.isNullOrBlank()) {
-            binding.searchEditText.setText(EMPTY_STRING)
             clearPlaceholders()
             inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
-            binding.searchEditText.clearFocus()
         }
     }
 
@@ -167,5 +165,4 @@ class SearchFragment : Fragment() {
         _viewBinding = null
         super.onDestroyView()
     }
-
 }

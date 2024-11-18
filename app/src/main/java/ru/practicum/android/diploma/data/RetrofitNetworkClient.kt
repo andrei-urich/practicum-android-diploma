@@ -1,9 +1,13 @@
-package ru.practicum.android.diploma.data.network
+package ru.practicum.android.diploma.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.practicum.android.diploma.data.search.network.AppAPI
+import ru.practicum.android.diploma.data.search.network.NetworkClient
+import ru.practicum.android.diploma.data.search.network.Response
+import ru.practicum.android.diploma.data.search.network.VacancySearchRequest
 import ru.practicum.android.diploma.data.utils.InternetAccessChecker
-import ru.practicum.android.diploma.util.ACCESS_TOKEN
+import ru.practicum.android.diploma.util.CODE_200
 import ru.practicum.android.diploma.util.RESULT_CODE_BAD_REQUEST
 import ru.practicum.android.diploma.util.RESULT_CODE_ERROR
 
@@ -18,12 +22,9 @@ class RetrofitNetworkClient(
             when (dto) {
                 is VacancySearchRequest -> {
                     val response = withContext(Dispatchers.IO) {
-                        apiService.search(
-                            token = ACCESS_TOKEN,
-                            dto.request
-                        )
+                        apiService.search(dto.request)
                     }
-                    return response.apply { resultCode = response.resultCode }
+                    return response.apply { resultCode = CODE_200 }
                 }
 
                 else -> {

@@ -6,14 +6,10 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.practicum.android.diploma.data.network.AppAPI
-import ru.practicum.android.diploma.data.network.NetworkClient
-import ru.practicum.android.diploma.data.network.RetrofitNetworkClient
-import ru.practicum.android.diploma.data.search.SearchRepositoryImpl
+import ru.practicum.android.diploma.data.search.network.AppAPI
+import ru.practicum.android.diploma.data.search.network.NetworkClient
+import ru.practicum.android.diploma.data.RetrofitNetworkClient
 import ru.practicum.android.diploma.data.utils.InternetAccessChecker
-import ru.practicum.android.diploma.domain.search.SearchInteractor
-import ru.practicum.android.diploma.domain.search.SearchInteractorImpl
-import ru.practicum.android.diploma.domain.search.SearchRepository
 
 val searchDataModule = module {
     single { InternetAccessChecker() }
@@ -29,14 +25,6 @@ val searchDataModule = module {
 
     factory<NetworkClient> {
         RetrofitNetworkClient(get(), get())
-    }
-
-    single<SearchRepository> {
-        SearchRepositoryImpl(get())
-    }
-
-    single<SearchInteractor> {
-        SearchInteractorImpl(get())
     }
 
     single { (key: String) ->
