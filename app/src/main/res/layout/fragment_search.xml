@@ -44,6 +44,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/searchEditText"
+            android:imeOptions="actionUnspecified"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -53,12 +54,11 @@
         android:id="@+id/iconSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@id/searchLayoutField"
-        app:layout_constraintTop_toTopOf="@id/searchLayoutField"
-        app:layout_constraintBottom_toBottomOf="@id/searchLayoutField"
-        android:src="@drawable/search_icon"
         android:layout_marginEnd="@dimen/space_16"
-        />
+        android:src="@drawable/search_icon"
+        app:layout_constraintBottom_toBottomOf="@id/searchLayoutField"
+        app:layout_constraintEnd_toEndOf="@id/searchLayoutField"
+        app:layout_constraintTop_toTopOf="@id/searchLayoutField" />
 
     <Button
         android:id="@+id/vacanciesFound"
