@@ -22,13 +22,6 @@ class RetrofitNetworkClient(
         if (internetAccessChecker.isConnected()) {
             when (dto) {
                 is VacancySearchRequest -> {
-                    options["text"] = dto.text
-                    if (dto.page.isNotEmpty()) {
-                        options["page"] = dto.page
-                    }
-                    if (dto.perPage.isNotEmpty()) {
-                        options["per_page"] = dto.perPage
-                    }
                     val response = withContext(Dispatchers.IO) {
                         apiService.search(options)
                     }
