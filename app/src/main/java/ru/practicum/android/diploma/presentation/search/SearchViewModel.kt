@@ -46,8 +46,8 @@ class SearchViewModel(
                         )
 
                         else -> {
-                            val tracks: List<VacancyShort> = pair.first as List<VacancyShort>
-                            searchStateLiveData.postValue(SearchState.Content(tracks))
+                            val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
+                            searchStateLiveData.postValue(SearchState.Content(vacancies))
                         }
                     }
                 }
