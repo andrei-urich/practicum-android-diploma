@@ -8,9 +8,9 @@ object SalaryToString {
     ): String {
         var string = ""
         val string_: String
-        if (vacancy.salaryFrom != 0) string = vacancy.salaryFrom.toString()
+        if (vacancy.salaryFrom != 0) string = "от " + vacancy.salaryFrom.toString()
         if (vacancy.salaryTo != 0) {
-            string_ = vacancy.salaryTo.toString() + " " + vacancy.currency
+            string_ = "до " + vacancy.salaryTo.toString() + " " + vacancy.currency
             string += " " + string_
         } else {
             string += " " + vacancy.currency

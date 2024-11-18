@@ -17,6 +17,7 @@ import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
 import ru.practicum.android.diploma.presentation.search.SearchState
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
+import ru.practicum.android.diploma.ui.vacancydetails.VacancyDetailsFragment
 import ru.practicum.android.diploma.util.CONNECTION_ERROR
 import ru.practicum.android.diploma.util.EMPTY_STRING
 import ru.practicum.android.diploma.util.ERROR
@@ -90,13 +91,12 @@ class SearchFragment : Fragment() {
         viewModel.getOpenTrigger().observe(viewLifecycleOwner) { vacancy ->
             showVacancy(vacancy.vacancyId)
         }
-
     }
 
     private fun showVacancy(vacancyId: String?) {
-        println(vacancyId)
         findNavController().navigate(
-            R.id.action_searchFragment_to_vacancyDetailsFragment
+            R.id.action_searchFragment_to_vacancyDetailsFragment,
+            VacancyDetailsFragment.createArgs(vacancyId)
         )
     }
 
