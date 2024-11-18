@@ -39,9 +39,7 @@ class SearchFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _viewBinding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
@@ -103,8 +101,7 @@ class SearchFragment : Fragment() {
 
     private fun showVacancy(vacancyId: String?) {
         findNavController().navigate(
-            R.id.action_searchFragment_to_vacancyDetailsFragment,
-            VacancyDetailsFragment.createArgs(vacancyId)
+            R.id.action_searchFragment_to_vacancyDetailsFragment, VacancyDetailsFragment.createArgs(vacancyId)
         )
     }
 
@@ -173,8 +170,10 @@ class SearchFragment : Fragment() {
     private fun startPlaceholderVisibility(flag: Boolean) {
         if (flag) {
             binding.placeholderImage.visibility = View.VISIBLE
+            binding.iconSearch.visibility = View.VISIBLE
         } else {
             binding.placeholderImage.visibility = View.GONE
+            binding.iconSearch.visibility = View.GONE
         }
     }
 
