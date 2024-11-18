@@ -8,6 +8,7 @@ const val RESULT_CODE_BAD_REQUEST = 400
 const val RESULT_CODE_ERROR = -1
 const val CODE_200 = 200
 const val CODE_299 = 299
+const val PER_PAGE = 20
 
 // ---- Details Vacancy const ----
 const val DETAILS_VACANCY_ID = "vacancyID"
@@ -25,3 +26,4 @@ const val CONNECTION_ERROR = "CONNECTION_ERROR"
 const val LOADING = "LOADING"
 const val SHOW_RESULT = "SHOW_RESULT"
 const val CORNER_RADIUS = 2
+const val ZERO = 0

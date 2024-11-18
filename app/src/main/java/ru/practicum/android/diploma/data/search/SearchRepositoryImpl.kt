@@ -32,7 +32,10 @@ class SearchRepositoryImpl(
                             salaryFrom = it.salary?.from,
                             salaryTo = it.salary?.to,
                             currency = it.salary?.currency,
-                            logoLink = it.employer.logoUrls?.original ?: EMPTY_STRING
+                            logoLink = it.employer.logoUrls?.original ?: EMPTY_STRING,
+                            found = it.found,
+                            pages = it.pages,
+                            page = it.page
                         )
                     }
                     emit(Resource.Success(vacancies))
