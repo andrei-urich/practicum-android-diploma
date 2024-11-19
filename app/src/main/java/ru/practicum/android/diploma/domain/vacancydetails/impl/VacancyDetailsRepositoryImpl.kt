@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.data.vacancydetails.ResourceDetails
 import ru.practicum.android.diploma.data.vacancydetails.SalaryInfo
 import ru.practicum.android.diploma.data.vacancydetails.network.AddressDto
 import ru.practicum.android.diploma.data.vacancydetails.network.NameInfoDto
-import ru.practicum.android.diploma.data.vacancydetails.network.NetworkClientDetails
+import ru.practicum.android.diploma.data.vacancydetails.network.NetworkRequestDetails
 import ru.practicum.android.diploma.data.vacancydetails.network.SalaryDto
 import ru.practicum.android.diploma.data.vacancydetails.network.VacancyDetailsRequest
 import ru.practicum.android.diploma.data.vacancydetails.network.VacancyDetailsResponse
@@ -18,7 +18,7 @@ import ru.practicum.android.diploma.domain.vacancydetails.models.Details
 import ru.practicum.android.diploma.domain.vacancydetails.models.VacancyDetails
 import ru.practicum.android.diploma.util.EMPTY_STRING
 
-class VacancyDetailsRepositoryImpl(private val networkClientDetails: NetworkClientDetails) : VacancyDetailsRepository {
+class VacancyDetailsRepositoryImpl(private val networkClientDetails: NetworkRequestDetails) : VacancyDetailsRepository {
     override fun getVacancyDetails(vacancyId: String): Flow<ResourceDetails<VacancyDetails?>> = flow {
         when (val response = networkClientDetails.doRequest(VacancyDetailsRequest(vacancyId))) {
             is VacancyDetailsResponse -> {
