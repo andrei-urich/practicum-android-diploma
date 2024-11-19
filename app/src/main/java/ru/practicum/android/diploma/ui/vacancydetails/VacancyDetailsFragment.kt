@@ -55,6 +55,10 @@ class VacancyDetailsFragment : Fragment() {
                 is VacancyDetailsState.Error -> {
                     showTypeErrorOrEmpty(state.errorType)
                 }
+
+                is VacancyDetailsState.Loading -> {
+                    showLoading()
+                }
                 else -> {}
             }
 
@@ -112,12 +116,12 @@ class VacancyDetailsFragment : Fragment() {
         }
     }
 
-//    private fun showLoading() {
-//        binding.itemVacancyDetails.itemVacancyDetailsView.visibility = View.GONE
-//        binding.detailsProgressBar.visibility = View.VISIBLE
-//        binding.errorPlaceholderIv.visibility = View.GONE
-//        binding.errorPlaceholderTv.visibility = View.GONE
-//    }
+    private fun showLoading() {
+        binding.itemVacancyDetails.itemVacancyDetailsView.visibility = View.GONE
+        binding.detailsProgressBar.visibility = View.VISIBLE
+        binding.errorPlaceholderIv.visibility = View.GONE
+        binding.errorPlaceholderTv.visibility = View.GONE
+    }
 
     private fun showVacancyContent(state: VacancyDetailsState.Content) {
         val vacancyDetailsBinding = FragmentVacancydetailsItemsBinding.bind(binding.root)
