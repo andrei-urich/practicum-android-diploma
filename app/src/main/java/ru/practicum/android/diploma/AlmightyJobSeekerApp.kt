@@ -22,14 +22,14 @@ class AlmightyJobSeekerApp : Application() {
             androidContext(this@AlmightyJobSeekerApp)
             modules(
                 searchDataModule,
-                favoriteDataModule,
-                favoriteRepositoryModule,
-                favoriteInteractorModule,
-                favoriteViewModelModule,
                 vacancyDetailsDataModule,
                 vacancyDetailsRepositoryModule,
                 vacancyDetailsInteractorModule,
                 vacancyDetailsViewModelModule,
+                favoriteDataModule,
+                favoriteRepositoryModule,
+                favoriteInteractorModule,
+                favoriteViewModelModule,
                 searchViewModelModule
             )
         }
