@@ -7,12 +7,12 @@ import ru.practicum.android.diploma.data.vacancydetails.ErrorType
 import ru.practicum.android.diploma.data.vacancydetails.ResourceDetails
 import ru.practicum.android.diploma.domain.vacancydetails.api.VacancyDetailsInteractor
 import ru.practicum.android.diploma.domain.vacancydetails.api.VacancyDetailsRepository
-import ru.practicum.android.diploma.domain.vacancydetails.api.VacancyExternalNavigator
+import ru.practicum.android.diploma.domain.vacancydetails.api.ExternalNavigator
 import ru.practicum.android.diploma.domain.vacancydetails.models.VacancyDetails
 
 class VacancyDetailsInteractorImpl(
     private val repository: VacancyDetailsRepository,
-    private val externalNavigator: VacancyExternalNavigator
+    private val externalNavigator: ExternalNavigator
 ) : VacancyDetailsInteractor {
     override fun getVacancyDetail(vacancyId: String): Flow<Pair<VacancyDetails?, ErrorType>> {
         return repository.getVacancyDetails(vacancyId).map { result ->
