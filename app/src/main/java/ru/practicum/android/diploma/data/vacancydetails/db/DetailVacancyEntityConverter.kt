@@ -24,43 +24,44 @@ class DetailVacancyEntityConverter {
     }
 
     fun mapDt(detailVacancyEntity: DetailVacancyEntity?): VacancyDetails? {
-        if (detailVacancyEntity != null){
-        val adress = Address(
-            detailVacancyEntity.addressCity,
-            detailVacancyEntity.addressBuilding,
-            detailVacancyEntity.addressStreet,
-            detailVacancyEntity.addressDescription
-        )
-        val vacancy = VacancyDetails(
-            hhID = detailVacancyEntity.hhID,
-            name = detailVacancyEntity.name,
-            isFavorite = detailVacancyEntity.isFavorite, // zochem
-            employerInfo = EmployerInfo(
-                detailVacancyEntity.employerName,
-                detailVacancyEntity.employerLogoUrl,
-                detailVacancyEntity.areaName
-            ),
-            salaryInfo = SalaryInfo(
-                detailVacancyEntity.salaryFrom,
-                detailVacancyEntity.salaryTo,
-                detailVacancyEntity.salaryCurrency
-            ),
-            details = Details(
-                adress,
-                NameInfo(detailVacancyEntity.experienceId, detailVacancyEntity.experienceName.toString()),
-                NameInfo(detailVacancyEntity.employmentId, detailVacancyEntity.employerName),
-                NameInfo(detailVacancyEntity.scheduleId, detailVacancyEntity.scheduleName.toString()),
-                description = detailVacancyEntity.description,
-                keySkills = listOf(NameInfo(detailVacancyEntity.keySkills, detailVacancyEntity.keySkills)),
-                // ОБРАТИТЬ ВНИМАНИЕ, KEYSKILLS ИЗ СТРОКИ ПРЕВАРЩАЕТСЯ В НЕЧТО И ОБРАТНО
-                hhVacancyLink = detailVacancyEntity.hhVacancyLink
+        if (detailVacancyEntity != null) {
+            val adress = Address(
+                detailVacancyEntity.addressCity,
+                detailVacancyEntity.addressBuilding,
+                detailVacancyEntity.addressStreet,
+                detailVacancyEntity.addressDescription
             )
-        )
-        return vacancy
+            val vacancy = VacancyDetails(
+                hhID = detailVacancyEntity.hhID,
+                name = detailVacancyEntity.name,
+                isFavorite = detailVacancyEntity.isFavorite, // zochem
+                employerInfo = EmployerInfo(
+                    detailVacancyEntity.employerName,
+                    detailVacancyEntity.employerLogoUrl,
+                    detailVacancyEntity.areaName
+                ),
+                salaryInfo = SalaryInfo(
+                    detailVacancyEntity.salaryFrom,
+                    detailVacancyEntity.salaryTo,
+                    detailVacancyEntity.salaryCurrency
+                ),
+                details = Details(
+                    adress,
+                    NameInfo(detailVacancyEntity.experienceId, detailVacancyEntity.experienceName.toString()),
+                    NameInfo(detailVacancyEntity.employmentId, detailVacancyEntity.employerName),
+                    NameInfo(detailVacancyEntity.scheduleId, detailVacancyEntity.scheduleName.toString()),
+                    description = detailVacancyEntity.description,
+                    keySkills = listOf(NameInfo(detailVacancyEntity.keySkills, detailVacancyEntity.keySkills)),
+                    // ОБРАТИТЬ ВНИМАНИЕ, KEYSKILLS ИЗ СТРОКИ ПРЕВАРЩАЕТСЯ В НЕЧТО И ОБРАТНО
+                    hhVacancyLink = detailVacancyEntity.hhVacancyLink
+                )
+            )
+            return vacancy
         } else {
             return null
         }
     }
+
     fun map(vacancy: VacancyDetails): DetailVacancyEntity {
         val vacancyEntity = DetailVacancyEntity(
             hhID = vacancy.hhID,

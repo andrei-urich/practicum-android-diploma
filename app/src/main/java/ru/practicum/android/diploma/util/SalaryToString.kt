@@ -21,4 +21,3 @@ object SalaryToString {
         return string
     }
 }
-

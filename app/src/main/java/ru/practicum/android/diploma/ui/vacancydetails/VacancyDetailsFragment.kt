@@ -42,8 +42,19 @@ class VacancyDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         vacancyID = requireArguments().getString(DETAILS_VACANCY_ID)
+        viewModel.getFavoriteButtonStateLD().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.favoriteVacansyIv.setImageResource(R.drawable.favorite_icon_active)
+            } else {
+                binding.favoriteVacansyIv.setImageResource(R.drawable.favorite_icon_normal)
+            }
+        }
         if (vacancyID != null) {
             viewModel.getVacancy(vacancyID!!)
+        }
+        // viewModel.controlFavorites(vacancyID!!)
+        binding.favoriteVacansyIv.setOnClickListener {
+            viewModel.controlFavorites(vacancyID!!)
         }
 
         viewModel.observeVacancyState().observe(viewLifecycleOwner) { state ->
@@ -59,6 +70,7 @@ class VacancyDetailsFragment : Fragment() {
                 is VacancyDetailsState.Loading -> {
                     showLoading()
                 }
+
                 else -> {}
             }
 

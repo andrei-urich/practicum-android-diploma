@@ -25,4 +25,3 @@ const val CONNECTION_ERROR = "CONNECTION_ERROR"
 const val CORNER_RADIUS = 2
 const val ZERO = 0
 const val ONE = 1
-
