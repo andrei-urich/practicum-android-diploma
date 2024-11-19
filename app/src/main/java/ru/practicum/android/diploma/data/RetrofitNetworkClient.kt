@@ -22,7 +22,7 @@ class RetrofitNetworkClient(
             when (dto) {
                 is VacancySearchRequest -> {
                     val response = withContext(Dispatchers.IO) {
-                        apiService.search(dto.request)
+                        apiService.search(dto.options)
                     }
                     return response.apply { resultCode = CODE_200 }
                 }

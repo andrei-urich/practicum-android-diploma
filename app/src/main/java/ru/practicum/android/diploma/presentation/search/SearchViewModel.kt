@@ -12,7 +12,10 @@ import ru.practicum.android.diploma.domain.search.models.VacancyShort
 import ru.practicum.android.diploma.presentation.SingleEventLiveData
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.EMPTY_STRING
+import ru.practicum.android.diploma.util.ONE
+import ru.practicum.android.diploma.util.PER_PAGE
 import ru.practicum.android.diploma.util.SEARCH_DEBOUNCE_DELAY
+import ru.practicum.android.diploma.util.ZERO
 
 class SearchViewModel(
     private val interactor: SearchInteractor,
@@ -21,37 +24,77 @@ class SearchViewModel(
     private var isClickAllowed = true
     private var searchText = EMPTY_STRING
     private var searchJob: Job? = null
-    private var searchStateLiveData = MutableLiveData<SearchState>()
+    private var searchStateLiveData = MutableLiveData<Pair<SearchState, Int?>>()
     private var openTrigger = SingleEventLiveData<VacancyShort>()
+    private val vacancyList: MutableList<VacancyShort> = mutableListOf()
+    private var pages: Int = ZERO
+    private var currentPage: Int = ZERO
+    private var isNextPageLoading = false
 
-    fun getSearchStateLiveData(): LiveData<SearchState> = searchStateLiveData
+    fun getSearchStateLiveData(): LiveData<Pair<SearchState, Int?>> = searchStateLiveData
     fun getOpenTrigger(): LiveData<VacancyShort> = openTrigger
+
     fun getSearchText(searchText: String) {
-        this.searchText = searchText
-        if (searchText.isNotBlank()) {
-            searchDebounce(searchText)
+        if (searchText.isNotBlank() && this.searchText != searchText) {
+            this.searchText = searchText
+            searchDebounce()
         }
     }
 
-    private fun request(request: String) {
-        if (request.isNotEmpty()) {
-            searchStateLiveData.postValue(SearchState.Loading)
-            viewModelScope.launch {
-                interactor.search(
-                    request
-                ).collect { pair ->
-                    when (pair.first) {
-                        null -> searchStateLiveData.postValue(
-                            SearchState.Error
-                        )
+    private fun request(state: SearchState, position: Int?) {
+        when (state) {
+            is SearchState.Loading, SearchState.LoadingNextPage -> {
+                if (!isNextPageLoading) {
+                    searchStateLiveData.postValue(Pair(state, position))
+                    val request = constructRequest(searchText)
+                    isNextPageLoading = true
+                    viewModelScope.launch {
+                        interactor.search(
+                            request
+                        ).collect { pair ->
+                            when (pair.first) {
+                                null -> searchStateLiveData.postValue(
+                                    Pair(SearchState.Error, position)
+                                )
 
-                        else -> {
-                            val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
-                            searchStateLiveData.postValue(SearchState.Content(vacancies))
+                                else -> {
+                                    val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
+                                    vacancyList.addAll(vacancies)
+                                    isNextPageLoading = false
+                                    currentPage++
+                                    pages = vacancyList[0].pages
+                                    searchStateLiveData.postValue(Pair(SearchState.Content(vacancyList), position))
+                                }
+                            }
                         }
                     }
                 }
             }
+
+            else -> {
+                searchStateLiveData.postValue(
+                    Pair(SearchState.Error, position)
+                )
+            }
+        }
+
+    }
+
+    private fun constructRequest(searchText: String): HashMap<String, String> {
+        val options: HashMap<String, String> = HashMap()
+        options["text"] = searchText
+        if (currentPage != 1) {
+            options["page"] = currentPage.toString()
+        }
+        options["per_page"] = PER_PAGE.toString()
+        return options
+    }
+
+    fun getNextPage() {
+        if (currentPage < pages) {
+            // Вычисляем позицию куда проскролить ресайклер, чтобы первой стояла первая вакансия с новой страницы
+            val position = (currentPage - ONE) * PER_PAGE - ONE
+            request(SearchState.LoadingNextPage, position)
         }
     }
 
@@ -75,11 +118,18 @@ class SearchViewModel(
         return current
     }
 
-    private fun searchDebounce(searchText: String) {
+    private fun searchDebounce() {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
+            prepareSearchCounts()
             delay(SEARCH_DEBOUNCE_DELAY)
-            request(searchText)
+            request(SearchState.Loading, null)
         }
+    }
+
+    private fun prepareSearchCounts() {
+        pages = ZERO
+        currentPage = ONE
+        vacancyList.clear()
     }
 }

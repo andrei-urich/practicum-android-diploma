@@ -15,7 +15,9 @@ import ru.practicum.android.diploma.util.EMPTY_STRING
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient
 ) : SearchRepository {
-    override fun search(request: String): Flow<Resource<List<VacancyShort>>> = flow {
+    override fun search(
+        request: HashMap<String, String>
+    ): Flow<Resource<List<VacancyShort>>> = flow {
         val response = networkClient.doRequest(VacancySearchRequest(request))
         when (response.resultCode) {
             in CODE_200..CODE_299 -> {
@@ -30,7 +32,10 @@ class SearchRepositoryImpl(
                             salaryFrom = it.salary?.from,
                             salaryTo = it.salary?.to,
                             currency = it.salary?.currency,
-                            logoLink = it.employer.logoUrls?.original ?: EMPTY_STRING
+                            logoLink = it.employer.logoUrls?.original ?: EMPTY_STRING,
+                            found = response.found,
+                            pages = response.pages,
+                            page = response.page
                         )
                     }
                     emit(Resource.Success(vacancies))

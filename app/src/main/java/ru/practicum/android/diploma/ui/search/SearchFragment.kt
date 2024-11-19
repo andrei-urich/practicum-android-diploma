@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -20,10 +21,8 @@ import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.ui.vacancydetails.VacancyDetailsFragment
 import ru.practicum.android.diploma.util.CONNECTION_ERROR
 import ru.practicum.android.diploma.util.EMPTY_STRING
-import ru.practicum.android.diploma.util.ERROR
-import ru.practicum.android.diploma.util.LOADING
 import ru.practicum.android.diploma.util.SEARCH_ERROR
-import ru.practicum.android.diploma.util.SHOW_RESULT
+import ru.practicum.android.diploma.util.ZERO
 
 class SearchFragment : Fragment() {
     private var searchText = EMPTY_STRING
@@ -51,6 +50,7 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         startPlaceholderVisibility(true)
+        binding.vacancyListRv.layoutManager = LinearLayoutManager(requireActivity())
 
         val searchTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -74,31 +74,27 @@ class SearchFragment : Fragment() {
         }
         binding.searchEditText.addTextChangedListener(searchTextWatcher)
 
-        viewModel.getSearchStateLiveData().observe(viewLifecycleOwner) { searchState ->
-            when (searchState) {
-                is SearchState.Error -> {
-                    changeContentVisibility(showCase = ERROR)
-                }
-
-                is SearchState.Content -> {
-                    vacancies.clear()
-                    vacancies.addAll(searchState.vacancyList.toMutableList())
-                    changeContentVisibility(showCase = SHOW_RESULT)
-                }
-
-                is SearchState.Loading -> {
-                    changeContentVisibility(showCase = LOADING)
-                }
-
-                else -> {
-                    changeContentVisibility(showCase = ERROR)
-                }
-            }
+        viewModel.getSearchStateLiveData().observe(viewLifecycleOwner) { pair ->
+            changeContentVisibility(pair.first, pair.second)
         }
 
         viewModel.getOpenTrigger().observe(viewLifecycleOwner) { vacancy ->
             showVacancy(vacancy.vacancyId)
         }
+
+        binding.vacancyListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0) {
+                    val pos = (binding.vacancyListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    val itemsCount = searchAdapter.itemCount
+                    if (pos == itemsCount - 1) {
+                        viewModel.getNextPage()
+                    }
+                }
+            }
+        })
     }
 
     private fun showVacancy(vacancyId: String?) {
@@ -108,43 +104,50 @@ class SearchFragment : Fragment() {
         )
     }
 
-    private fun changeContentVisibility(showCase: String) {
-        when (showCase) {
-            ERROR -> {
+    private fun changeContentVisibility(searchState: SearchState, position: Int?) {
+        when (searchState) {
+            is SearchState.Error -> {
                 binding.mainProgressBar.visibility = View.GONE
                 inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
                 showSearchError(CONNECTION_ERROR)
             }
 
-            LOADING -> {
-                clearScreen(showCase)
+            is SearchState.Content -> {
+                clearScreen()
+                vacancies.clear()
+                vacancies.addAll(searchState.vacancyList.toMutableList())
+
+                if (vacancies.isNotEmpty()) {
+                    binding.vacanciesFound.text = requireActivity().resources
+                        .getQuantityString(R.plurals.vacancy_number, vacancies[ZERO].found, vacancies[ZERO].found)
+                    binding.vacancyListRv.visibility = View.VISIBLE
+                    binding.vacanciesFound.visibility = View.VISIBLE
+                    binding.vacancyListRv.adapter = searchAdapter
+                    searchAdapter.notifyDataSetChanged()
+
+                    if (position != null) {
+                        binding.vacancyListRv.scrollToPosition(position)
+                    }
+                } else {
+                    showSearchError(SEARCH_ERROR)
+                }
+            }
+
+            is SearchState.Loading -> {
+                clearScreen()
                 binding.mainProgressBar.visibility = View.VISIBLE
             }
 
-            SHOW_RESULT -> {
-                clearScreen(showCase)
-                binding.mainProgressBar.visibility = View.GONE
-                binding.vacancyListRv.adapter = searchAdapter
-                binding.vacancyListRv.layoutManager = LinearLayoutManager(requireActivity())
-
-                binding.vacancyListRv.visibility = View.VISIBLE
-
-                if (vacancies.isNotEmpty()) {
-                    searchAdapter.notifyDataSetChanged()
-
-                } else {
-                    binding.mainProgressBar.visibility = View.GONE
-                    showSearchError(SEARCH_ERROR)
-                }
+            is SearchState.LoadingNextPage -> {
+                clearScreen()
+                binding.recyclerViewProgressBar.visibility = View.VISIBLE
             }
         }
     }
 
-    private fun clearScreen(s: CharSequence?) {
-        if (!s.isNullOrBlank()) {
-            clearPlaceholders()
-            inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
-        }
+    private fun clearScreen() {
+        clearPlaceholders()
+        inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
     }
 
     private fun clearPlaceholders() {
@@ -155,6 +158,9 @@ class SearchFragment : Fragment() {
         binding.placeholderNoVacancyListMessage.visibility = View.GONE
         binding.placeholderNoInternetMessage.visibility = View.GONE
         binding.placeholderServerErrorMessage.visibility = View.GONE
+        binding.vacanciesFound.visibility = View.GONE
+        binding.mainProgressBar.visibility = View.GONE
+        binding.recyclerViewProgressBar.visibility = View.GONE
     }
 
     private fun showSearchError(codeError: String) {
