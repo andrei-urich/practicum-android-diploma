@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -67,12 +66,11 @@ class VacancyDetailsFragment : Fragment() {
         vacancy = state.vacancy
         hideErrorsAndLoading()
         showVacancyContent(state)
-        binding.itemVacancyDetails.itemVacancyDetailsView.isVisible = true
+        binding.itemVacancyDetails.itemVacancyDetailsView.visibility = View.VISIBLE
     }
 
     private fun setBindings() {
         binding.favoriteVacansyIv.setOnClickListener {
-
         }
 
         binding.arrowBackIv.setOnClickListener {
@@ -86,16 +84,16 @@ class VacancyDetailsFragment : Fragment() {
     }
 
     private fun hideErrorsAndLoading() {
-        binding.detailsProgressBar.isVisible = false
-        binding.errorPlaceholderIv.isVisible = false
-        binding.errorPlaceholderTv.isVisible = false
+        binding.detailsProgressBar.visibility = View.GONE
+        binding.errorPlaceholderIv.visibility = View.GONE
+        binding.errorPlaceholderTv.visibility = View.GONE
     }
 
     private fun showTypeErrorOrEmpty(type: ErrorType) {
-        binding.detailsProgressBar.isVisible = false
-        binding.errorPlaceholderIv.isVisible = true
-        binding.errorPlaceholderTv.isVisible = true
-        binding.itemVacancyDetails.itemVacancyDetailsView.isVisible = false
+        binding.detailsProgressBar.visibility = View.GONE
+        binding.errorPlaceholderIv.visibility = View.VISIBLE
+        binding.errorPlaceholderTv.visibility = View.VISIBLE
+        binding.itemVacancyDetails.itemVacancyDetailsView.visibility = View.GONE
         when (type) {
             is BadRequestError -> {
                 binding.errorPlaceholderTv.text = getString(R.string.toast_unknown_error)
@@ -114,12 +112,12 @@ class VacancyDetailsFragment : Fragment() {
         }
     }
 
-    private fun showLoading() {
-        binding.itemVacancyDetails.itemVacancyDetailsView.isVisible = false
-        binding.detailsProgressBar.isVisible = true
-        binding.errorPlaceholderIv.isVisible = false
-        binding.errorPlaceholderTv.isVisible = false
-    }
+//    private fun showLoading() {
+//        binding.itemVacancyDetails.itemVacancyDetailsView.visibility = View.GONE
+//        binding.detailsProgressBar.visibility = View.VISIBLE
+//        binding.errorPlaceholderIv.visibility = View.GONE
+//        binding.errorPlaceholderTv.visibility = View.GONE
+//    }
 
     private fun showVacancyContent(state: VacancyDetailsState.Content) {
         val vacancyDetailsBinding = FragmentVacancydetailsItemsBinding.bind(binding.root)
@@ -136,13 +134,13 @@ class VacancyDetailsFragment : Fragment() {
 
     private fun setVacancyTitle(binding: FragmentVacancydetailsItemsBinding, state: VacancyDetailsState.Content) {
         binding.nameVacancyTv.text = "${state.vacancy.name}"
-        binding.cardInfoCompanyCv.isVisible = true
-        binding.nameVacancyTv.isVisible = true
+        binding.cardInfoCompanyCv.visibility = View.VISIBLE
+        binding.nameVacancyTv.visibility = View.VISIBLE
     }
 
     private fun setCompanyDetails(binding: FragmentVacancydetailsItemsBinding, state: VacancyDetailsState.Content) {
         binding.nameCompanyTv.text = state.vacancy.employerInfo.employerName
-        binding.nameCompanyTv.isVisible = true
+        binding.nameCompanyTv.visibility = View.VISIBLE
     }
 
     private fun setAddress(binding: FragmentVacancydetailsItemsBinding, state: VacancyDetailsState.Content) {
@@ -159,17 +157,17 @@ class VacancyDetailsFragment : Fragment() {
     private fun setSalary(binding: FragmentVacancydetailsItemsBinding, state: VacancyDetailsState.Content) {
         val salary = Formatter.formatSalary(requireContext(), state.vacancy.salaryInfo)
         binding.vacancySalaryTv.text = salary
-        binding.vacancySalaryTv.isVisible = true
+        binding.vacancySalaryTv.visibility = View.VISIBLE
     }
 
     private fun setKeySkills(binding: FragmentVacancydetailsItemsBinding, state: VacancyDetailsState.Content) {
         val keySkills = state.vacancy.details.keySkills
         if (keySkills.isEmpty()) {
-            binding.keySkills.isVisible = false
-            binding.vacancyKeySkillsTv.isVisible = false
+            binding.keySkills.visibility = View.GONE
+            binding.vacancyKeySkillsTv.visibility = View.GONE
         } else {
-            binding.keySkills.isVisible = true
-            binding.vacancyKeySkillsTv.isVisible = true
+            binding.keySkills.visibility = View.VISIBLE
+            binding.vacancyKeySkillsTv.visibility = View.VISIBLE
             val skillsText = keySkills.joinToString(separator = "\n") { "•  ${it.name}" }
             binding.vacancyKeySkillsTv.text = skillsText
         }
@@ -178,14 +176,14 @@ class VacancyDetailsFragment : Fragment() {
     private fun setDescription(binding: FragmentVacancydetailsItemsBinding, state: VacancyDetailsState.Content) {
         val htmlDescription = state.vacancy.details.description
         binding.descriptionVacancy.text = Html.fromHtml(htmlDescription, Html.FROM_HTML_MODE_COMPACT)
-        binding.vacancyDescriptionTv.isVisible = true
-        binding.descriptionVacancy.isVisible = true
+        binding.vacancyDescriptionTv.visibility = View.VISIBLE
+        binding.descriptionVacancy.visibility = View.VISIBLE
     }
 
     private fun setExperience(binding: FragmentVacancydetailsItemsBinding, state: VacancyDetailsState.Content) {
         binding.valueExperienceTv.text = state.vacancy.details.experience?.name
-        binding.experienceTv.isVisible = true
-        binding.valueExperienceTv.isVisible = true
+        binding.experienceTv.visibility = View.VISIBLE
+        binding.valueExperienceTv.visibility = View.VISIBLE
     }
 
     private fun setEmployment(binding: FragmentVacancydetailsItemsBinding, state: VacancyDetailsState.Content) {
