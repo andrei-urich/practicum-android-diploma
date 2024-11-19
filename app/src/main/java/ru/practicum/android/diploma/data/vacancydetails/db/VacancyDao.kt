@@ -13,8 +13,7 @@ interface VacancyDao {
     @Query("DELETE FROM vacancy_table WHERE hhID = :vacancyId")
     fun deleteVacancyFromFavourite(vacancyId: String)
     @Query("SELECT * FROM vacancy_table")
-    fun getAllFavouritesVacancies(): Flow<List<DetailVacancyEntity>>
-
+    fun getAllFavouritesVacancies(): List<DetailVacancyEntity>
     @Query("SELECT hhID FROM vacancy_table")
     fun getAllFavouritesVacanciesId(): List<String>
     @Query("SELECT * FROM vacancy_table WHERE hhID = :id LIMIT 1")
