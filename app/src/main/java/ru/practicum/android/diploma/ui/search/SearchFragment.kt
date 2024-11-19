@@ -118,7 +118,8 @@ class SearchFragment : Fragment() {
                 vacancies.addAll(searchState.vacancyList.toMutableList())
 
                 if (vacancies.isNotEmpty()) {
-                    binding.vacanciesFound.text = vacancies[ZERO].found.toString()
+                    binding.vacanciesFound.text = requireActivity().resources
+                        .getQuantityString(R.plurals.vacancy_number, vacancies[ZERO].found, vacancies[ZERO].found)
                     binding.vacancyListRv.visibility = View.VISIBLE
                     binding.vacanciesFound.visibility = View.VISIBLE
                     binding.vacancyListRv.adapter = searchAdapter
