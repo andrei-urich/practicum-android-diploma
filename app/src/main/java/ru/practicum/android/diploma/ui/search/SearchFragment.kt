@@ -149,7 +149,6 @@ class SearchFragment : Fragment() {
         inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
     }
 
-
     private fun clearPlaceholders() {
         binding.placeholderNoVacancyListMessage.visibility = View.GONE
         binding.placeholderServerError.visibility = View.GONE
