@@ -27,8 +27,5 @@ const val LOADING = "LOADING"
 const val SHOW_RESULT = "SHOW_RESULT"
 const val CORNER_RADIUS = 2
 const val ZERO = 0
-const val FIRST = 1
-const val SECOND = 2
-const val NEXT = "NEXT_PAGE"
-const val PREVIOUS = "PREVIOUS_PAGE"
+const val ONE = 1
 

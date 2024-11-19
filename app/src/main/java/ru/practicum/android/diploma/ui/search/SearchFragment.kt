@@ -22,12 +22,9 @@ import ru.practicum.android.diploma.ui.vacancydetails.VacancyDetailsFragment
 import ru.practicum.android.diploma.util.CONNECTION_ERROR
 import ru.practicum.android.diploma.util.EMPTY_STRING
 import ru.practicum.android.diploma.util.ERROR
-import ru.practicum.android.diploma.util.FIRST
+import ru.practicum.android.diploma.util.ONE
 import ru.practicum.android.diploma.util.LOADING
-import ru.practicum.android.diploma.util.NEXT
-import ru.practicum.android.diploma.util.PREVIOUS
 import ru.practicum.android.diploma.util.SEARCH_ERROR
-import ru.practicum.android.diploma.util.SECOND
 import ru.practicum.android.diploma.util.SHOW_RESULT
 
 class SearchFragment : Fragment() {
@@ -113,18 +110,10 @@ class SearchFragment : Fragment() {
                 if (dy > 0) {
                     val pos = (binding.vacancyListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = searchAdapter.itemCount
-                    if (pos >= itemsCount - FIRST) {
-                        viewModel.getNextPage(NEXT)
+                    if (pos >= itemsCount - ONE) {
+                        viewModel.getNextPage()
                     }
                 }
-
-//                if (dy < 0) {
-//                    val pos =
-//                        (binding.vacancyListRv.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-//                    if (pos <= SECOND) {
-//                        viewModel.getNextPage(PREVIOUS)
-//                    }
-//                }
             }
         })
     }
