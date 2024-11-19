@@ -17,13 +17,12 @@ class VacancyDetailsViewModel(
     private val vacancyInteractor: VacancyDetailsInteractor,
 ) : ViewModel() {
 
-    private var isFavourite: Boolean = false
+//    private var isFavourite: Boolean = false
 
     private val vacancyState = MutableLiveData<VacancyDetailsState>()
     fun observeVacancyState(): LiveData<VacancyDetailsState> = vacancyState
-    private var favouriteTracksId: List<String>? = null
     var vacancy: VacancyDetails? = null
-
+//    private var favouriteTracksId: List<String>? = null
 
     fun getVacancy(vacancyId: String) {
         renderState(VacancyDetailsState.Loading)
