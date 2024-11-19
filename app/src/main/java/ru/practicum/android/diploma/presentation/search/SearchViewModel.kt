@@ -28,13 +28,16 @@ class SearchViewModel(
     private var searchJob: Job? = null
     private var searchStateLiveData = MutableLiveData<SearchState>()
     private var openTrigger = SingleEventLiveData<VacancyShort>()
-    private val pager = Pager()
+    private val vacancyList: MutableList<VacancyShort> = mutableListOf()
+    private var pages: Int = ZERO
+    private var currentPage: Int = ZERO
 
     fun getSearchStateLiveData(): LiveData<SearchState> = searchStateLiveData
     fun getOpenTrigger(): LiveData<VacancyShort> = openTrigger
+
     fun getSearchText(searchText: String) {
-        this.searchText = searchText
-        if (searchText.isNotBlank()) {
+        if (searchText.isNotBlank() && this.searchText != searchText) {
+            this.searchText = searchText
             searchDebounce(searchText)
         }
     }
@@ -54,7 +57,7 @@ class SearchViewModel(
 
                         else -> {
                             val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
-                            pager.vacancyList.addAll(vacancies)
+                            updateSearchCounts(vacancies)
                             searchStateLiveData.postValue(SearchState.Content(vacancies))
                         }
                     }
@@ -66,8 +69,8 @@ class SearchViewModel(
     private fun constructRequest(searchText: String): HashMap<String, String> {
         val options: HashMap<String, String> = HashMap()
         options["text"] = searchText
-        if (pager.currentPage != 0) {
-            options["page"] = pager.currentPage.toString()
+        if (currentPage != 0) {
+            options["page"] = currentPage.toString()
         }
         options["per_page"] = PER_PAGE.toString()
         return options
@@ -76,16 +79,16 @@ class SearchViewModel(
     fun getNextPage(flag: String) {
         when (flag) {
             NEXT -> {
-                pager.currentPage++
-                if (pager.currentPage < pager.pages) request(pager.searchText)
+                currentPage++
+                if (currentPage < pages) request(searchText)
             }
 
             PREVIOUS -> {
-                pager.currentPage--
-                if (pager.currentPage > FIRST) {
-                    val startIndex = PER_PAGE * pager.currentPage
+                currentPage--
+                if (currentPage > FIRST) {
+                    val startIndex = PER_PAGE * currentPage
                     val lastIndex = startIndex + PER_PAGE
-                    val vacancyPage: List<VacancyShort> = pager.vacancyList.subList(startIndex, lastIndex)
+                    val vacancyPage: List<VacancyShort> = vacancyList.subList(startIndex, lastIndex)
                     searchStateLiveData.postValue(SearchState.Content(vacancyPage))
                 }
             }
@@ -119,26 +122,21 @@ class SearchViewModel(
     private fun searchDebounce(searchText: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            clearPager(searchText)
+            prepareSearchCounts()
             delay(SEARCH_DEBOUNCE_DELAY)
             request(searchText)
         }
     }
 
-    private fun clearPager(searchText: String) {
-        if (!pager.searchText.equals(searchText)) {
-            pager.pages = ZERO
-            pager.currentPage = ZERO
-            pager.vacancyList.clear()
-        }
+    private fun prepareSearchCounts() {
+        pages = ZERO
+        currentPage = FIRST
+        vacancyList.clear()
     }
 
-    // Класс для хранения количества страниц, данных текущей страницы и кол-ва найденных вакансий в поиске
-    inner class Pager(
-        val vacancyList: MutableList<VacancyShort> = mutableListOf(),
-        var searchText: String = EMPTY_STRING,
-        var pages: Int = ZERO,
-        var currentPage: Int = ZERO,
-    )
-
+    private fun updateSearchCounts(vacancies: List<VacancyShort>) {
+        vacancyList.addAll(vacancies)
+        pages = vacancyList[0].pages
+        currentPage = vacancyList[0].page
+    }
 }

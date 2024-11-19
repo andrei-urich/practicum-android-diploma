@@ -56,6 +56,7 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         startPlaceholderVisibility(true)
+        binding.vacancyListRv.layoutManager = LinearLayoutManager(requireActivity())
 
         val searchTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -158,7 +159,6 @@ class SearchFragment : Fragment() {
                     binding.vacanciesFound.visibility = View.VISIBLE
                     binding.mainProgressBar.visibility = View.GONE
                     binding.vacancyListRv.adapter = searchAdapter
-                    binding.vacancyListRv.layoutManager = LinearLayoutManager(requireActivity())
                     searchAdapter.notifyDataSetChanged()
 
                 } else {
