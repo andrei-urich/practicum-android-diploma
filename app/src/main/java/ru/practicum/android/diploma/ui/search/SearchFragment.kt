@@ -21,7 +21,6 @@ import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.ui.vacancydetails.VacancyDetailsFragment
 import ru.practicum.android.diploma.util.CONNECTION_ERROR
 import ru.practicum.android.diploma.util.EMPTY_STRING
-import ru.practicum.android.diploma.util.ONE
 import ru.practicum.android.diploma.util.SEARCH_ERROR
 
 class SearchFragment : Fragment() {
@@ -89,7 +88,7 @@ class SearchFragment : Fragment() {
                 if (dy > 0) {
                     val pos = (binding.vacancyListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = searchAdapter.itemCount
-                    if (pos >= itemsCount - ONE) {
+                    if (pos == itemsCount - 1) {
                         viewModel.getNextPage()
                     }
                 }

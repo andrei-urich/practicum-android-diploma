@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.search
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -44,22 +45,32 @@ class SearchViewModel(
     private fun request(state: SearchState) {
         when (state) {
             is SearchState.Loading, SearchState.LoadingNextPage -> {
-                searchStateLiveData.postValue(state)
-                val request = constructRequest(searchText)
-                viewModelScope.launch {
-                    interactor.search(
-                        request
-                    ).collect { pair ->
-                        when (pair.first) {
-                            null -> searchStateLiveData.postValue(
-                                SearchState.Error
-                            )
+                if (!isNextPageLoading) {
+                    searchStateLiveData.postValue(state)
+                    val request = constructRequest(searchText)
+                    isNextPageLoading = true
+                    Log.d("MY", "новый запрос  ${request.toString()}")
 
-                            else -> {
-                                val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
-                                vacancyList.addAll(vacancies)
-                                updateSearchCounts()
-                                searchStateLiveData.postValue(SearchState.Content(vacancyList))
+
+                    viewModelScope.launch {
+                        interactor.search(
+                            request
+                        ).collect { pair ->
+                            when (pair.first) {
+                                null -> searchStateLiveData.postValue(
+                                    SearchState.Error
+                                )
+
+                                else -> {
+                                    val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
+                                    vacancyList.addAll(vacancies)
+
+                                    Log.d("MY", " в базе итого ${vacancyList.size.toString()} ")
+                                    isNextPageLoading = false
+                                    currentPage++
+                                    pages = vacancyList[0].pages
+                                    searchStateLiveData.postValue(SearchState.Content(vacancyList))
+                                }
                             }
                         }
                     }
@@ -78,7 +89,7 @@ class SearchViewModel(
     private fun constructRequest(searchText: String): HashMap<String, String> {
         val options: HashMap<String, String> = HashMap()
         options["text"] = searchText
-        if (currentPage != 0) {
+        if (currentPage != 1) {
             options["page"] = currentPage.toString()
         }
         options["per_page"] = PER_PAGE.toString()
@@ -86,9 +97,9 @@ class SearchViewModel(
     }
 
     fun getNextPage() {
-        currentPage++
-        isNextPageLoading = true
-        if (currentPage < pages) request(SearchState.LoadingNextPage)
+        if (currentPage < pages) {
+            request(SearchState.LoadingNextPage)
+        }
     }
 
     fun showVacancy(vacancy: VacancyShort) {
@@ -124,11 +135,5 @@ class SearchViewModel(
         pages = ZERO
         currentPage = ONE
         vacancyList.clear()
-    }
-
-    private fun updateSearchCounts() {
-        pages = vacancyList[0].pages
-        currentPage = vacancyList[0].page
-        isNextPageLoading = false
     }
 }
