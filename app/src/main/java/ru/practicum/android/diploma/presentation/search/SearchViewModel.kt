@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.presentation.search
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -49,9 +48,6 @@ class SearchViewModel(
                     searchStateLiveData.postValue(Pair(state, position))
                     val request = constructRequest(searchText)
                     isNextPageLoading = true
-                    Log.d("MY", "новый запрос  ${request.toString()}")
-
-
                     viewModelScope.launch {
                         interactor.search(
                             request
@@ -64,8 +60,6 @@ class SearchViewModel(
                                 else -> {
                                     val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
                                     vacancyList.addAll(vacancies)
-
-                                    Log.d("MY", " в базе итого ${vacancyList.size.toString()} ")
                                     isNextPageLoading = false
                                     currentPage++
                                     pages = vacancyList[0].pages

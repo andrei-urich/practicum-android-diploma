@@ -22,6 +22,7 @@ import ru.practicum.android.diploma.ui.vacancydetails.VacancyDetailsFragment
 import ru.practicum.android.diploma.util.CONNECTION_ERROR
 import ru.practicum.android.diploma.util.EMPTY_STRING
 import ru.practicum.android.diploma.util.SEARCH_ERROR
+import ru.practicum.android.diploma.util.ZERO
 
 class SearchFragment : Fragment() {
     private var searchText = EMPTY_STRING
@@ -117,7 +118,7 @@ class SearchFragment : Fragment() {
                 vacancies.addAll(searchState.vacancyList.toMutableList())
 
                 if (vacancies.isNotEmpty()) {
-                    binding.vacanciesFound.text = vacancies.get(0).found.toString()
+                    binding.vacanciesFound.text = vacancies[ZERO].found.toString()
                     binding.vacancyListRv.visibility = View.VISIBLE
                     binding.vacanciesFound.visibility = View.VISIBLE
                     binding.vacancyListRv.adapter = searchAdapter
