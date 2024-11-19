@@ -20,11 +20,8 @@ const val CLICK_FAVORITE_DEBOUNCE_DELAY = 2000L
 // ---- Search const ----
 const val CLICK_DEBOUNCE_DELAY = 1000L
 const val SEARCH_DEBOUNCE_DELAY = 2000L
-const val ERROR = "ERROR"
 const val SEARCH_ERROR = "SEARCH_ERROR"
 const val CONNECTION_ERROR = "CONNECTION_ERROR"
-const val LOADING = "LOADING"
-const val SHOW_RESULT = "SHOW_RESULT"
 const val CORNER_RADIUS = 2
 const val ZERO = 0
 const val ONE = 1

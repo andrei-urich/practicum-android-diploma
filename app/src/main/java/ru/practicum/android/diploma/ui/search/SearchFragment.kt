@@ -21,11 +21,8 @@ import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.ui.vacancydetails.VacancyDetailsFragment
 import ru.practicum.android.diploma.util.CONNECTION_ERROR
 import ru.practicum.android.diploma.util.EMPTY_STRING
-import ru.practicum.android.diploma.util.ERROR
 import ru.practicum.android.diploma.util.ONE
-import ru.practicum.android.diploma.util.LOADING
 import ru.practicum.android.diploma.util.SEARCH_ERROR
-import ru.practicum.android.diploma.util.SHOW_RESULT
 
 class SearchFragment : Fragment() {
     private var searchText = EMPTY_STRING
@@ -78,25 +75,7 @@ class SearchFragment : Fragment() {
         binding.searchEditText.addTextChangedListener(searchTextWatcher)
 
         viewModel.getSearchStateLiveData().observe(viewLifecycleOwner) { searchState ->
-            when (searchState) {
-                is SearchState.Error -> {
-                    changeContentVisibility(showCase = ERROR)
-                }
-
-                is SearchState.Content -> {
-                    vacancies.clear()
-                    vacancies.addAll(searchState.vacancyList.toMutableList())
-                    changeContentVisibility(showCase = SHOW_RESULT)
-                }
-
-                is SearchState.Loading -> {
-                    changeContentVisibility(showCase = LOADING)
-                }
-
-                else -> {
-                    changeContentVisibility(showCase = ERROR)
-                }
-            }
+            changeContentVisibility(searchState)
         }
 
         viewModel.getOpenTrigger().observe(viewLifecycleOwner) { vacancy ->
@@ -125,45 +104,48 @@ class SearchFragment : Fragment() {
         )
     }
 
-    private fun changeContentVisibility(showCase: String) {
-        when (showCase) {
-            ERROR -> {
+    private fun changeContentVisibility(searchState: SearchState) {
+        when (searchState) {
+            is SearchState.Error -> {
                 binding.mainProgressBar.visibility = View.GONE
                 inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
                 showSearchError(CONNECTION_ERROR)
             }
 
-            LOADING -> {
-                clearScreen(showCase)
-                binding.mainProgressBar.visibility = View.VISIBLE
-            }
-
-            SHOW_RESULT -> {
-                clearScreen(showCase)
-
-                binding.vacancyListRv.visibility = View.VISIBLE
+            is SearchState.Content -> {
+                clearScreen()
+                vacancies.clear()
+                vacancies.addAll(searchState.vacancyList.toMutableList())
 
                 if (vacancies.isNotEmpty()) {
                     binding.vacanciesFound.text = vacancies.get(0).found.toString()
+                    binding.vacancyListRv.visibility = View.VISIBLE
                     binding.vacanciesFound.visibility = View.VISIBLE
-                    binding.mainProgressBar.visibility = View.GONE
                     binding.vacancyListRv.adapter = searchAdapter
                     searchAdapter.notifyDataSetChanged()
 
                 } else {
-                    binding.mainProgressBar.visibility = View.GONE
                     showSearchError(SEARCH_ERROR)
                 }
+            }
+
+            is SearchState.Loading -> {
+                clearScreen()
+                binding.mainProgressBar.visibility = View.VISIBLE
+            }
+
+            is SearchState.LoadingNextPage -> {
+                clearScreen()
+                binding.recyclerViewProgressBar.visibility = View.VISIBLE
             }
         }
     }
 
-    private fun clearScreen(s: CharSequence?) {
-        if (!s.isNullOrBlank()) {
-            clearPlaceholders()
-            inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
-        }
+    private fun clearScreen() {
+        clearPlaceholders()
+        inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
     }
+
 
     private fun clearPlaceholders() {
         binding.placeholderNoVacancyListMessage.visibility = View.GONE
@@ -174,6 +156,8 @@ class SearchFragment : Fragment() {
         binding.placeholderNoInternetMessage.visibility = View.GONE
         binding.placeholderServerErrorMessage.visibility = View.GONE
         binding.vacanciesFound.visibility = View.GONE
+        binding.mainProgressBar.visibility = View.GONE
+        binding.recyclerViewProgressBar.visibility = View.GONE
     }
 
     private fun showSearchError(codeError: String) {

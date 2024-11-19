@@ -41,27 +41,38 @@ class SearchViewModel(
         }
     }
 
-    private fun request() {
-        searchStateLiveData.postValue(SearchState.Loading)
-        val request = constructRequest(searchText)
-        viewModelScope.launch {
-            interactor.search(
-                request
-            ).collect { pair ->
-                when (pair.first) {
-                    null -> searchStateLiveData.postValue(
-                        SearchState.Error
-                    )
+    private fun request(state: SearchState) {
+        when (state) {
+            is SearchState.Loading, SearchState.LoadingNextPage -> {
+                searchStateLiveData.postValue(state)
+                val request = constructRequest(searchText)
+                viewModelScope.launch {
+                    interactor.search(
+                        request
+                    ).collect { pair ->
+                        when (pair.first) {
+                            null -> searchStateLiveData.postValue(
+                                SearchState.Error
+                            )
 
-                    else -> {
-                        val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
-                        vacancyList.addAll(vacancies)
-                        updateSearchCounts()
-                        searchStateLiveData.postValue(SearchState.Content(vacancyList))
+                            else -> {
+                                val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
+                                vacancyList.addAll(vacancies)
+                                updateSearchCounts()
+                                searchStateLiveData.postValue(SearchState.Content(vacancyList))
+                            }
+                        }
                     }
                 }
             }
+
+            else -> {
+                searchStateLiveData.postValue(
+                    SearchState.Error
+                )
+            }
         }
+
     }
 
     private fun constructRequest(searchText: String): HashMap<String, String> {
@@ -77,7 +88,7 @@ class SearchViewModel(
     fun getNextPage() {
         currentPage++
         isNextPageLoading = true
-        if (currentPage < pages) request()
+        if (currentPage < pages) request(SearchState.LoadingNextPage)
     }
 
     fun showVacancy(vacancy: VacancyShort) {
@@ -105,7 +116,7 @@ class SearchViewModel(
         searchJob = viewModelScope.launch {
             prepareSearchCounts()
             delay(SEARCH_DEBOUNCE_DELAY)
-            request()
+            request(SearchState.Loading)
         }
     }
 
