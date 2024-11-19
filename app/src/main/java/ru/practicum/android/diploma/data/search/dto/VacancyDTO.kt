@@ -5,8 +5,5 @@ data class VacancyDTO(
     val name: String,
     val area: AreaDTO,
     val employer: EmployerDTO,
-    val salary: SalaryDTO?,
-    val found: Int,
-    val page: Int,
-    val pages: Int
+    val salary: SalaryDTO?
 )

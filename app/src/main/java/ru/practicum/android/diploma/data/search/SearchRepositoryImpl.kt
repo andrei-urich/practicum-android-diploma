@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.data.search
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.data.search.network.NetworkClient
@@ -33,9 +34,9 @@ class SearchRepositoryImpl(
                             salaryTo = it.salary?.to,
                             currency = it.salary?.currency,
                             logoLink = it.employer.logoUrls?.original ?: EMPTY_STRING,
-                            found = it.found,
-                            pages = it.pages,
-                            page = it.page
+                            found = response.found,
+                            pages = response.pages,
+                            page = response.page
                         )
                     }
                     emit(Resource.Success(vacancies))

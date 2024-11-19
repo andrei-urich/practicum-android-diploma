@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -21,8 +22,12 @@ import ru.practicum.android.diploma.ui.vacancydetails.VacancyDetailsFragment
 import ru.practicum.android.diploma.util.CONNECTION_ERROR
 import ru.practicum.android.diploma.util.EMPTY_STRING
 import ru.practicum.android.diploma.util.ERROR
+import ru.practicum.android.diploma.util.FIRST
 import ru.practicum.android.diploma.util.LOADING
+import ru.practicum.android.diploma.util.NEXT
+import ru.practicum.android.diploma.util.PREVIOUS
 import ru.practicum.android.diploma.util.SEARCH_ERROR
+import ru.practicum.android.diploma.util.SECOND
 import ru.practicum.android.diploma.util.SHOW_RESULT
 
 class SearchFragment : Fragment() {
@@ -99,6 +104,28 @@ class SearchFragment : Fragment() {
         viewModel.getOpenTrigger().observe(viewLifecycleOwner) { vacancy ->
             showVacancy(vacancy.vacancyId)
         }
+
+        binding.vacancyListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0) {
+                    val pos = (binding.vacancyListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    val itemsCount = searchAdapter.itemCount
+                    if (pos >= itemsCount - FIRST) {
+                        viewModel.getNextPage(NEXT)
+                    }
+                }
+
+//                if (dy < 0) {
+//                    val pos =
+//                        (binding.vacancyListRv.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+//                    if (pos <= SECOND) {
+//                        viewModel.getNextPage(PREVIOUS)
+//                    }
+//                }
+            }
+        })
     }
 
     private fun showVacancy(vacancyId: String?) {
@@ -123,13 +150,15 @@ class SearchFragment : Fragment() {
 
             SHOW_RESULT -> {
                 clearScreen(showCase)
-                binding.mainProgressBar.visibility = View.GONE
-                binding.vacancyListRv.adapter = searchAdapter
-                binding.vacancyListRv.layoutManager = LinearLayoutManager(requireActivity())
 
                 binding.vacancyListRv.visibility = View.VISIBLE
 
                 if (vacancies.isNotEmpty()) {
+                    binding.vacanciesFound.text = vacancies.get(0).found.toString()
+                    binding.vacanciesFound.visibility = View.VISIBLE
+                    binding.mainProgressBar.visibility = View.GONE
+                    binding.vacancyListRv.adapter = searchAdapter
+                    binding.vacancyListRv.layoutManager = LinearLayoutManager(requireActivity())
                     searchAdapter.notifyDataSetChanged()
 
                 } else {
@@ -155,6 +184,7 @@ class SearchFragment : Fragment() {
         binding.placeholderNoVacancyListMessage.visibility = View.GONE
         binding.placeholderNoInternetMessage.visibility = View.GONE
         binding.placeholderServerErrorMessage.visibility = View.GONE
+        binding.vacanciesFound.visibility = View.GONE
     }
 
     private fun showSearchError(codeError: String) {

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
+import ru.practicum.android.diploma.util.SalaryToString
 
 class VacanciesRecyclerViewHolder(parentView: View) : RecyclerView.ViewHolder(parentView) {
     private var vacancyNameAndCityTV: TextView = parentView.findViewById(R.id.vacancyNameAndCityTVRecycler)
@@ -17,7 +18,7 @@ class VacanciesRecyclerViewHolder(parentView: View) : RecyclerView.ViewHolder(pa
     fun bind(vacancy: VacancyShort) {
         vacancyNameAndCityTV.text = itemView.context.getString(R.string.vacancy_item_title, vacancy.name, vacancy.area)
         companyNameTV.text = vacancy.employer
-        salaryTV.text = "${vacancy.salary} ${vacancy.currency}"
+        salaryTV.text = SalaryToString.getSalary(vacancy)
         Glide.with(itemView)
             .load(Uri.parse(vacancy.logoLink))
             .placeholder(R.drawable.placeholder)
