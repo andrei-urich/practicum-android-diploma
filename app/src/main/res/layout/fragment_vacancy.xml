@@ -1,28 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="?attr/colorSecondaryVariant">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        style="@style/ToolbarTitleText"
+    <ProgressBar
+        android:id="@+id/detailsProgressBar"
+        android:layout_width="@dimen/space_36"
+        android:layout_height="@dimen/space_0"
+        android:indeterminateTint="@color/blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <ImageView
-            android:id="@+id/backFromVacancy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/arrow_back_icon"
-            app:tint="?attr/colorSecondary"
-            android:layout_marginEnd="@dimen/space_16"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/ToolbarTitleText"
-            android:layout_marginStart="@dimen/space_16"
-            android:text="@string/vacancy_detail_title_tv" />
-    </com.google.android.material.appbar.MaterialToolbar>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="136dp">
+
+        <ImageView
+            android:id="@+id/arrowBackIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_20"
+            android:layout_marginTop="@dimen/space_20"
+            android:clickable="true"
+            android:src="@drawable/arrow_back_icon"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/screenNameVacancy"
+            style="@style/Medium22TextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_20"
+            android:layout_marginTop="@dimen/space_20"
+            android:text="@string/vacancy_detail_title_tv"
+            app:layout_constraintStart_toEndOf="@+id/arrowBackIv"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/shareVacansyIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_20"
+            android:layout_marginEnd="@dimen/space_28"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:src="@drawable/share_icon"
+            app:layout_constraintEnd_toStartOf="@+id/favoriteVacansyIv"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/favoriteVacansyIv"
+            android:layout_width="@dimen/space_20"
+            android:layout_height="@dimen/space_20"
+            android:layout_marginTop="@dimen/space_20"
+            android:layout_marginEnd="@dimen/space_20"
+            android:clickable="true"
+            android:src="@drawable/favorite_icon_normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineLeftGl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/space_16" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineRightGl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/space_16" />
+
+        <ImageView
+            android:id="@+id/errorPlaceholderIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/cant_take_vacancy_image"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineRightGl"
+            app:layout_constraintStart_toStartOf="@+id/guidelineLeftGl"
+            app:layout_constraintTop_toBottomOf="@+id/screenNameVacancy" />
+
+        <TextView
+            android:id="@+id/errorPlaceholderTv"
+            style="@style/Medium22TextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_16"
+            android:gravity="center"
+            android:text="@string/no_vacancies_found_title"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/errorPlaceholderIv"
+            app:layout_constraintStart_toStartOf="@+id/errorPlaceholderIv"
+            app:layout_constraintTop_toBottomOf="@+id/errorPlaceholderIv" />
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/space_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/guidelineRightGl"
+            app:layout_constraintStart_toStartOf="@+id/guidelineLeftGl"
+            app:layout_constraintTop_toBottomOf="@+id/screenNameVacancy">
+
+            <include
+                android:id="@+id/itemVacancyDetails"
+                layout="@layout/fragment_vacancydetails_items" />
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
