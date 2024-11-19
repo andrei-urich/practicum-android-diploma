@@ -73,8 +73,8 @@ class SearchFragment : Fragment() {
         }
         binding.searchEditText.addTextChangedListener(searchTextWatcher)
 
-        viewModel.getSearchStateLiveData().observe(viewLifecycleOwner) { searchState ->
-            changeContentVisibility(searchState)
+        viewModel.getSearchStateLiveData().observe(viewLifecycleOwner) { pair ->
+            changeContentVisibility(pair.first, pair.second)
         }
 
         viewModel.getOpenTrigger().observe(viewLifecycleOwner) { vacancy ->
@@ -103,7 +103,7 @@ class SearchFragment : Fragment() {
         )
     }
 
-    private fun changeContentVisibility(searchState: SearchState) {
+    private fun changeContentVisibility(searchState: SearchState, position: Int?) {
         when (searchState) {
             is SearchState.Error -> {
                 binding.mainProgressBar.visibility = View.GONE
@@ -123,6 +123,9 @@ class SearchFragment : Fragment() {
                     binding.vacancyListRv.adapter = searchAdapter
                     searchAdapter.notifyDataSetChanged()
 
+                    if (position != null) {
+                        binding.vacancyListRv.scrollToPosition(position)
+                    }
                 } else {
                     showSearchError(SEARCH_ERROR)
                 }

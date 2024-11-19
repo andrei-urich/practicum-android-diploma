@@ -25,14 +25,14 @@ class SearchViewModel(
     private var isClickAllowed = true
     private var searchText = EMPTY_STRING
     private var searchJob: Job? = null
-    private var searchStateLiveData = MutableLiveData<SearchState>()
+    private var searchStateLiveData = MutableLiveData<Pair<SearchState, Int?>>()
     private var openTrigger = SingleEventLiveData<VacancyShort>()
     private val vacancyList: MutableList<VacancyShort> = mutableListOf()
     private var pages: Int = ZERO
     private var currentPage: Int = ZERO
     private var isNextPageLoading = false
 
-    fun getSearchStateLiveData(): LiveData<SearchState> = searchStateLiveData
+    fun getSearchStateLiveData(): LiveData<Pair<SearchState, Int?>> = searchStateLiveData
     fun getOpenTrigger(): LiveData<VacancyShort> = openTrigger
 
     fun getSearchText(searchText: String) {
@@ -42,11 +42,11 @@ class SearchViewModel(
         }
     }
 
-    private fun request(state: SearchState) {
+    private fun request(state: SearchState, position: Int?) {
         when (state) {
             is SearchState.Loading, SearchState.LoadingNextPage -> {
                 if (!isNextPageLoading) {
-                    searchStateLiveData.postValue(state)
+                    searchStateLiveData.postValue(Pair(state, position))
                     val request = constructRequest(searchText)
                     isNextPageLoading = true
                     Log.d("MY", "новый запрос  ${request.toString()}")
@@ -58,7 +58,7 @@ class SearchViewModel(
                         ).collect { pair ->
                             when (pair.first) {
                                 null -> searchStateLiveData.postValue(
-                                    SearchState.Error
+                                    Pair(SearchState.Error, position)
                                 )
 
                                 else -> {
@@ -69,7 +69,7 @@ class SearchViewModel(
                                     isNextPageLoading = false
                                     currentPage++
                                     pages = vacancyList[0].pages
-                                    searchStateLiveData.postValue(SearchState.Content(vacancyList))
+                                    searchStateLiveData.postValue(Pair(SearchState.Content(vacancyList), position))
                                 }
                             }
                         }
@@ -79,7 +79,7 @@ class SearchViewModel(
 
             else -> {
                 searchStateLiveData.postValue(
-                    SearchState.Error
+                    Pair(SearchState.Error, position)
                 )
             }
         }
@@ -98,7 +98,9 @@ class SearchViewModel(
 
     fun getNextPage() {
         if (currentPage < pages) {
-            request(SearchState.LoadingNextPage)
+            // Вычисляем позицию куда проскролить ресайклер, чтобы первой стояла первая вакансия с новой страницы
+            val position = (currentPage - ONE) * PER_PAGE - ONE
+            request(SearchState.LoadingNextPage, position)
         }
     }
 
@@ -127,7 +129,7 @@ class SearchViewModel(
         searchJob = viewModelScope.launch {
             prepareSearchCounts()
             delay(SEARCH_DEBOUNCE_DELAY)
-            request(SearchState.Loading)
+            request(SearchState.Loading, null)
         }
     }
 
