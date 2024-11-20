@@ -119,7 +119,6 @@ class SearchFragment : Fragment() {
             }
 
             is SearchState.NextPageLoadingError -> {
-                binding.recyclerViewProgressBar.visibility = View.GONE
                 showSearchError(searchState.resultCode, true)
             }
 
@@ -179,6 +178,7 @@ class SearchFragment : Fragment() {
 
     private fun showSearchError(codeError: Int?, isLoadingNextPage: Boolean) {
         if (isLoadingNextPage) {
+            binding.recyclerViewProgressBar.visibility = View.GONE
             when (codeError) {
                 RESULT_CODE_NO_INTERNET_ERROR -> {
                     val message = requireActivity().resources.getString(R.string.toast_internet_throwable)
