@@ -52,9 +52,16 @@ class SearchViewModel(
                         request
                     ).collect { pair ->
                         when (pair.first) {
-                            null -> searchStateLiveData.postValue(
-                                Pair(SearchState.Error(pair.second), position)
-                            )
+                            null ->
+                                if (state is SearchState.Loading) {
+                                    searchStateLiveData.postValue(
+                                        Pair(SearchState.LoadingError(pair.second), position)
+                                    )
+                                } else {
+                                    searchStateLiveData.postValue(
+                                        Pair(SearchState.NextPageLoadingError(pair.second), position)
+                                    )
+                                }
 
                             else -> {
                                 val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>

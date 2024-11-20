@@ -5,7 +5,11 @@ import ru.practicum.android.diploma.domain.search.models.VacancyShort
 sealed class SearchState {
     object Loading : SearchState()
     object LoadingNextPage : SearchState()
-    data class Error(
+    data class LoadingError(
+        val resultCode: Int?
+    ) : SearchState()
+
+    data class NextPageLoadingError(
         val resultCode: Int?
     ) : SearchState()
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -104,10 +105,16 @@ class SearchFragment : Fragment() {
 
     private fun changeContentVisibility(searchState: SearchState, position: Int?) {
         when (searchState) {
-            is SearchState.Error -> {
+            is SearchState.LoadingError -> {
                 binding.mainProgressBar.visibility = View.GONE
                 inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
-                showSearchError(searchState.resultCode)
+                showSearchError(searchState.resultCode, false)
+            }
+
+            is SearchState.NextPageLoadingError -> {
+                binding.mainProgressBar.visibility = View.GONE
+                inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
+                showSearchError(searchState.resultCode, true)
             }
 
             is SearchState.Content -> {
@@ -117,10 +124,10 @@ class SearchFragment : Fragment() {
 
                 if (vacancies.isNotEmpty()) {
                     binding.vacanciesFound.text = requireActivity().resources.getQuantityString(
-                            R.plurals.vacancy_number,
-                            vacancies[ZERO].found,
-                            vacancies[ZERO].found
-                        )
+                        R.plurals.vacancy_number,
+                        vacancies[ZERO].found,
+                        vacancies[ZERO].found
+                    )
                     binding.vacancyListRv.visibility = View.VISIBLE
                     binding.vacanciesFound.visibility = View.VISIBLE
                     binding.vacancyListRv.adapter = searchAdapter
@@ -130,7 +137,7 @@ class SearchFragment : Fragment() {
                         binding.vacancyListRv.scrollToPosition(position)
                     }
                 } else {
-                    showSearchError(null)
+                    showSearchError(null, false)
                 }
             }
 
@@ -164,26 +171,38 @@ class SearchFragment : Fragment() {
         binding.recyclerViewProgressBar.visibility = View.GONE
     }
 
-    private fun showSearchError(codeError: Int?) {
-        when (codeError) {
-            null -> {
-                binding.placeholderNoVacancyList.visibility = View.VISIBLE
-                binding.placeholderNoVacancyListMessage.visibility = View.VISIBLE
-                vacancies.clear()
+    private fun showSearchError(codeError: Int?, isLoadingNextPage: Boolean) {
+        if (isLoadingNextPage) {
+            when (codeError) {
+                RESULT_CODE_NO_INTERNET_ERROR -> {
+                    binding.recyclerViewProgressBar.visibility = View.GONE
+                    val message = requireActivity().resources.getString(R.string.toast_internet_throwable)
+                    Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
+                }
+
+                RESULT_CODE_SERVER_ERROR, RESULT_CODE_BAD_REQUEST -> {
+                    binding.recyclerViewProgressBar.visibility = View.GONE
+                    val message = requireActivity().resources.getString(R.string.toast_unknown_error)
+                    Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
+                }
             }
+        } else {
+            when (codeError) {
+                null -> {
+                    binding.placeholderNoVacancyList.visibility = View.VISIBLE
+                    binding.placeholderNoVacancyListMessage.visibility = View.VISIBLE
+                    vacancies.clear()
+                }
 
-            RESULT_CODE_NO_INTERNET_ERROR -> {
-                binding.placeholderNoInternet.visibility = View.VISIBLE
-                binding.placeholderNoInternetMessage.visibility = View.VISIBLE
-            }
+                RESULT_CODE_NO_INTERNET_ERROR -> {
+                    binding.placeholderNoInternet.visibility = View.VISIBLE
+                    binding.placeholderNoInternetMessage.visibility = View.VISIBLE
+                }
 
-            RESULT_CODE_SERVER_ERROR, RESULT_CODE_BAD_REQUEST -> {
-                binding.placeholderServerError.visibility = View.VISIBLE
-                binding.placeholderServerErrorMessage.visibility = View.VISIBLE
-            }
-
-            else -> {
-
+                RESULT_CODE_SERVER_ERROR, RESULT_CODE_BAD_REQUEST -> {
+                    binding.placeholderServerError.visibility = View.VISIBLE
+                    binding.placeholderServerErrorMessage.visibility = View.VISIBLE
+                }
             }
         }
     }
