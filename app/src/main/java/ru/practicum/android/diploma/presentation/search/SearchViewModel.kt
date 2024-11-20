@@ -76,7 +76,7 @@ class SearchViewModel(
                                     vacancyList.addAll(vacancies)
                                     isNextPageLoading = false
                                     currentPage++
-                                    pages = vacancyList[0].pages
+                                    if (vacancies.isNotEmpty()) pages = vacancyList[0].pages
                                     searchStateLiveData.postValue(Pair(SearchState.Content(vacancyList), position))
                                 }
                             }
