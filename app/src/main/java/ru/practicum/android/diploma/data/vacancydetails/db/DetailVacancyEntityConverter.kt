@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.domain.vacancydetails.models.VacancyDetails
 
 class DetailVacancyEntityConverter {
     fun mapSt(detailVacancyEntity: DetailVacancyEntity): VacancyShort {
-        val vacancy = VacancyShort(
+        return VacancyShort(
             name = detailVacancyEntity.name,
             vacancyId = detailVacancyEntity.hhID,
             employer = detailVacancyEntity.employerName,
@@ -20,12 +20,11 @@ class DetailVacancyEntityConverter {
             currency = detailVacancyEntity.salaryCurrency,
             logoLink = detailVacancyEntity.employerLogoUrl
         )
-        return vacancy
     }
 
     fun mapDt(detailVacancyEntity: DetailVacancyEntity?): VacancyDetails? {
         if (detailVacancyEntity != null) {
-            val adress = Address(
+            val address = Address(
                 detailVacancyEntity.addressCity,
                 detailVacancyEntity.addressBuilding,
                 detailVacancyEntity.addressStreet,
@@ -46,7 +45,7 @@ class DetailVacancyEntityConverter {
                     detailVacancyEntity.salaryCurrency
                 ),
                 details = Details(
-                    adress,
+                    address,
                     NameInfo(detailVacancyEntity.experienceId, detailVacancyEntity.experienceName.toString()),
                     NameInfo(detailVacancyEntity.employmentId, detailVacancyEntity.employerName),
                     NameInfo(detailVacancyEntity.scheduleId, detailVacancyEntity.scheduleName.toString()),

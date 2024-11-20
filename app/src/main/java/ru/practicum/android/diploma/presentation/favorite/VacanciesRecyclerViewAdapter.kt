@@ -24,7 +24,6 @@ class VacanciesRecyclerViewAdapter(private val vacancyList: List<VacancyShort>) 
         holder.itemView.setOnClickListener {
             onClickListener?.onClick(position, vacancyList[position])
         }
-
     }
 
     fun setOnClickListener(listener: OnClickListener) {

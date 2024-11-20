@@ -8,8 +8,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.favorite.interactors.GetFavoriteVacanciesListInteractor
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
-import ru.practicum.android.diploma.util.CODE_200
-import ru.practicum.android.diploma.util.CODE_299
+import java.io.IOException
 
 class FavoriteViewModel(
     private val getFavoriteVacanciesListInteractor: GetFavoriteVacanciesListInteractor,
@@ -22,26 +21,61 @@ class FavoriteViewModel(
         return favoriteVacanciesScreenStateLiveData
     }
 
-    fun getTestList() {
-        favoriteVacanciesScreenStateLiveData.postValue(
-            FavoritesScreenState.FilledFavoriteScreen(
-                listOf(
-                    VacancyShort("23", "developer", "yandex", "Spb", CODE_200, null, currency = "Р", null),
-                    VacancyShort("24", "developer2", "skillbox", "Msk", CODE_299, null, currency = "$", null)
-                )
-            )
+//    fun getTestList() {
+//        favoriteVacanciesScreenStateLiveData.postValue(
+//            FavoritesScreenState.FilledFavoriteScreen(
+//                listOf(
+//                    VacancyShort("23", "developer", "yandex", "Spb", CODE_200, null, currency = "Р", "null"),
+//                    VacancyShort("24", "developer2", "skillbox", "Msk", CODE_299, null, currency = "$", "null")
+//                )
+//            )
+//
+//        )
+//    }
 
-        )
-    }
+//    fun getFavoriteVacanciesList() {
+//        viewModelScope.launch(dispatcherIO) {
+//            getFavoriteVacanciesListInteractor.getFavVacanciesList().collect {
+//                if (it.isEmpty()) {
+//                    favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.EmptyFavoriteScreen)
+//                } else {
+//                    // favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.FilledFavoriteScreen(it))
+//                }
+//            }
+//        }
+//    }
 
     fun getFavoriteVacanciesList() {
         viewModelScope.launch(dispatcherIO) {
-            getFavoriteVacanciesListInteractor.getFavVacanciesList().collect {
-                if (it.isEmpty()) {
-                    favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.EmptyFavoriteScreen)
-                } else {
-                    // favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.FilledFavoriteScreen(it))
-                }
+            try {
+                getFavoriteVacanciesListInteractor
+                    .getFavVacanciesList()
+                    .collect { vacancies ->
+                        if (vacancies.isEmpty()) {
+                            favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.EmptyFavoriteScreen)
+                        } else {
+                            val vacancyBases = vacancies.map { vacancy ->
+                                VacancyShort(
+                                    vacancyId = vacancy.vacancyId,
+                                    name = vacancy.name,
+                                    employer = vacancy.employer,
+                                    area = vacancy.area,
+                                    salaryTo = vacancy.salaryTo,
+                                    salaryFrom = vacancy.salaryFrom,
+                                    currency = vacancy.currency,
+                                    logoLink = vacancy.logoLink,
+                                )
+                            }
+                            val vacancyArrayList = ArrayList(vacancyBases)
+                            favoriteVacanciesScreenStateLiveData.postValue(
+                                FavoritesScreenState.FilledFavoriteScreen(
+                                    vacancyArrayList
+                                )
+                            )
+                        }
+                    }
+            } catch (e: IOException) {
+                favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.Error(e))
             }
         }
     }

@@ -18,8 +18,8 @@ class GetFavoriteVacanciesListRepositoryImpl(
 
     }
 
-    private fun convertVacancyList(vacaniesEntity: List<DetailVacancyEntity>): List<VacancyShort> {
-        return vacaniesEntity.map { vacancyEntity -> favVacancyEntityConverter.mapSt(vacancyEntity) }
+    private fun convertVacancyList(vacanciesEntity: List<DetailVacancyEntity>): List<VacancyShort> {
+        return vacanciesEntity.map { vacancyEntity -> favVacancyEntityConverter.mapSt(vacancyEntity) }
     }
 
 }
