@@ -45,7 +45,7 @@ class SearchViewModel(
 
     private fun request(state: SearchState, position: Int?) {
         if (state is SearchState.Loading || state is SearchState.LoadingNextPage) {
-            if (!isNextPageLoading) {
+            if (!isNextPageLoading && !isNextPageLoadingError) {
                 searchStateLiveData.postValue(Pair(state, position))
                 val request = constructRequest(searchText)
                 isNextPageLoading = true
@@ -55,8 +55,8 @@ class SearchViewModel(
                     ).collect { pair ->
                         when (pair.first) {
                             null -> {
+                                isNextPageLoading = false
                                 if (state is SearchState.Loading) {
-                                    isNextPageLoading = false
                                     searchStateLiveData.postValue(
                                         Pair(SearchState.LoadingError(pair.second), position)
                                     )
@@ -126,16 +126,12 @@ class SearchViewModel(
     private fun searchDebounce() {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            prepareSearchCounts()
+            pages = ZERO
+            currentPage = ONE
+            vacancyList.clear()
             delay(SEARCH_DEBOUNCE_DELAY)
             request(SearchState.Loading, null)
         }
-    }
-
-    private fun prepareSearchCounts() {
-        pages = ZERO
-        currentPage = ONE
-        vacancyList.clear()
     }
 
     fun clearScreen(flag: Boolean) {
