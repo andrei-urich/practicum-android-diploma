@@ -26,8 +26,8 @@ class FavoriteViewModel(
         favoriteVacanciesScreenStateLiveData.postValue(
             FavoritesScreenState.FilledFavoriteScreen(
                 listOf(
-                    VacancyShort("23", "developer", "yandex", "Spb", CODE_200, null, currency = "Р", null),
-                    VacancyShort("24", "developer2", "skillbox", "Msk", CODE_299, null, currency = "$", null)
+                    VacancyShort("23", "developer", "yandex", "Spb", CODE_200, null, currency = "Р", "null"),
+                    VacancyShort("24", "developer2", "skillbox", "Msk", CODE_299, null, currency = "$", "null")
                 )
             )
 

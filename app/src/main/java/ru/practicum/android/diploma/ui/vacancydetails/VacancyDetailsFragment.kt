@@ -89,6 +89,13 @@ class VacancyDetailsFragment : Fragment() {
         binding.favoriteVacansyIv.setOnClickListener {
         }
 
+        binding.shareVacansyIv.setOnClickListener {
+            val intent = viewModel.getSharingIntent()
+            if (intent != null) {
+                startActivity(intent)
+            }
+        }
+
         binding.arrowBackIv.setOnClickListener {
             findNavController().navigateUp()
         }

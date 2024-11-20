@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.vacancydetails
 
+import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,7 +21,7 @@ class VacancyDetailsViewModel(
     private val vacancyDetailFavoriteInteractor: VacancyDetailFavoriteInteractor
 ) : ViewModel() {
 
-//    private var isFavourite: Boolean = false
+//    private var isFavorite: Boolean = false
 
     private val vacancyState = MutableLiveData<VacancyDetailsState>()
     private val favoriteButtonState = MutableLiveData<Boolean>(false)
@@ -28,7 +29,6 @@ class VacancyDetailsViewModel(
     fun getFavoriteButtonStateLD(): LiveData<Boolean> = favoriteButtonState
     var vacancy: VacancyDetails? = null
 
-    //    private var favouriteTracksId: List<String>? = null
     fun getVacancy(vacancyId: String) {
         renderState(VacancyDetailsState.Loading)
         viewModelScope.launch {
@@ -98,6 +98,14 @@ class VacancyDetailsViewModel(
                 vacancyDetailFavoriteInteractor.addVacancyToFavorites(vacancy!!)
                 favoriteButtonState.postValue(true)
             }
+        }
+    }
+
+    fun getSharingIntent(): Intent? {
+        return if (vacancy != null) {
+            vacancyInteractor.shareVacancy(vacancy!!.details.hhVacancyLink)
+        } else {
+            null
         }
     }
 
