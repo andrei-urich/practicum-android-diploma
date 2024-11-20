@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.data.vacancydetails.db
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import ru.practicum.android.diploma.data.vacancydetails.EmployerInfo
 import ru.practicum.android.diploma.data.vacancydetails.NameInfo
 import ru.practicum.android.diploma.data.vacancydetails.SalaryInfo
@@ -8,7 +10,7 @@ import ru.practicum.android.diploma.domain.vacancydetails.models.Address
 import ru.practicum.android.diploma.domain.vacancydetails.models.Details
 import ru.practicum.android.diploma.domain.vacancydetails.models.VacancyDetails
 
-class DetailVacancyEntityConverter {
+class DetailVacancyEntityConverter(private val gson: Gson) {
     fun mapSt(detailVacancyEntity: DetailVacancyEntity): VacancyShort {
         return VacancyShort(
             name = detailVacancyEntity.name,
@@ -20,6 +22,10 @@ class DetailVacancyEntityConverter {
             currency = detailVacancyEntity.salaryCurrency,
             logoLink = detailVacancyEntity.employerLogoUrl
         )
+    }
+
+    private fun mapKeySkills(keySkills: String): List<NameInfo> {
+        return gson.fromJson(keySkills, object : TypeToken<List<NameInfo>>() {}.type) ?: emptyList()
     }
 
     fun mapDt(detailVacancyEntity: DetailVacancyEntity?): VacancyDetails? {
@@ -50,7 +56,7 @@ class DetailVacancyEntityConverter {
                     NameInfo(detailVacancyEntity.employmentId, detailVacancyEntity.employerName),
                     NameInfo(detailVacancyEntity.scheduleId, detailVacancyEntity.scheduleName.toString()),
                     description = detailVacancyEntity.description,
-                    keySkills = listOf(NameInfo(detailVacancyEntity.keySkills, detailVacancyEntity.keySkills)),
+                    keySkills = mapKeySkills(detailVacancyEntity.keySkills),
                     // ОБРАТИТЬ ВНИМАНИЕ, KEYSKILLS ИЗ СТРОКИ ПРЕВАРЩАЕТСЯ В НЕЧТО И ОБРАТНО
                     hhVacancyLink = detailVacancyEntity.hhVacancyLink
                 )
@@ -83,9 +89,13 @@ class DetailVacancyEntityConverter {
             scheduleId = vacancy.details.schedule?.id,
             scheduleName = vacancy.details.schedule?.name,
             description = vacancy.details.description,
-            keySkills = vacancy.details.keySkills.toString(),
+            keySkills = mapKeySkills(vacancy.details.keySkills),
             hhVacancyLink = vacancy.details.hhVacancyLink
         )
         return vacancyEntity
+    }
+
+    private fun mapKeySkills(keySkills: List<NameInfo>): String {
+        return gson.toJson(keySkills)
     }
 }
