@@ -106,8 +106,6 @@ class SearchFragment : Fragment() {
     private fun changeContentVisibility(searchState: SearchState, position: Int?) {
         when (searchState) {
             is SearchState.LoadingError -> {
-                binding.mainProgressBar.visibility = View.GONE
-                inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
                 showSearchError(searchState.resultCode, false)
             }
 
@@ -184,11 +182,14 @@ class SearchFragment : Fragment() {
                 }
             }
         } else {
+            binding.mainProgressBar.visibility = View.GONE
+            binding.vacancyListRv.visibility = View.GONE
+            binding.vacanciesFound.visibility = View.GONE
+            inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
             when (codeError) {
                 null -> {
                     binding.placeholderNoVacancyList.visibility = View.VISIBLE
                     binding.placeholderNoVacancyListMessage.visibility = View.VISIBLE
-                    vacancies.clear()
                 }
 
                 RESULT_CODE_NO_INTERNET_ERROR -> {
@@ -206,6 +207,7 @@ class SearchFragment : Fragment() {
 
     private fun startPlaceholderVisibility(flag: Boolean) {
         if (flag) {
+            clearScreen()
             binding.placeholderImage.visibility = View.VISIBLE
             binding.iconSearch.visibility = View.VISIBLE
         } else {
