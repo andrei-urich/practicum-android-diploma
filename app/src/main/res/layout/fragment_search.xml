@@ -44,9 +44,9 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/searchEditText"
-            android:imeOptions="actionUnspecified"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:imeOptions="actionUnspecified" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -78,15 +78,15 @@
         android:id="@+id/vacancyListRv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/space_8"
-        android:layout_marginBottom="@dimen/space_16"
+        android:clipToPadding="false"
         android:focusableInTouchMode="true"
         android:orientation="vertical"
+        android:paddingVertical="45dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/recyclerViewProgressBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vacanciesFound"
+        app:layout_constraintTop_toBottomOf="@id/searchLayoutField"
         tools:listitem="@layout/vacancy_item" />
 
     <ProgressBar
