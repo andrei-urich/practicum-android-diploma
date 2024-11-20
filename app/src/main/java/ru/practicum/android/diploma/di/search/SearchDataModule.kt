@@ -1,14 +1,11 @@
 package ru.practicum.android.diploma.di.search
 
-import android.content.Context
-import com.google.gson.Gson
-import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.practicum.android.diploma.data.search.network.RetrofitNetworkClient
 import ru.practicum.android.diploma.data.search.network.AppAPI
 import ru.practicum.android.diploma.data.search.network.NetworkClient
+import ru.practicum.android.diploma.data.search.network.RetrofitNetworkClient
 
 val searchDataModule = module {
     single<AppAPI> {
@@ -19,14 +16,7 @@ val searchDataModule = module {
             .create(AppAPI::class.java)
     }
 
-    factory { Gson() }
-
     factory<NetworkClient> {
         RetrofitNetworkClient(get())
-    }
-
-    single { (key: String) ->
-        androidContext()
-            .getSharedPreferences(key, Context.MODE_PRIVATE)
     }
 }

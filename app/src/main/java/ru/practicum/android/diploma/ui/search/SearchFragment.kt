@@ -129,7 +129,6 @@ class SearchFragment : Fragment() {
                 renderContent(vacancies, position)
             }
 
-
             is SearchState.Loading -> {
                 clearScreen()
                 binding.mainProgressBar.visibility = View.VISIBLE
