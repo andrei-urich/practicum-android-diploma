@@ -5,4 +5,5 @@ import ru.practicum.android.diploma.domain.search.models.VacancyShort
 
 interface SearchRepository {
     fun search(request: HashMap<String, String>): Flow<Resource<List<VacancyShort>>>
+    fun checkNet() : Boolean
 }

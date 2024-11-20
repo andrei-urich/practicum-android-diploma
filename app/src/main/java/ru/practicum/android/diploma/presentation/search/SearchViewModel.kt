@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.presentation.search
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,7 +18,7 @@ import ru.practicum.android.diploma.util.SEARCH_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.ZERO
 
 class SearchViewModel(
-    private val interactor: SearchInteractor,
+    private val interactor: SearchInteractor
 ) : ViewModel() {
 
     private var isClickAllowed = true
@@ -47,9 +46,6 @@ class SearchViewModel(
             if (!isNextPageLoading) {
                 searchStateLiveData.postValue(Pair(state, position))
                 val request = constructRequest(searchText)
-
-                Log.d("MY", request.toString())
-
                 isNextPageLoading = true
                 viewModelScope.launch {
                     interactor.search(
@@ -57,21 +53,16 @@ class SearchViewModel(
                     ).collect { pair ->
                         when (pair.first) {
                             null -> {
-                                isNextPageLoading = false
                                 if (state is SearchState.Loading) {
-
-                                    Log.d("MY", " Load error ${pair.second}")
-
+                                    isNextPageLoading = false
                                     searchStateLiveData.postValue(
                                         Pair(SearchState.LoadingError(pair.second), position)
                                     )
                                 } else {
-
-                                    Log.d("MY", " Load NEXT Page error ${pair.second}"
-                                    )
                                     searchStateLiveData.postValue(
                                         Pair(SearchState.NextPageLoadingError(pair.second), position)
                                     )
+
                                 }
                             }
 
@@ -81,8 +72,6 @@ class SearchViewModel(
                                 isNextPageLoading = false
                                 currentPage++
                                 pages = vacancyList[0].pages
-
-                                Log.d("MY", " found ${pair.first?.size ?: 0} vacancies")
                                 searchStateLiveData.postValue(Pair(SearchState.Content(vacancyList), position))
                             }
                         }
@@ -103,6 +92,7 @@ class SearchViewModel(
     }
 
     fun getNextPage() {
+        if (interactor.checkNet()) isNextPageLoading = false
         if (currentPage < pages) {
             // Вычисляем позицию куда проскролить ресайклер, чтобы первой стояла первая вакансия с новой страницы
             val position = (currentPage - ONE) * PER_PAGE

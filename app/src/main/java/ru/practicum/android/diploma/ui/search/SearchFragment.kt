@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -113,8 +112,7 @@ class SearchFragment : Fragment() {
             }
 
             is SearchState.NextPageLoadingError -> {
-                binding.mainProgressBar.visibility = View.GONE
-                inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
+                binding.recyclerViewProgressBar.visibility = View.GONE
                 showSearchError(searchState.resultCode, true)
             }
 
@@ -174,26 +172,18 @@ class SearchFragment : Fragment() {
 
     private fun showSearchError(codeError: Int?, isLoadingNextPage: Boolean) {
         if (isLoadingNextPage) {
-
-            Log.d("MY", " Get NEXT Page error ${codeError}")
-
             when (codeError) {
                 RESULT_CODE_NO_INTERNET_ERROR -> {
-                    binding.recyclerViewProgressBar.visibility = View.GONE
                     val message = requireActivity().resources.getString(R.string.toast_internet_throwable)
                     Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
                 }
 
                 RESULT_CODE_SERVER_ERROR, RESULT_CODE_BAD_REQUEST -> {
-                    binding.recyclerViewProgressBar.visibility = View.GONE
                     val message = requireActivity().resources.getString(R.string.toast_unknown_error)
                     Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
                 }
             }
         } else {
-            Log.d("MY", " Get Loading error ${codeError}")
-
-
             when (codeError) {
                 null -> {
                     binding.placeholderNoVacancyList.visibility = View.VISIBLE
