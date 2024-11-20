@@ -19,9 +19,13 @@ class VacancyDetailFavoriteRepositoryImpl(
         vacancyDatabase.vacancyDao().deleteVacancyFromFavourite(vacancyID)
     }
 
-    override suspend fun getVacancyFromFavorites(vacancyID: String): Flow<VacancyDetails?> = flow {
-        val vacancyEntity = vacancyDatabase.vacancyDao().getVacancyById(vacancyID)
-        emit(detailVacancyEntityConverter.mapDt(vacancyEntity))
+    override suspend fun getVacancyFromFavorites(vacancyID: String): VacancyDetails? {
+        val vacancyEntity = vacancyDatabase.vacancyDao().getVacancyById(vacancyID) ?: return null
+        return vacancyEntity.let { detailVacancyEntityConverter.mapDt(it) }
+    }
+
+    override suspend fun getAllFavouritesVacanciesId(): Flow<List<String>> = flow {
+        emit(vacancyDatabase.vacancyDao().getAllFavouritesVacanciesId())
     }
 
 }

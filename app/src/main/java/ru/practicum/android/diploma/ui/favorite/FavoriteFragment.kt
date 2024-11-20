@@ -64,14 +64,20 @@ class FavoriteFragment : Fragment() {
                     favoriteRecyclerViewAdapter.notifyDataSetChanged()
                     filledScreenState()
                 }
+                is FavoritesScreenState.Error -> showErrorPlaceholders()
             }
         }
-        viewModel.getTestList()
+        viewModel.getFavoriteVacanciesList()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun showErrorPlaceholders() {
+        binding.favoritesCantGetListPlaceholder.visibility = View.VISIBLE
+        binding.favoriteEmptyListPlaceholder.visibility = View.VISIBLE
     }
 
     private fun loadingScreenState() {
