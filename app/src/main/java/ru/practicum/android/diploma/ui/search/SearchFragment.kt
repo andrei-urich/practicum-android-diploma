@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,9 +20,10 @@ import ru.practicum.android.diploma.domain.search.models.VacancyShort
 import ru.practicum.android.diploma.presentation.search.SearchState
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.ui.vacancydetails.VacancyDetailsFragment
-import ru.practicum.android.diploma.util.CONNECTION_ERROR
 import ru.practicum.android.diploma.util.EMPTY_STRING
-import ru.practicum.android.diploma.util.SEARCH_ERROR
+import ru.practicum.android.diploma.util.RESULT_CODE_BAD_REQUEST
+import ru.practicum.android.diploma.util.RESULT_CODE_NO_INTERNET_ERROR
+import ru.practicum.android.diploma.util.RESULT_CODE_SERVER_ERROR
 import ru.practicum.android.diploma.util.ZERO
 
 class SearchFragment : Fragment() {
@@ -60,8 +62,9 @@ class SearchFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchText = s.toString()
                 if (binding.searchEditText.hasFocus() && s?.isEmpty() == true) {
-                    startPlaceholderVisibility(true)
+                    viewModel.clearScreen(true)
                     binding.vacancyListRv.visibility = View.GONE
+                    binding.vacanciesFound.visibility = View.GONE
                 } else {
                     startPlaceholderVisibility(false)
                 }
@@ -106,10 +109,18 @@ class SearchFragment : Fragment() {
 
     private fun changeContentVisibility(searchState: SearchState, position: Int?) {
         when (searchState) {
-            is SearchState.Error -> {
-                binding.mainProgressBar.visibility = View.GONE
-                inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
-                showSearchError(CONNECTION_ERROR)
+            is SearchState.Prepared -> {
+                clearScreen()
+                startPlaceholderVisibility(true)
+            }
+
+            is SearchState.LoadingError -> {
+                showSearchError(searchState.resultCode, false)
+            }
+
+            is SearchState.NextPageLoadingError -> {
+                binding.recyclerViewProgressBar.visibility = View.GONE
+                showSearchError(searchState.resultCode, true)
             }
 
             is SearchState.Content -> {
@@ -118,8 +129,11 @@ class SearchFragment : Fragment() {
                 vacancies.addAll(searchState.vacancyList.toMutableList())
 
                 if (vacancies.isNotEmpty()) {
-                    binding.vacanciesFound.text = requireActivity().resources
-                        .getQuantityString(R.plurals.vacancy_number, vacancies[ZERO].found, vacancies[ZERO].found)
+                    binding.vacanciesFound.text = requireActivity().resources.getQuantityString(
+                        R.plurals.vacancy_number,
+                        vacancies[ZERO].found,
+                        vacancies[ZERO].found
+                    )
                     binding.vacancyListRv.visibility = View.VISIBLE
                     binding.vacanciesFound.visibility = View.VISIBLE
                     binding.vacancyListRv.adapter = searchAdapter
@@ -129,7 +143,7 @@ class SearchFragment : Fragment() {
                         binding.vacancyListRv.scrollToPosition(position)
                     }
                 } else {
-                    showSearchError(SEARCH_ERROR)
+                    showSearchError(null, false)
                 }
             }
 
@@ -163,21 +177,46 @@ class SearchFragment : Fragment() {
         binding.recyclerViewProgressBar.visibility = View.GONE
     }
 
-    private fun showSearchError(codeError: String) {
-        if (codeError == SEARCH_ERROR) {
-            binding.placeholderNoVacancyList.visibility = View.VISIBLE
-            vacancies.clear()
-            searchAdapter.notifyDataSetChanged()
+    private fun showSearchError(codeError: Int?, isLoadingNextPage: Boolean) {
+        if (isLoadingNextPage) {
+            when (codeError) {
+                RESULT_CODE_NO_INTERNET_ERROR -> {
+                    val message = requireActivity().resources.getString(R.string.toast_internet_throwable)
+                    Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
+                }
 
+                RESULT_CODE_SERVER_ERROR, RESULT_CODE_BAD_REQUEST -> {
+                    val message = requireActivity().resources.getString(R.string.toast_unknown_error)
+                    Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
+                }
+            }
         } else {
-            binding.placeholderServerError.visibility = View.VISIBLE
-            vacancies.clear()
-            searchAdapter.notifyDataSetChanged()
+            binding.mainProgressBar.visibility = View.GONE
+            binding.vacancyListRv.visibility = View.GONE
+            binding.vacanciesFound.visibility = View.GONE
+            inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
+            when (codeError) {
+                null -> {
+                    binding.placeholderNoVacancyList.visibility = View.VISIBLE
+                    binding.placeholderNoVacancyListMessage.visibility = View.VISIBLE
+                }
+
+                RESULT_CODE_NO_INTERNET_ERROR -> {
+                    binding.placeholderNoInternet.visibility = View.VISIBLE
+                    binding.placeholderNoInternetMessage.visibility = View.VISIBLE
+                }
+
+                RESULT_CODE_SERVER_ERROR, RESULT_CODE_BAD_REQUEST -> {
+                    binding.placeholderServerError.visibility = View.VISIBLE
+                    binding.placeholderServerErrorMessage.visibility = View.VISIBLE
+                }
+            }
         }
     }
 
     private fun startPlaceholderVisibility(flag: Boolean) {
         if (flag) {
+            clearScreen()
             binding.placeholderImage.visibility = View.VISIBLE
             binding.iconSearch.visibility = View.VISIBLE
         } else {

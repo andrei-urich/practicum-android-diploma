@@ -6,7 +6,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.practicum.android.diploma.data.RetrofitNetworkClient
+import ru.practicum.android.diploma.data.search.network.RetrofitNetworkClient
 import ru.practicum.android.diploma.data.search.network.AppAPI
 import ru.practicum.android.diploma.data.search.network.NetworkClient
 
@@ -22,7 +22,7 @@ val searchDataModule = module {
     factory { Gson() }
 
     factory<NetworkClient> {
-        RetrofitNetworkClient(get(), androidContext())
+        RetrofitNetworkClient(get())
     }
 
     single { (key: String) ->

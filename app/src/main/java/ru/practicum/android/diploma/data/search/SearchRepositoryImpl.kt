@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.data.search
 
+import android.content.Context
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.data.search.network.NetworkClient
@@ -11,9 +12,11 @@ import ru.practicum.android.diploma.domain.search.models.VacancyShort
 import ru.practicum.android.diploma.util.CODE_200
 import ru.practicum.android.diploma.util.CODE_299
 import ru.practicum.android.diploma.util.EMPTY_STRING
+import ru.practicum.android.diploma.util.isConnected
 
 class SearchRepositoryImpl(
-    private val networkClient: NetworkClient
+    private val networkClient: NetworkClient,
+    private val context: Context
 ) : SearchRepository {
     override fun search(
         request: HashMap<String, String>
@@ -46,5 +49,9 @@ class SearchRepositoryImpl(
 
             else -> emit(Resource.Error(response.resultCode))
         }
+    }
+
+    override fun checkNet(): Boolean {
+        return isConnected(context)
     }
 }

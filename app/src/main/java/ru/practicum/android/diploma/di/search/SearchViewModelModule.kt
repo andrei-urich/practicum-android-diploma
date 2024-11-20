@@ -13,7 +13,7 @@ val searchViewModelModule = module {
         SearchViewModel(get())
     }
     single<SearchRepository> {
-        SearchRepositoryImpl(get())
+        SearchRepositoryImpl(get(), get())
     }
 
     single<SearchInteractor> {

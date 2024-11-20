@@ -20,4 +20,8 @@ class SearchInteractorImpl(
             }
         }
     }
+
+    override fun checkNet(): Boolean {
+        return repository.checkNet()
+    }
 }

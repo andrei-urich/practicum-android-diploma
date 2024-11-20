@@ -21,30 +21,6 @@ class FavoriteViewModel(
         return favoriteVacanciesScreenStateLiveData
     }
 
-//    fun getTestList() {
-//        favoriteVacanciesScreenStateLiveData.postValue(
-//            FavoritesScreenState.FilledFavoriteScreen(
-//                listOf(
-//                    VacancyShort("23", "developer", "yandex", "Spb", CODE_200, null, currency = "Р", "null"),
-//                    VacancyShort("24", "developer2", "skillbox", "Msk", CODE_299, null, currency = "$", "null")
-//                )
-//            )
-//
-//        )
-//    }
-
-//    fun getFavoriteVacanciesList() {
-//        viewModelScope.launch(dispatcherIO) {
-//            getFavoriteVacanciesListInteractor.getFavVacanciesList().collect {
-//                if (it.isEmpty()) {
-//                    favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.EmptyFavoriteScreen)
-//                } else {
-//                    // favoriteVacanciesScreenStateLiveData.postValue(FavoritesScreenState.FilledFavoriteScreen(it))
-//                }
-//            }
-//        }
-//    }
-
     fun getFavoriteVacanciesList() {
         viewModelScope.launch(dispatcherIO) {
             try {

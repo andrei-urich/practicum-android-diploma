@@ -44,9 +44,9 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/searchEditText"
-            android:imeOptions="actionUnspecified"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:imeOptions="actionUnspecified" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -78,16 +78,17 @@
         android:id="@+id/vacancyListRv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/space_8"
-        android:layout_marginBottom="@dimen/space_16"
+        android:clipToPadding="false"
         android:focusableInTouchMode="true"
         android:orientation="vertical"
+        android:paddingVertical="45dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/recyclerViewProgressBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vacanciesFound"
-        tools:listitem="@layout/vacancy_item" />
+        app:layout_constraintTop_toBottomOf="@id/searchLayoutField"
+        tools:listitem="@layout/vacancy_item"
+        tools:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/recyclerViewProgressBar"
@@ -107,7 +108,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchLayoutField"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
@@ -130,7 +131,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            tools:visibility="gone" />
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/placeholderNoInternetMessage"
@@ -139,8 +140,8 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/placeholderImage"
-            tools:visibility="gone" />
+            app:layout_constraintTop_toBottomOf="@+id/placeholderNoInternet"
+            tools:visibility="visible" />
 
         <ImageView
             android:id="@+id/placeholderImage"
@@ -154,7 +155,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
         <ImageView
             android:id="@+id/placeholderNoVacancyList"
