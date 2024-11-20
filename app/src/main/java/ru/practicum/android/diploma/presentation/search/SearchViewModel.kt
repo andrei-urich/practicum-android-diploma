@@ -14,6 +14,7 @@ import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.EMPTY_STRING
 import ru.practicum.android.diploma.util.ONE
 import ru.practicum.android.diploma.util.PER_PAGE
+import ru.practicum.android.diploma.util.RESULT_CODE_BAD_REQUEST
 import ru.practicum.android.diploma.util.SEARCH_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.ZERO
 
@@ -44,42 +45,50 @@ class SearchViewModel(
     }
 
     private fun request(state: SearchState, position: Int?) {
-        if (state is SearchState.Loading || state is SearchState.LoadingNextPage) {
-            if (!isNextPageLoading && !isNextPageLoadingError) {
-                searchStateLiveData.postValue(Pair(state, position))
-                val request = constructRequest(searchText)
-                isNextPageLoading = true
-                viewModelScope.launch {
-                    interactor.search(
-                        request
-                    ).collect { pair ->
-                        when (pair.first) {
-                            null -> {
-                                isNextPageLoading = false
-                                if (state is SearchState.Loading) {
-                                    searchStateLiveData.postValue(
-                                        Pair(SearchState.LoadingError(pair.second), position)
-                                    )
-                                } else {
-                                    isNextPageLoadingError = true
-                                    searchStateLiveData.postValue(
-                                        Pair(SearchState.NextPageLoadingError(pair.second), position)
-                                    )
+        when (state) {
+            is SearchState.Loading, SearchState.LoadingNextPage -> {
+                if (!isNextPageLoading && !isNextPageLoadingError) {
+                    searchStateLiveData.postValue(Pair(state, position))
+                    val request = constructRequest(searchText)
+                    isNextPageLoading = true
+                    viewModelScope.launch {
+                        interactor.search(
+                            request
+                        ).collect { pair ->
+                            when (pair.first) {
+                                null -> {
+                                    isNextPageLoading = false
+                                    if (state is SearchState.Loading) {
+                                        searchStateLiveData.postValue(
+                                            Pair(SearchState.LoadingError(pair.second), position)
+                                        )
+                                    } else {
+                                        isNextPageLoadingError = true
+                                        searchStateLiveData.postValue(
+                                            Pair(SearchState.NextPageLoadingError(pair.second), position)
+                                        )
 
+                                    }
                                 }
-                            }
 
-                            else -> {
-                                val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
-                                vacancyList.addAll(vacancies)
-                                isNextPageLoading = false
-                                currentPage++
-                                pages = vacancyList[0].pages
-                                searchStateLiveData.postValue(Pair(SearchState.Content(vacancyList), position))
+                                else -> {
+                                    val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
+                                    vacancyList.addAll(vacancies)
+                                    isNextPageLoading = false
+                                    currentPage++
+                                    pages = vacancyList[0].pages
+                                    searchStateLiveData.postValue(Pair(SearchState.Content(vacancyList), position))
+                                }
                             }
                         }
                     }
                 }
+            }
+
+            else -> {
+                searchStateLiveData.postValue(
+                    Pair(SearchState.LoadingError(RESULT_CODE_BAD_REQUEST), null)
+                )
             }
         }
     }
