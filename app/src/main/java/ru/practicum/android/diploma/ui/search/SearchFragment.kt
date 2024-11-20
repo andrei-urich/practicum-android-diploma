@@ -61,6 +61,8 @@ class SearchFragment : Fragment() {
                 searchText = s.toString()
                 if (binding.searchEditText.hasFocus() && s?.isEmpty() == true) {
                     viewModel.clearScreen(true)
+                    binding.vacancyListRv.visibility = View.GONE
+                    binding.vacanciesFound.visibility = View.GONE
                 } else {
                     startPlaceholderVisibility(false)
                 }
@@ -156,8 +158,6 @@ class SearchFragment : Fragment() {
 
     private fun clearScreen() {
         clearPlaceholders()
-        binding.vacancyListRv.visibility = View.GONE
-        binding.vacanciesFound.visibility = View.GONE
         inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
     }
 
