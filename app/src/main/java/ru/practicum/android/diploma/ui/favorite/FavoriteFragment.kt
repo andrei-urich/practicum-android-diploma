@@ -37,6 +37,8 @@ class FavoriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadingScreenState()
+        binding.favoriteEmptyListPlaceholder.setImageResource(R.drawable.empty_list_image)
+        binding.favoritesCantGetListPlaceholder.setImageResource(R.drawable.cant_take_list_of_vacancy_or_region_image)
         binding.favoritesRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val favoriteRecyclerViewAdapter = VacanciesRecyclerViewAdapter(vacancyList)
@@ -64,6 +66,7 @@ class FavoriteFragment : Fragment() {
                     favoriteRecyclerViewAdapter.notifyDataSetChanged()
                     filledScreenState()
                 }
+
                 is FavoritesScreenState.Error -> showErrorPlaceholders()
             }
         }
@@ -76,8 +79,14 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun showErrorPlaceholders() {
-        binding.favoritesCantGetListPlaceholder.visibility = View.VISIBLE
-        binding.favoriteEmptyListPlaceholder.visibility = View.VISIBLE
+        with(binding) {
+            favoritesCantGetListPlaceholder.visibility = View.VISIBLE
+            favoritesPlaceholderCantGetListText.visibility = View.VISIBLE
+            favoriteProgressBar.visibility = View.INVISIBLE
+            favoritesRecyclerView.visibility = View.INVISIBLE
+            favoriteEmptyListPlaceholder.visibility = View.INVISIBLE
+            favoritesPlaceholderEmptyListText.visibility = View.INVISIBLE
+        }
     }
 
     private fun loadingScreenState() {
@@ -85,6 +94,9 @@ class FavoriteFragment : Fragment() {
             favoriteProgressBar.visibility = View.VISIBLE
             favoritesRecyclerView.visibility = View.INVISIBLE
             favoriteEmptyListPlaceholder.visibility = View.INVISIBLE
+            favoritesPlaceholderEmptyListText.visibility = View.INVISIBLE
+            favoritesPlaceholderCantGetListText.visibility = View.INVISIBLE
+            favoritesCantGetListPlaceholder.visibility = View.INVISIBLE
         }
     }
 
@@ -93,6 +105,9 @@ class FavoriteFragment : Fragment() {
             favoriteProgressBar.visibility = View.INVISIBLE
             favoritesRecyclerView.visibility = View.INVISIBLE
             favoriteEmptyListPlaceholder.visibility = View.VISIBLE
+            favoritesPlaceholderEmptyListText.visibility = View.VISIBLE
+            favoritesPlaceholderCantGetListText.visibility = View.INVISIBLE
+            favoritesCantGetListPlaceholder.visibility = View.INVISIBLE
         }
     }
 
@@ -101,6 +116,9 @@ class FavoriteFragment : Fragment() {
             favoriteProgressBar.visibility = View.INVISIBLE
             favoritesRecyclerView.visibility = View.VISIBLE
             favoriteEmptyListPlaceholder.visibility = View.INVISIBLE
+            favoritesPlaceholderEmptyListText.visibility = View.INVISIBLE
+            favoritesPlaceholderCantGetListText.visibility = View.INVISIBLE
+            favoritesCantGetListPlaceholder.visibility = View.INVISIBLE
         }
     }
 }
