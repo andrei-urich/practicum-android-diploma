@@ -22,7 +22,7 @@ val searchDataModule = module {
     factory { Gson() }
 
     factory<NetworkClient> {
-        RetrofitNetworkClient(get(), androidContext())
+        RetrofitNetworkClient(get())
     }
 
     single { (key: String) ->
