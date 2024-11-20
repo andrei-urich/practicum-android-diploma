@@ -17,7 +17,11 @@ class VacancyDetailFavoriteInteractorImpl(
         vacancyDetailFavoriteRepository.deleteVacancyFromFavorites(vacancyID)
     }
 
-    override suspend fun getVacancyFromFavorites(vacancyID: String): Flow<VacancyDetails?> {
+    override suspend fun getVacancyFromFavorites(vacancyID: String): VacancyDetails? {
         return vacancyDetailFavoriteRepository.getVacancyFromFavorites(vacancyID)
+    }
+
+    override suspend fun getAllFavouritesVacanciesId(): Flow<List<String>> {
+        return vacancyDetailFavoriteRepository.getAllFavouritesVacanciesId()
     }
 }
