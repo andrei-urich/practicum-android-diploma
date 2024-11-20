@@ -42,42 +42,33 @@ class SearchViewModel(
     }
 
     private fun request(state: SearchState, position: Int?) {
-        when (state) {
-            is SearchState.Loading, SearchState.LoadingNextPage -> {
-                if (!isNextPageLoading) {
-                    searchStateLiveData.postValue(Pair(state, position))
-                    val request = constructRequest(searchText)
-                    isNextPageLoading = true
-                    viewModelScope.launch {
-                        interactor.search(
-                            request
-                        ).collect { pair ->
-                            when (pair.first) {
-                                null -> searchStateLiveData.postValue(
-                                    Pair(SearchState.Error, position)
-                                )
+        if (state is SearchState.Loading || state is SearchState.LoadingNextPage) {
+            if (!isNextPageLoading) {
+                searchStateLiveData.postValue(Pair(state, position))
+                val request = constructRequest(searchText)
+                isNextPageLoading = true
+                viewModelScope.launch {
+                    interactor.search(
+                        request
+                    ).collect { pair ->
+                        when (pair.first) {
+                            null -> searchStateLiveData.postValue(
+                                Pair(SearchState.Error(pair.second), position)
+                            )
 
-                                else -> {
-                                    val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
-                                    vacancyList.addAll(vacancies)
-                                    isNextPageLoading = false
-                                    currentPage++
-                                    pages = vacancyList[0].pages
-                                    searchStateLiveData.postValue(Pair(SearchState.Content(vacancyList), position))
-                                }
+                            else -> {
+                                val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
+                                vacancyList.addAll(vacancies)
+                                isNextPageLoading = false
+                                currentPage++
+                                pages = vacancyList[0].pages
+                                searchStateLiveData.postValue(Pair(SearchState.Content(vacancyList), position))
                             }
                         }
                     }
                 }
             }
-
-            else -> {
-                searchStateLiveData.postValue(
-                    Pair(SearchState.Error, position)
-                )
-            }
         }
-
     }
 
     private fun constructRequest(searchText: String): HashMap<String, String> {

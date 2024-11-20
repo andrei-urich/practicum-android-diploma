@@ -19,9 +19,10 @@ import ru.practicum.android.diploma.domain.search.models.VacancyShort
 import ru.practicum.android.diploma.presentation.search.SearchState
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.ui.vacancydetails.VacancyDetailsFragment
-import ru.practicum.android.diploma.util.CONNECTION_ERROR
 import ru.practicum.android.diploma.util.EMPTY_STRING
-import ru.practicum.android.diploma.util.SEARCH_ERROR
+import ru.practicum.android.diploma.util.RESULT_CODE_BAD_REQUEST
+import ru.practicum.android.diploma.util.RESULT_CODE_NO_INTERNET_ERROR
+import ru.practicum.android.diploma.util.RESULT_CODE_SERVER_ERROR
 import ru.practicum.android.diploma.util.ZERO
 
 class SearchFragment : Fragment() {
@@ -38,9 +39,7 @@ class SearchFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _viewBinding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
@@ -99,8 +98,7 @@ class SearchFragment : Fragment() {
 
     private fun showVacancy(vacancyId: String?) {
         findNavController().navigate(
-            R.id.action_searchFragment_to_vacancyDetailsFragment,
-            VacancyDetailsFragment.createArgs(vacancyId)
+            R.id.action_searchFragment_to_vacancyDetailsFragment, VacancyDetailsFragment.createArgs(vacancyId)
         )
     }
 
@@ -109,7 +107,7 @@ class SearchFragment : Fragment() {
             is SearchState.Error -> {
                 binding.mainProgressBar.visibility = View.GONE
                 inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
-                showSearchError(CONNECTION_ERROR)
+                showSearchError(searchState.resultCode)
             }
 
             is SearchState.Content -> {
@@ -118,8 +116,11 @@ class SearchFragment : Fragment() {
                 vacancies.addAll(searchState.vacancyList.toMutableList())
 
                 if (vacancies.isNotEmpty()) {
-                    binding.vacanciesFound.text = requireActivity().resources
-                        .getQuantityString(R.plurals.vacancy_number, vacancies[ZERO].found, vacancies[ZERO].found)
+                    binding.vacanciesFound.text = requireActivity().resources.getQuantityString(
+                            R.plurals.vacancy_number,
+                            vacancies[ZERO].found,
+                            vacancies[ZERO].found
+                        )
                     binding.vacancyListRv.visibility = View.VISIBLE
                     binding.vacanciesFound.visibility = View.VISIBLE
                     binding.vacancyListRv.adapter = searchAdapter
@@ -129,7 +130,7 @@ class SearchFragment : Fragment() {
                         binding.vacancyListRv.scrollToPosition(position)
                     }
                 } else {
-                    showSearchError(SEARCH_ERROR)
+                    showSearchError(null)
                 }
             }
 
@@ -163,16 +164,27 @@ class SearchFragment : Fragment() {
         binding.recyclerViewProgressBar.visibility = View.GONE
     }
 
-    private fun showSearchError(codeError: String) {
-        if (codeError == SEARCH_ERROR) {
-            binding.placeholderNoVacancyList.visibility = View.VISIBLE
-            vacancies.clear()
-            searchAdapter.notifyDataSetChanged()
+    private fun showSearchError(codeError: Int?) {
+        when (codeError) {
+            null -> {
+                binding.placeholderNoVacancyList.visibility = View.VISIBLE
+                binding.placeholderNoVacancyListMessage.visibility = View.VISIBLE
+                vacancies.clear()
+            }
 
-        } else {
-            binding.placeholderServerError.visibility = View.VISIBLE
-            vacancies.clear()
-            searchAdapter.notifyDataSetChanged()
+            RESULT_CODE_NO_INTERNET_ERROR -> {
+                binding.placeholderNoInternet.visibility = View.VISIBLE
+                binding.placeholderNoInternetMessage.visibility = View.VISIBLE
+            }
+
+            RESULT_CODE_SERVER_ERROR, RESULT_CODE_BAD_REQUEST -> {
+                binding.placeholderServerError.visibility = View.VISIBLE
+                binding.placeholderServerErrorMessage.visibility = View.VISIBLE
+            }
+
+            else -> {
+
+            }
         }
     }
 
