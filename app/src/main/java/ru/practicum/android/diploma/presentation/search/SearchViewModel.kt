@@ -10,11 +10,9 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.search.SearchInteractor
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
 import ru.practicum.android.diploma.presentation.SingleEventLiveData
-import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.EMPTY_STRING
 import ru.practicum.android.diploma.util.ONE
 import ru.practicum.android.diploma.util.PER_PAGE
-import ru.practicum.android.diploma.util.RESULT_CODE_BAD_REQUEST
 import ru.practicum.android.diploma.util.SEARCH_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.ZERO
 
@@ -22,7 +20,6 @@ class SearchViewModel(
     private val interactor: SearchInteractor
 ) : ViewModel() {
 
-    private var isClickAllowed = true
     private var searchText = EMPTY_STRING
     private var searchJob: Job? = null
     private var pages: Int = ZERO
@@ -67,17 +64,12 @@ class SearchViewModel(
                                         searchStateLiveData.postValue(
                                             Pair(SearchState.NextPageLoadingError(pair.second), position)
                                         )
-
                                     }
                                 }
 
                                 else -> {
                                     val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
-                                    vacancyList.addAll(vacancies)
-                                    isNextPageLoading = false
-                                    currentPage++
-                                    if (vacancies.isNotEmpty()) pages = vacancyList[0].pages
-                                    searchStateLiveData.postValue(Pair(SearchState.Content(vacancyList), position))
+                                    vacanciesAddAndLoadStatus(vacancies, position)
                                 }
                             }
                         }
@@ -86,12 +78,19 @@ class SearchViewModel(
             }
 
             else -> {
-                searchStateLiveData.postValue(
-                    Pair(SearchState.LoadingError(RESULT_CODE_BAD_REQUEST), null)
-                )
+                vacanciesAddAndLoadStatus(vacancyList, null)
             }
         }
     }
+
+    private fun vacanciesAddAndLoadStatus(vacancies: List<VacancyShort>, position: Int?) {
+        vacancyList.addAll(vacancies)
+        isNextPageLoading = false
+        currentPage++
+        if (vacancies.isNotEmpty()) pages = vacancyList[0].pages
+        searchStateLiveData.postValue(Pair(SearchState.Content(vacancyList), position))
+    }
+
 
     private fun constructRequest(searchText: String): HashMap<String, String> {
         val options: HashMap<String, String> = HashMap()
@@ -113,23 +112,7 @@ class SearchViewModel(
     }
 
     fun showVacancy(vacancy: VacancyShort) {
-        if (clickDebounce()) {
-            viewModelScope.launch {
-                openTrigger.postValue(vacancy)
-            }
-        }
-    }
-
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            viewModelScope.launch {
-                delay(CLICK_DEBOUNCE_DELAY)
-                isClickAllowed = true
-            }
-        }
-        return current
+        openTrigger.postValue(vacancy)
     }
 
     private fun searchDebounce() {

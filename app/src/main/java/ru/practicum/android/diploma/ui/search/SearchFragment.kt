@@ -119,7 +119,6 @@ class SearchFragment : Fragment() {
             }
 
             is SearchState.NextPageLoadingError -> {
-                binding.recyclerViewProgressBar.visibility = View.GONE
                 showSearchError(searchState.resultCode, true)
             }
 
@@ -127,25 +126,9 @@ class SearchFragment : Fragment() {
                 clearScreen()
                 vacancies.clear()
                 vacancies.addAll(searchState.vacancyList.toMutableList())
-
-                if (vacancies.isNotEmpty()) {
-                    binding.vacanciesFound.text = requireActivity().resources.getQuantityString(
-                        R.plurals.vacancy_number,
-                        vacancies[ZERO].found,
-                        vacancies[ZERO].found
-                    )
-                    binding.vacancyListRv.visibility = View.VISIBLE
-                    binding.vacanciesFound.visibility = View.VISIBLE
-                    binding.vacancyListRv.adapter = searchAdapter
-                    searchAdapter.notifyDataSetChanged()
-
-                    if (position != null) {
-                        binding.vacancyListRv.scrollToPosition(position)
-                    }
-                } else {
-                    showSearchError(null, false)
-                }
+                renderContent(vacancies, position)
             }
+
 
             is SearchState.Loading -> {
                 clearScreen()
@@ -179,6 +162,7 @@ class SearchFragment : Fragment() {
 
     private fun showSearchError(codeError: Int?, isLoadingNextPage: Boolean) {
         if (isLoadingNextPage) {
+            binding.recyclerViewProgressBar.visibility = View.GONE
             when (codeError) {
                 RESULT_CODE_NO_INTERNET_ERROR -> {
                     val message = requireActivity().resources.getString(R.string.toast_internet_throwable)
@@ -224,6 +208,26 @@ class SearchFragment : Fragment() {
         } else {
             binding.placeholderImage.visibility = View.GONE
             binding.iconSearch.visibility = View.GONE
+        }
+    }
+
+    private fun renderContent(vacancies: List<VacancyShort>, position: Int?) {
+        if (vacancies.isNotEmpty()) {
+            binding.vacanciesFound.text = requireActivity().resources.getQuantityString(
+                R.plurals.vacancy_number,
+                vacancies[ZERO].found,
+                vacancies[ZERO].found
+            )
+            binding.vacancyListRv.visibility = View.VISIBLE
+            binding.vacanciesFound.visibility = View.VISIBLE
+            binding.vacancyListRv.adapter = searchAdapter
+            searchAdapter.notifyDataSetChanged()
+
+            if (position != null) {
+                binding.vacancyListRv.scrollToPosition(position)
+            }
+        } else {
+            showSearchError(null, false)
         }
     }
 
