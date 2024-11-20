@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import ru.practicum.android.diploma.data.vacancydetails.ErrorType
 import ru.practicum.android.diploma.data.vacancydetails.ResourceDetails
+import ru.practicum.android.diploma.domain.vacancydetails.api.ExternalNavigator
 import ru.practicum.android.diploma.domain.vacancydetails.api.VacancyDetailsInteractor
 import ru.practicum.android.diploma.domain.vacancydetails.api.VacancyDetailsRepository
-import ru.practicum.android.diploma.domain.vacancydetails.api.ExternalNavigator
 import ru.practicum.android.diploma.domain.vacancydetails.models.VacancyDetails
 
 class VacancyDetailsInteractorImpl(
