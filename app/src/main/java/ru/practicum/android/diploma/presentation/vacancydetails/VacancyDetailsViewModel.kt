@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.vacancydetails.ErrorType
 import ru.practicum.android.diploma.data.vacancydetails.NoInternetError
 import ru.practicum.android.diploma.data.vacancydetails.Success
@@ -21,12 +22,11 @@ class VacancyDetailsViewModel(
     private val vacancyDetailFavoriteInteractor: VacancyDetailFavoriteInteractor
 ) : ViewModel() {
 
-//    private var isFavorite: Boolean = false
+    private var isFavorite: Boolean = false
 
     private val vacancyState = MutableLiveData<VacancyDetailsState>()
-    private val favoriteButtonState = MutableLiveData<Boolean>(false)
     fun observeVacancyState(): LiveData<VacancyDetailsState> = vacancyState
-    fun getFavoriteButtonStateLD(): LiveData<Boolean> = favoriteButtonState
+    private var favoriteVacanciesId: List<String>? = null
     var vacancy: VacancyDetails? = null
 
     fun getVacancy(vacancyId: String) {
@@ -37,17 +37,17 @@ class VacancyDetailsViewModel(
             }
         }
     }
-    fun checkInFavorite(vacancyId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            vacancyDetailFavoriteInteractor.getVacancyFromFavorites(vacancyId).collect {
-                if (it == null) {
-                    favoriteButtonState.postValue(false)
-                } else {
-                    favoriteButtonState.postValue(true)
-                }
+
+    fun addToFavById(vacancyId: VacancyDetails) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                vacancyDetailFavoriteInteractor.addVacancyToFavorites(vacancyId)
             }
+            isFavorite = true
+            vacancyState.postValue(VacancyDetailsState.isFavorite(isFavorite))
         }
     }
+
     private fun processResult(vacancyDetails: VacancyDetails?, errorType: ErrorType) {
         when (errorType) {
             is Success -> {
@@ -83,22 +83,65 @@ class VacancyDetailsViewModel(
         }
     }
 
+    fun isFavorite(vacancyId: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                vacancyDetailFavoriteInteractor
+                    .getAllFavouritesVacanciesId()
+                    .collect {
+                        favoriteVacanciesId = it
+                    }
+            }
+            if (favoriteVacanciesId!!.contains(vacancyId)) {
+                isFavorite = true
+                vacancyState.postValue(VacancyDetailsState.isFavorite(isFavorite))
+            } else {
+                isFavorite = false
+                vacancyState.postValue(VacancyDetailsState.isFavorite(isFavorite))
+            }
+        }
+    }
+
     private fun renderState(state: VacancyDetailsState) {
         vacancyState.postValue(state)
     }
 
-    fun controlFavorites(vacancyId: String) {
-        if (favoriteButtonState.value == true) {
-            viewModelScope.launch {
+    fun deleteFavouriteVacancy(vacancyId: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
                 vacancyDetailFavoriteInteractor.deleteVacancyFromFavorites(vacancyId)
-                favoriteButtonState.postValue(false)
             }
-        } else {
-            viewModelScope.launch {
-                vacancyDetailFavoriteInteractor.addVacancyToFavorites(vacancy!!)
-                favoriteButtonState.postValue(true)
+            isFavorite = false
+            vacancyState.postValue(VacancyDetailsState.isFavorite(isFavorite))
+        }
+    }
+
+    fun getVacancyDatabase(vacancyId: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val vacancy = vacancyDetailFavoriteInteractor.getVacancyFromFavorites(vacancyId)
+                withContext(Dispatchers.Main) {
+                    vacancy?.let {
+                        vacancyState.postValue(VacancyDetailsState.Content(it))
+                    } ?: run {
+                        vacancyState.postValue(VacancyDetailsState.Empty)
+                    }
+                }
             }
         }
+    }
+
+    fun checkVacancyInDatabase(vacancyId: String, callback: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val exists = withContext(Dispatchers.IO) {
+                vacancyDetailFavoriteInteractor.getVacancyFromFavorites(vacancyId) != null
+            }
+            callback(exists)
+        }
+    }
+
+    fun getFavouriteState(): Boolean {
+        return isFavorite
     }
 
     fun getSharingIntent(): Intent? {

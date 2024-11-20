@@ -19,6 +19,7 @@ import ru.practicum.android.diploma.data.vacancydetails.ErrorType
 import ru.practicum.android.diploma.data.vacancydetails.NoInternetError
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.databinding.FragmentVacancydetailsItemsBinding
+import ru.practicum.android.diploma.domain.vacancydetails.models.DetailsNotFoundType
 import ru.practicum.android.diploma.domain.vacancydetails.models.VacancyDetails
 import ru.practicum.android.diploma.presentation.vacancydetails.VacancyDetailsViewModel
 import ru.practicum.android.diploma.presentation.vacancydetails.model.VacancyDetailsState
@@ -42,25 +43,28 @@ class VacancyDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         vacancyID = requireArguments().getString(DETAILS_VACANCY_ID)
-        viewModel.getFavoriteButtonStateLD().observe(viewLifecycleOwner) {
-            if (it) {
-                binding.favoriteVacansyIv.setImageResource(R.drawable.favorite_icon_active)
-            } else {
-                binding.favoriteVacansyIv.setImageResource(R.drawable.favorite_icon_normal)
-            }
-        }
         if (vacancyID != null) {
             viewModel.getVacancy(vacancyID!!)
         }
-        // viewModel.controlFavorites(vacancyID!!)
-        binding.favoriteVacansyIv.setOnClickListener {
-            viewModel.controlFavorites(vacancyID!!)
-        }
-
         viewModel.observeVacancyState().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is VacancyDetailsState.Content -> {
                     showContent(state)
+                }
+
+                is VacancyDetailsState.NoInternet -> {
+                    viewModel.checkVacancyInDatabase(vacancyID!!) { exists ->
+                        if (exists) {
+                            viewModel.getVacancyDatabase(vacancyID!!)
+                        } else {
+                            showTypeErrorOrEmpty(NoInternetError())
+                        }
+                    }
+                }
+
+                is VacancyDetailsState.Empty -> {
+                    showTypeErrorOrEmpty(DetailsNotFoundType())
+                    viewModel.deleteFavouriteVacancy(vacancyID!!)
                 }
 
                 is VacancyDetailsState.Error -> {
@@ -71,6 +75,7 @@ class VacancyDetailsFragment : Fragment() {
                     showLoading()
                 }
 
+                is VacancyDetailsState.isFavorite -> checkFavouriteIcon(state.isFav)
                 else -> {}
             }
 
@@ -83,10 +88,12 @@ class VacancyDetailsFragment : Fragment() {
         hideErrorsAndLoading()
         showVacancyContent(state)
         binding.itemVacancyDetails.itemVacancyDetailsView.visibility = View.VISIBLE
+        viewModel.isFavorite(vacancy!!.hhID)
     }
 
     private fun setBindings() {
         binding.favoriteVacansyIv.setOnClickListener {
+            checkIsFavourite(viewModel.getFavouriteState())
         }
 
         binding.shareVacansyIv.setOnClickListener {
@@ -98,6 +105,22 @@ class VacancyDetailsFragment : Fragment() {
 
         binding.arrowBackIv.setOnClickListener {
             findNavController().navigateUp()
+        }
+    }
+
+    private fun checkFavouriteIcon(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.favoriteVacansyIv.setImageResource(R.drawable.favorite_icon_active)
+        } else {
+            binding.favoriteVacansyIv.setImageResource(R.drawable.favorite_icon_normal)
+        }
+    }
+
+    private fun checkIsFavourite(favouriteState: Boolean) {
+        if (favouriteState) {
+            vacancy!!.hhID.let { id -> viewModel.deleteFavouriteVacancy(id) }
+        } else {
+            viewModel.addToFavById(vacancy!!)
         }
     }
 
