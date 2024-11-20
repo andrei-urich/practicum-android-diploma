@@ -89,7 +89,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchLayoutField"
         tools:listitem="@layout/vacancy_item"
-        tools:visibility="gone" />
+        tools:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/recyclerViewProgressBar"
@@ -132,7 +132,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/placeholderNoInternetMessage"
@@ -142,7 +142,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/placeholderNoInternet"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
         <ImageView
             android:id="@+id/placeholderImage"
@@ -194,7 +194,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            tools:visibility="v" />
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/placeholderServerErrorMessage"
