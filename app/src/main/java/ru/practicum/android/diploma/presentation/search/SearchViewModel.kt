@@ -93,7 +93,7 @@ class SearchViewModel(
     fun getNextPage() {
         if (currentPage < pages) {
             // Вычисляем позицию куда проскролить ресайклер, чтобы первой стояла первая вакансия с новой страницы
-            val position = (currentPage - ONE) * PER_PAGE - ONE
+            val position = (currentPage - ONE) * PER_PAGE
             request(SearchState.LoadingNextPage, position)
         }
     }
