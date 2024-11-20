@@ -65,6 +65,7 @@
         style="@style/blueNotifications"
         android:layout_marginTop="@dimen/space_12"
         android:clickable="false"
+        android:layout_height="35dp"
         android:textAllCaps="false"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
@@ -169,7 +170,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/placeholderNoVacancyListMessage"
@@ -179,7 +180,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/placeholderNoVacancyList"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
         <ImageView
             android:id="@+id/placeholderServerError"
@@ -193,7 +194,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            tools:visibility="gone" />
+            tools:visibility="v" />
 
         <TextView
             android:id="@+id/placeholderServerErrorMessage"

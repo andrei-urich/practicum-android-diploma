@@ -34,5 +34,5 @@ val vacancyDetailsDataModule = module {
             .fallbackToDestructiveMigration()
             .build()
     }
-    single { DetailVacancyEntityConverter() }
+    single { DetailVacancyEntityConverter(get()) }
 }

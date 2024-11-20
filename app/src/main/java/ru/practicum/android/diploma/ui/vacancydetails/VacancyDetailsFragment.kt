@@ -142,7 +142,7 @@ class VacancyDetailsFragment : Fragment() {
         binding.itemVacancyDetails.itemVacancyDetailsView.visibility = View.GONE
         when (type) {
             is BadRequestError -> {
-                binding.errorPlaceholderTv.text = getString(R.string.toast_unknown_error)
+                binding.errorPlaceholderTv.text = getString(R.string.server_throwable_tv)
                 binding.errorPlaceholderIv.setImageResource(R.drawable.server_error_vacancy_image)
             }
 
@@ -152,8 +152,8 @@ class VacancyDetailsFragment : Fragment() {
             }
 
             else -> {
-                binding.errorPlaceholderTv.text = getString(R.string.no_vacancies_found_title)
-                binding.errorPlaceholderIv.setImageResource(R.drawable.cant_take_list_of_vacancy_or_region_image)
+                binding.errorPlaceholderTv.text = getString(R.string.nothing_shown_vacancy_tv)
+                binding.errorPlaceholderIv.setImageResource(R.drawable.empty_list_image)
             }
         }
     }

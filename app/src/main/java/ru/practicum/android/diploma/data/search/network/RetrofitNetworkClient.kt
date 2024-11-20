@@ -20,10 +20,10 @@ class RetrofitNetworkClient(
                 }
             } catch (e: retrofit2.HttpException) {
                 println(e)
-                Response().apply { resultCode = RESULT_CODE_NO_INTERNET_ERROR }
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             } catch (e: IOException) {
                 println(e)
-                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+                Response().apply { resultCode = RESULT_CODE_NO_INTERNET_ERROR }
             }
         }
     }
