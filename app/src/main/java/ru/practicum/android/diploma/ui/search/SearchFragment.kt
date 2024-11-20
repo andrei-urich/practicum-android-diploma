@@ -102,7 +102,8 @@ class SearchFragment : Fragment() {
 
     private fun showVacancy(vacancyId: String?) {
         findNavController().navigate(
-            R.id.action_searchFragment_to_vacancyDetailsFragment, VacancyDetailsFragment.createArgs(vacancyId)
+            R.id.action_searchFragment_to_vacancyDetailsFragment,
+            VacancyDetailsFragment.createArgs(vacancyId)
         )
     }
 
