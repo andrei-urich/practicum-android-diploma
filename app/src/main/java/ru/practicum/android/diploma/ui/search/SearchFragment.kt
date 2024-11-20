@@ -126,25 +126,9 @@ class SearchFragment : Fragment() {
                 clearScreen()
                 vacancies.clear()
                 vacancies.addAll(searchState.vacancyList.toMutableList())
-
-                if (vacancies.isNotEmpty()) {
-                    binding.vacanciesFound.text = requireActivity().resources.getQuantityString(
-                        R.plurals.vacancy_number,
-                        vacancies[ZERO].found,
-                        vacancies[ZERO].found
-                    )
-                    binding.vacancyListRv.visibility = View.VISIBLE
-                    binding.vacanciesFound.visibility = View.VISIBLE
-                    binding.vacancyListRv.adapter = searchAdapter
-                    searchAdapter.notifyDataSetChanged()
-
-                    if (position != null) {
-                        binding.vacancyListRv.scrollToPosition(position)
-                    }
-                } else {
-                    showSearchError(null, false)
-                }
+                renderContent(vacancies, position)
             }
+
 
             is SearchState.Loading -> {
                 clearScreen()
@@ -224,6 +208,26 @@ class SearchFragment : Fragment() {
         } else {
             binding.placeholderImage.visibility = View.GONE
             binding.iconSearch.visibility = View.GONE
+        }
+    }
+
+    private fun renderContent(vacancies: List<VacancyShort>, position: Int?) {
+        if (vacancies.isNotEmpty()) {
+            binding.vacanciesFound.text = requireActivity().resources.getQuantityString(
+                R.plurals.vacancy_number,
+                vacancies[ZERO].found,
+                vacancies[ZERO].found
+            )
+            binding.vacancyListRv.visibility = View.VISIBLE
+            binding.vacanciesFound.visibility = View.VISIBLE
+            binding.vacancyListRv.adapter = searchAdapter
+            searchAdapter.notifyDataSetChanged()
+
+            if (position != null) {
+                binding.vacancyListRv.scrollToPosition(position)
+            }
+        } else {
+            showSearchError(null, false)
         }
     }
 
