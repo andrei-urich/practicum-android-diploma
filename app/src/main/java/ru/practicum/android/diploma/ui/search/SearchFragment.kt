@@ -60,8 +60,7 @@ class SearchFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchText = s.toString()
                 if (binding.searchEditText.hasFocus() && s?.isEmpty() == true) {
-                    startPlaceholderVisibility(true)
-                    binding.vacancyListRv.visibility = View.GONE
+                    viewModel.clearScreen(true)
                 } else {
                     startPlaceholderVisibility(false)
                 }
@@ -105,6 +104,11 @@ class SearchFragment : Fragment() {
 
     private fun changeContentVisibility(searchState: SearchState, position: Int?) {
         when (searchState) {
+            is SearchState.Prepared -> {
+                clearScreen()
+                startPlaceholderVisibility(true)
+            }
+
             is SearchState.LoadingError -> {
                 showSearchError(searchState.resultCode, false)
             }
@@ -152,6 +156,8 @@ class SearchFragment : Fragment() {
 
     private fun clearScreen() {
         clearPlaceholders()
+        binding.vacancyListRv.visibility = View.GONE
+        binding.vacanciesFound.visibility = View.GONE
         inputMethodManager?.hideSoftInputFromWindow(binding.searchScreen.windowToken, 0)
     }
 

@@ -24,12 +24,14 @@ class SearchViewModel(
     private var isClickAllowed = true
     private var searchText = EMPTY_STRING
     private var searchJob: Job? = null
-    private var searchStateLiveData = MutableLiveData<Pair<SearchState, Int?>>()
-    private var openTrigger = SingleEventLiveData<VacancyShort>()
-    private val vacancyList: MutableList<VacancyShort> = mutableListOf()
     private var pages: Int = ZERO
     private var currentPage: Int = ZERO
     private var isNextPageLoading = false
+    private var isNextPageLoadingError = false
+    private val vacancyList: MutableList<VacancyShort> = mutableListOf()
+
+    private val searchStateLiveData = MutableLiveData<Pair<SearchState, Int?>>()
+    private val openTrigger = SingleEventLiveData<VacancyShort>()
 
     fun getSearchStateLiveData(): LiveData<Pair<SearchState, Int?>> = searchStateLiveData
     fun getOpenTrigger(): LiveData<VacancyShort> = openTrigger
@@ -59,6 +61,7 @@ class SearchViewModel(
                                         Pair(SearchState.LoadingError(pair.second), position)
                                     )
                                 } else {
+                                    isNextPageLoadingError = true
                                     searchStateLiveData.postValue(
                                         Pair(SearchState.NextPageLoadingError(pair.second), position)
                                     )
@@ -92,7 +95,7 @@ class SearchViewModel(
     }
 
     fun getNextPage() {
-        if (interactor.checkNet()) isNextPageLoading = false
+        if (interactor.checkNet()) isNextPageLoadingError = false
         if (currentPage < pages) {
             // Вычисляем позицию куда проскролить ресайклер, чтобы первой стояла первая вакансия с новой страницы
             val position = (currentPage - ONE) * PER_PAGE
@@ -133,5 +136,9 @@ class SearchViewModel(
         pages = ZERO
         currentPage = ONE
         vacancyList.clear()
+    }
+
+    fun clearScreen(flag: Boolean) {
+        if (flag) searchStateLiveData.postValue(Pair(SearchState.Prepared, null))
     }
 }
