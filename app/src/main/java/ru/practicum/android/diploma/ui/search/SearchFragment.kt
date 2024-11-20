@@ -165,7 +165,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun clearPlaceholders() {
-        binding.placeholderNoVacancyListMessage.visibility = View.GONE
+        binding.placeholderNoVacancyList.visibility = View.GONE
         binding.placeholderServerError.visibility = View.GONE
         binding.placeholderImage.visibility = View.GONE
         binding.placeholderNoInternet.visibility = View.GONE
@@ -199,6 +199,8 @@ class SearchFragment : Fragment() {
                 null -> {
                     binding.placeholderNoVacancyList.visibility = View.VISIBLE
                     binding.placeholderNoVacancyListMessage.visibility = View.VISIBLE
+                    binding.vacanciesFound.visibility = View.VISIBLE
+                    binding.vacanciesFound.text = requireActivity().getString(R.string.no_vacancies_found_title)
                 }
 
                 RESULT_CODE_NO_INTERNET_ERROR -> {
