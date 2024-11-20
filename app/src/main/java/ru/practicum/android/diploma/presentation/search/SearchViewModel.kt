@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.search
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -46,22 +47,33 @@ class SearchViewModel(
             if (!isNextPageLoading) {
                 searchStateLiveData.postValue(Pair(state, position))
                 val request = constructRequest(searchText)
+
+                Log.d("MY", request.toString())
+
                 isNextPageLoading = true
                 viewModelScope.launch {
                     interactor.search(
                         request
                     ).collect { pair ->
                         when (pair.first) {
-                            null ->
+                            null -> {
+                                isNextPageLoading = false
                                 if (state is SearchState.Loading) {
+
+                                    Log.d("MY", " Load error ${pair.second}")
+
                                     searchStateLiveData.postValue(
                                         Pair(SearchState.LoadingError(pair.second), position)
                                     )
                                 } else {
+
+                                    Log.d("MY", " Load NEXT Page error ${pair.second}"
+                                    )
                                     searchStateLiveData.postValue(
                                         Pair(SearchState.NextPageLoadingError(pair.second), position)
                                     )
                                 }
+                            }
 
                             else -> {
                                 val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
@@ -69,6 +81,8 @@ class SearchViewModel(
                                 isNextPageLoading = false
                                 currentPage++
                                 pages = vacancyList[0].pages
+
+                                Log.d("MY", " found ${pair.first?.size ?: 0} vacancies")
                                 searchStateLiveData.postValue(Pair(SearchState.Content(vacancyList), position))
                             }
                         }

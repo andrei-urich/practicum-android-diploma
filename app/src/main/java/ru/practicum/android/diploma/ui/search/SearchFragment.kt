@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -173,6 +174,9 @@ class SearchFragment : Fragment() {
 
     private fun showSearchError(codeError: Int?, isLoadingNextPage: Boolean) {
         if (isLoadingNextPage) {
+
+            Log.d("MY", " Get NEXT Page error ${codeError}")
+
             when (codeError) {
                 RESULT_CODE_NO_INTERNET_ERROR -> {
                     binding.recyclerViewProgressBar.visibility = View.GONE
@@ -187,6 +191,9 @@ class SearchFragment : Fragment() {
                 }
             }
         } else {
+            Log.d("MY", " Get Loading error ${codeError}")
+
+
             when (codeError) {
                 null -> {
                     binding.placeholderNoVacancyList.visibility = View.VISIBLE
