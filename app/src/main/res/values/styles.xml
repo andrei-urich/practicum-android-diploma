@@ -140,4 +140,80 @@
         <item name="android:textColor">?attr/colorSecondary</item>
     </style>
 
+    <style name="Widget.EdText.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/size_60</item>
+        <item name="cornerSize">6dp</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="colorControlHighlight">@color/white_day_night</item>
+        <item name="paddingStart">@dimen/space_0</item>
+        <item name="paddingEnd">@dimen/space_4</item>
+        <item name="android:textColorHint">@color/filter_item_empty</item>
+        <item name="endIconDrawable">@drawable/arrow_forward_icon</item>
+        <item name="endIconMode">custom</item>
+        <item name="endIconTint">@color/black_day_night</item>
+    </style>
+
+    <style name="Widget.App.SalaryInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.AppX.SalaryInputLayout</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxCollapsedPaddingTop">@dimen/space_8</item>
+        <item name="boxBackgroundColor">@color/search_field_color</item>
+        <item name="placeholderTextColor">@color/search_hint_day_night</item>
+        <item name="placeholderTextAppearance">@style/TextAppearance.App.Subtitle</item>
+        <item name="android:textColorHint">@color/search_hint_day_night</item>
+        <item name="hintTextColor">@color/blue</item>
+        <item name="hintTextAppearance">@style/Widget.App.SalaryHint</item>
+        <item name="endIconTint">@color/black_universal</item>
+        <item name="cursorColor">?attr/colorPrimary</item>
+        <item name="shapeAppearanceOverlay">@null</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.App.SmallComponent</item>
+    </style>
+
+    <style name="ThemeOverlay.AppX.SalaryInputLayout" parent="">
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle</item>
+        <item name="imageButtonStyle">@style/Widget.App.TextField.ImageButton</item>
+        <item name="editTextStyle">@style/Widget.App.SalaryInputEditText</item>
+    </style>
+
+    <style name="Widget.App.SalaryHint" parent="">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/font_12</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+
+    <style name="Widget.App.SalaryInputEditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="android:textAppearance">@style/TextAppearance.App.Subtitle</item>
+        <item name="android:textColor">@color/black_universal</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:inputType">number</item>
+        <item name="android:maxLength">9</item>
+        <item name="android:paddingTop">@dimen/space_24</item>
+        <item name="android:paddingBottom">@dimen/space_8</item>
+    </style>
+
+    <style name="bigBlueButton" parent="blueElements">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/font_16</item>
+        <item name="android:paddingVertical">@dimen/space_20</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="whiteElements" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:paddingVertical">@dimen/space_20</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/font_16</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="Widget.App.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/blue</item>
+    </style>
 </resources>
