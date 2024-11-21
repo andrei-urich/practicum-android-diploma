@@ -98,6 +98,9 @@ class SearchFragment : Fragment() {
                 }
             }
         })
+        binding.searchFilter.setOnClickListener {
+            findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
+        }
     }
 
     private fun showVacancy(vacancyId: String?) {
