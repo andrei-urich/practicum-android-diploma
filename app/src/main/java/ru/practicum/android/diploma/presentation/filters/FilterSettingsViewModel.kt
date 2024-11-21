@@ -1,3 +1,3 @@
 package ru.practicum.android.diploma.presentation.filters
 
-class PayFilterViewModel
+class FilterSettingsViewModel
