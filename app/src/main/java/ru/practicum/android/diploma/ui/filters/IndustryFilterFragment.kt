@@ -1,3 +1,5 @@
 package ru.practicum.android.diploma.ui.filters
 
-class IndustryFilterFragment
+import androidx.fragment.app.Fragment
+
+class IndustryFilterFragment : Fragment()
