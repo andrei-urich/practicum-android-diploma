@@ -17,13 +17,19 @@ class RootActivity : AppCompatActivity(R.layout.activity_root) {
         val bottomNavView = findViewById<BottomNavigationView>(R.id.bnView)
         bottomNavView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.filterSettingsFragment
-                || destination.id == R.id.areaFilterFragment
-                || destination.id == R.id.industryFilterFragment
-            ) {
-                bottomNavView.visibility = View.GONE
-            } else {
-                bottomNavView.visibility = View.VISIBLE
+
+            when (destination.id) {
+                R.id.filterSettingsFragment,
+                R.id.areaFilterFragment,
+                R.id.industryFilterFragment,
+                R.id.vacancyDetailsFragment
+                -> {
+                    bottomNavView.visibility = View.GONE
+                }
+
+                else -> {
+                    bottomNavView.visibility = View.VISIBLE
+                }
             }
         }
     }
