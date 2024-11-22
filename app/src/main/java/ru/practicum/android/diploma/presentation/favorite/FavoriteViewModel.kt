@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.favorite.interactors.GetFavoriteVacanciesListInteractor
+import ru.practicum.android.diploma.domain.favorite.interactors.VacancyDetailFavoriteInteractor
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
 import java.io.IOException
 
 class FavoriteViewModel(
-    private val getFavoriteVacanciesListInteractor: GetFavoriteVacanciesListInteractor,
+    private val favoriteVacanciesListInteractor: VacancyDetailFavoriteInteractor,
     private val dispatcherIO: CoroutineDispatcher
 ) : ViewModel() {
     private val favoriteVacanciesScreenStateLiveData =
@@ -24,7 +24,7 @@ class FavoriteViewModel(
     fun getFavoriteVacanciesList() {
         viewModelScope.launch(dispatcherIO) {
             try {
-                getFavoriteVacanciesListInteractor
+                favoriteVacanciesListInteractor
                     .getFavVacanciesList()
                     .collect { vacancies ->
                         if (vacancies.isEmpty()) {
