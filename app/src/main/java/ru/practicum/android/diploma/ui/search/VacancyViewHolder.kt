@@ -7,7 +7,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.VacancyItemBinding
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
-import ru.practicum.android.diploma.util.SalaryToString
+import ru.practicum.android.diploma.util.Formatter
 
 class VacancyViewHolder(
     private val binding: VacancyItemBinding,
@@ -21,7 +21,7 @@ class VacancyViewHolder(
 
     fun bind(vacancy: VacancyShort) {
         val title = vacancy.name + ", " + vacancy.area
-        val salary = SalaryToString.getSalary(vacancy)
+        val salary = Formatter.getSalary(vacancy)
         binding.vacancyNameAndCityTVRecycler.text = title
         binding.companyNameTVRecycler.text = vacancy.employer
         binding.salaryTVRecycler.text = salary

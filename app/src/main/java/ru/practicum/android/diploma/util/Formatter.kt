@@ -4,8 +4,27 @@ import android.content.Context
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.data.utils.Currency
 import ru.practicum.android.diploma.data.vacancydetails.SalaryInfo
+import ru.practicum.android.diploma.domain.search.models.VacancyShort
 
 object Formatter {
+    fun getSalary(
+        vacancy: VacancyShort
+    ): String {
+        if (vacancy.salaryFrom == null && vacancy.salaryTo == null) {
+            return "Зарплата не указана"
+        }
+        var string = ""
+        val string_: String
+        if (vacancy.salaryFrom != null) string = "от " + vacancy.salaryFrom.toString()
+        if (vacancy.salaryTo != null) {
+            string_ = "до " + vacancy.salaryTo.toString() + " " + currencyFromStr(vacancy.currency)
+            string += " $string_"
+        } else {
+            string += " " + currencyFromStr(vacancy.currency)
+        }
+        return string
+    }
+
     fun moneyFormat(num: Int) = "%,d".format(num).replace(",", " ")
 
     inline fun <reified T : Enum<T>> enumValueOfOrNull(name: String): T? {
