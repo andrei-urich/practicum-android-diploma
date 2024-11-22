@@ -23,7 +23,6 @@ import ru.practicum.android.diploma.domain.vacancydetails.models.DetailsNotFound
 import ru.practicum.android.diploma.domain.vacancydetails.models.VacancyDetails
 import ru.practicum.android.diploma.presentation.vacancydetails.VacancyDetailsViewModel
 import ru.practicum.android.diploma.presentation.vacancydetails.model.VacancyDetailsState
-import ru.practicum.android.diploma.util.DETAILS_VACANCY_ID
 import ru.practicum.android.diploma.util.Formatter
 
 class VacancyDetailsFragment : Fragment() {
@@ -250,6 +249,7 @@ class VacancyDetailsFragment : Fragment() {
     }
 
     companion object {
+        const val DETAILS_VACANCY_ID = "vacancyID"
         fun createArgs(vacancyId: String?) = bundleOf(
             DETAILS_VACANCY_ID to vacancyId
         )

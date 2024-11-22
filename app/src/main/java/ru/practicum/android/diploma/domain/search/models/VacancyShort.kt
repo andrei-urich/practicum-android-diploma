@@ -1,8 +1,5 @@
 package ru.practicum.android.diploma.domain.search.models
 
-import ru.practicum.android.diploma.util.EMPTY_STRING
-import ru.practicum.android.diploma.util.ZERO
-
 data class VacancyShort(
     val vacancyId: String?,
     val name: String?,
@@ -18,3 +15,5 @@ data class VacancyShort(
     val page: Int = ZERO,
     val pages: Int = ZERO
 )
+private const val EMPTY_STRING = ""
+private const val ZERO = 0

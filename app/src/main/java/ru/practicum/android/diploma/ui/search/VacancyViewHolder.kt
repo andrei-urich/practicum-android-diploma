@@ -7,7 +7,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.VacancyItemBinding
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
-import ru.practicum.android.diploma.util.CORNER_RADIUS
 import ru.practicum.android.diploma.util.SalaryToString
 
 class VacancyViewHolder(
@@ -34,5 +33,8 @@ class VacancyViewHolder(
             .transform(RoundedCorners(CORNER_RADIUS))
             .dontAnimate()
             .into(binding.employerLogoIVRecycler)
+    }
+    private companion object {
+        const val CORNER_RADIUS = 2
     }
 }

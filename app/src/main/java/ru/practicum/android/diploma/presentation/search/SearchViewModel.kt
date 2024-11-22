@@ -10,11 +10,6 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.search.SearchInteractor
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
 import ru.practicum.android.diploma.presentation.SingleEventLiveData
-import ru.practicum.android.diploma.util.EMPTY_STRING
-import ru.practicum.android.diploma.util.ONE
-import ru.practicum.android.diploma.util.PER_PAGE
-import ru.practicum.android.diploma.util.SEARCH_DEBOUNCE_DELAY
-import ru.practicum.android.diploma.util.ZERO
 
 class SearchViewModel(
     private val interactor: SearchInteractor
@@ -119,5 +114,12 @@ class SearchViewModel(
 
     fun clearScreen(flag: Boolean) {
         if (flag) searchStateLiveData.postValue(Pair(SearchState.Prepared, null))
+    }
+    private companion object {
+        const val EMPTY_STRING = ""
+        const val ONE = 1
+        const val ZERO = 0
+        const val PER_PAGE = 20
+        const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }

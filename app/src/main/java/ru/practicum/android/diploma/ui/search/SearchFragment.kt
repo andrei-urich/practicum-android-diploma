@@ -20,11 +20,6 @@ import ru.practicum.android.diploma.domain.search.models.VacancyShort
 import ru.practicum.android.diploma.presentation.search.SearchState
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.ui.vacancydetails.VacancyDetailsFragment
-import ru.practicum.android.diploma.util.EMPTY_STRING
-import ru.practicum.android.diploma.util.RESULT_CODE_BAD_REQUEST
-import ru.practicum.android.diploma.util.RESULT_CODE_NO_INTERNET_ERROR
-import ru.practicum.android.diploma.util.RESULT_CODE_SERVER_ERROR
-import ru.practicum.android.diploma.util.ZERO
 
 class SearchFragment : Fragment() {
     private var searchText = EMPTY_STRING
@@ -236,5 +231,12 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         _viewBinding = null
         super.onDestroyView()
+    }
+    private companion object {
+        const val EMPTY_STRING = ""
+        const val RESULT_CODE_BAD_REQUEST = 400
+        const val RESULT_CODE_NO_INTERNET_ERROR = 504
+        const val RESULT_CODE_SERVER_ERROR = 500
+        const val ZERO = 0
     }
 }

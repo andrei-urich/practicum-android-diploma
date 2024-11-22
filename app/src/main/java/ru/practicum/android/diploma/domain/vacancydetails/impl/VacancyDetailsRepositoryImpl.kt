@@ -16,7 +16,6 @@ import ru.practicum.android.diploma.domain.vacancydetails.api.VacancyDetailsRepo
 import ru.practicum.android.diploma.domain.vacancydetails.models.Address
 import ru.practicum.android.diploma.domain.vacancydetails.models.Details
 import ru.practicum.android.diploma.domain.vacancydetails.models.VacancyDetails
-import ru.practicum.android.diploma.util.EMPTY_STRING
 
 class VacancyDetailsRepositoryImpl(private val networkClientDetails: NetworkRequestDetails) : VacancyDetailsRepository {
     override fun getVacancyDetails(vacancyId: String): Flow<ResourceDetails<VacancyDetails?>> = flow {
@@ -100,5 +99,8 @@ class VacancyDetailsRepositoryImpl(private val networkClientDetails: NetworkRequ
                 name = it.name
             )
         }
+    }
+    private companion object {
+        const val EMPTY_STRING = ""
     }
 }
