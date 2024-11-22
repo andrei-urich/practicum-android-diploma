@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.vacancydetails.ErrorType
 import ru.practicum.android.diploma.data.vacancydetails.NoInternetError
 import ru.practicum.android.diploma.data.vacancydetails.Success
-import ru.practicum.android.diploma.domain.vacancydetails.api.VacancyDetailFavoriteInteractor
+import ru.practicum.android.diploma.domain.favorite.interactors.VacancyDetailFavoriteInteractor
 import ru.practicum.android.diploma.domain.vacancydetails.api.VacancyDetailsInteractor
 import ru.practicum.android.diploma.domain.vacancydetails.models.DetailsNotFoundType
 import ru.practicum.android.diploma.domain.vacancydetails.models.VacancyDetails

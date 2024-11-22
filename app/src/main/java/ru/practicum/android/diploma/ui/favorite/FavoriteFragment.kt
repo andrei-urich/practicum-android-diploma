@@ -16,7 +16,6 @@ import ru.practicum.android.diploma.presentation.favorite.FavoriteViewModel
 import ru.practicum.android.diploma.presentation.favorite.FavoritesScreenState
 import ru.practicum.android.diploma.presentation.favorite.VacanciesRecyclerViewAdapter
 import ru.practicum.android.diploma.ui.vacancydetails.VacancyDetailsFragment
-import ru.practicum.android.diploma.util.CLICK_FAVORITE_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.debounce
 
 class FavoriteFragment : Fragment() {
@@ -120,5 +119,8 @@ class FavoriteFragment : Fragment() {
             favoritesPlaceholderCantGetListText.visibility = View.INVISIBLE
             favoritesCantGetListPlaceholder.visibility = View.INVISIBLE
         }
+    }
+    private companion object {
+        const val CLICK_FAVORITE_DEBOUNCE_DELAY = 2000L
     }
 }

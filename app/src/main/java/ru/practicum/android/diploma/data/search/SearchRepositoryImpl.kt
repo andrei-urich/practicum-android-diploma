@@ -9,9 +9,6 @@ import ru.practicum.android.diploma.data.search.network.VacancySearchRequest
 import ru.practicum.android.diploma.domain.search.Resource
 import ru.practicum.android.diploma.domain.search.SearchRepository
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
-import ru.practicum.android.diploma.util.CODE_200
-import ru.practicum.android.diploma.util.CODE_299
-import ru.practicum.android.diploma.util.EMPTY_STRING
 import ru.practicum.android.diploma.util.isConnected
 
 class SearchRepositoryImpl(
@@ -53,5 +50,11 @@ class SearchRepositoryImpl(
 
     override fun checkNet(): Boolean {
         return isConnected(context)
+    }
+
+    private companion object {
+        const val EMPTY_STRING = ""
+        const val CODE_299 = 299
+        const val CODE_200 = 200
     }
 }

@@ -4,8 +4,6 @@ import android.app.Application
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import ru.practicum.android.diploma.di.favorite.favoriteDataModule
-import ru.practicum.android.diploma.di.favorite.favoriteInteractorModule
-import ru.practicum.android.diploma.di.favorite.favoriteRepositoryModule
 import ru.practicum.android.diploma.di.favorite.favoriteViewModelModule
 import ru.practicum.android.diploma.di.search.searchDataModule
 import ru.practicum.android.diploma.di.search.searchViewModelModule
@@ -27,8 +25,6 @@ class AlmightyJobSeekerApp : Application() {
                 vacancyDetailsInteractorModule,
                 vacancyDetailsViewModelModule,
                 favoriteDataModule,
-                favoriteRepositoryModule,
-                favoriteInteractorModule,
                 favoriteViewModelModule,
                 searchViewModelModule
             )
