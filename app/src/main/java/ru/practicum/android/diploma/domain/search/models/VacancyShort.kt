@@ -9,8 +9,6 @@ data class VacancyShort(
     val salaryFrom: Int?,
     val currency: String? = EMPTY_STRING,
     val logoLink: String?,
-
-    // Данные из конкретного поиска "по слову". Не нужно их в избранное.
     val found: Int = ZERO,
     val page: Int = ZERO,
     val pages: Int = ZERO

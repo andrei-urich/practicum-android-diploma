@@ -39,7 +39,7 @@ class DetailVacancyEntityConverter(private val gson: Gson) {
             val vacancy = VacancyDetails(
                 hhID = detailVacancyEntity.hhID,
                 name = detailVacancyEntity.name,
-                isFavorite = detailVacancyEntity.isFavorite, // zochem
+                isFavorite = detailVacancyEntity.isFavorite,
                 employerInfo = EmployerInfo(
                     detailVacancyEntity.employerName,
                     detailVacancyEntity.employerLogoUrl,
@@ -57,7 +57,6 @@ class DetailVacancyEntityConverter(private val gson: Gson) {
                     NameInfo(detailVacancyEntity.scheduleId, detailVacancyEntity.scheduleName.toString()),
                     description = detailVacancyEntity.description,
                     keySkills = mapKeySkills(detailVacancyEntity.keySkills),
-                    // ОБРАТИТЬ ВНИМАНИЕ, KEYSKILLS ИЗ СТРОКИ ПРЕВАРЩАЕТСЯ В НЕЧТО И ОБРАТНО
                     hhVacancyLink = detailVacancyEntity.hhVacancyLink
                 )
             )

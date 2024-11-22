@@ -91,7 +91,6 @@ class SearchViewModel(
     fun getNextPage() {
         if (interactor.checkNet()) isNextPageLoadingError = false
         if (currentPage < pages) {
-            // Вычисляем позицию куда проскролить ресайклер, чтобы первой стояла первая вакансия с новой страницы
             val position = (currentPage - ONE) * PER_PAGE
             request(SearchState.LoadingNextPage, position)
         }
