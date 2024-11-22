@@ -18,4 +18,3 @@ class RootActivity : AppCompatActivity(R.layout.activity_root) {
         bottomNavView.setupWithNavController(navController)
     }
 }
-
