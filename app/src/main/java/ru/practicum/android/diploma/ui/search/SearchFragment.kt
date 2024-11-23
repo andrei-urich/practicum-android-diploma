@@ -79,7 +79,8 @@ class SearchFragment : Fragment() {
         viewModel.getOpenTrigger().observe(viewLifecycleOwner) { vacancy ->
             findNavController().navigate(
                 R.id.action_searchFragment_to_vacancyDetailsFragment,
-                VacancyDetailsFragment.createArgs(vacancy.vacancyId))
+                VacancyDetailsFragment.createArgs(vacancy.vacancyId)
+            )
         }
         viewModel.getErrorLoadingNextPageTrigger().observe(viewLifecycleOwner) { errorCode ->
             showSearchError(errorCode, true)
