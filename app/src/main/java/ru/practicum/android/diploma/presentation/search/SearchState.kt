@@ -10,10 +10,6 @@ sealed class SearchState {
         val resultCode: Int?
     ) : SearchState()
 
-    data class NextPageLoadingError(
-        val resultCode: Int?
-    ) : SearchState()
-
     data class Content(
         val vacancyList: List<VacancyShort>,
     ) : SearchState()

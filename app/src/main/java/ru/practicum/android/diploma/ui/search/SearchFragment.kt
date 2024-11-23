@@ -79,6 +79,9 @@ class SearchFragment : Fragment() {
         viewModel.getOpenTrigger().observe(viewLifecycleOwner) { vacancy ->
             showVacancy(vacancy.vacancyId)
         }
+        viewModel.getErrorLoadingNextPageTrigger().observe(viewLifecycleOwner) {
+            errorCode -> showSearchError(errorCode, true)
+        }
 
         binding.vacancyListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -114,10 +117,6 @@ class SearchFragment : Fragment() {
 
             is SearchState.LoadingError -> {
                 showSearchError(searchState.resultCode, false)
-            }
-
-            is SearchState.NextPageLoadingError -> {
-                showSearchError(searchState.resultCode, true)
             }
 
             is SearchState.Content -> {

@@ -22,6 +22,7 @@ class SearchViewModel(
     private var isNextPageLoading = false
     private var isNextPageLoadingError = false
     private val vacancyList: MutableList<VacancyShort> = mutableListOf()
+    private val lastPosition: Int = 0
 
     private val searchStateLiveData = MutableLiveData<Pair<SearchState, Int?>>()
     private val openTrigger = SingleEventLiveData<VacancyShort>()
@@ -57,8 +58,8 @@ class SearchViewModel(
                             } else {
                                 isNextPageLoadingError = true
                                 searchStateLiveData.postValue(
-                                    Pair(SearchState.NextPageLoadingError(pair.second), position)
-                                )
+                                    Pair(SearchState.Content(vacancyList), lastPosition))
+                                errorLoadingNextPageTrigger.postValue(pair.second)
                             }
                         }
 
@@ -74,6 +75,7 @@ class SearchViewModel(
 
     private fun vacanciesAddAndLoadStatus(vacancies: List<VacancyShort>, position: Int?) {
         vacancyList.addAll(vacancies)
+        lastPosition == position
         isNextPageLoading = false
         currentPage++
         if (vacancies.isNotEmpty()) pages = vacancyList[0].pages
