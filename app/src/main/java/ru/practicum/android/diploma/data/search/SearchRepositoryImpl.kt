@@ -16,8 +16,10 @@ class SearchRepositoryImpl(
     private val context: Context
 ) : SearchRepository {
     override fun search(
-        request: HashMap<String, String>
+        searchText: String,
+        currentPage: Int
     ): Flow<Resource<List<VacancyShort>>> = flow {
+        val request: HashMap<String, String> = constructRequest(searchText, currentPage)
         val response = networkClient.doRequest(VacancySearchRequest(request))
         when (response.resultCode) {
             in CODE_200..CODE_299 -> {
@@ -52,9 +54,20 @@ class SearchRepositoryImpl(
         return isConnected(context)
     }
 
+    private fun constructRequest(searchText: String, currentPage: Int): HashMap<String, String> {
+        val options: HashMap<String, String> = HashMap()
+        options["text"] = searchText
+        if (currentPage != 1) {
+            options["page"] = currentPage.toString()
+        }
+        options["per_page"] = PER_PAGE.toString()
+        return options
+    }
+
     private companion object {
         const val EMPTY_STRING = ""
         const val CODE_299 = 299
         const val CODE_200 = 200
+        const val PER_PAGE = 20
     }
 }

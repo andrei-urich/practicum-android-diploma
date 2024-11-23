@@ -7,8 +7,14 @@ import ru.practicum.android.diploma.domain.search.models.VacancyShort
 class SearchInteractorImpl(
     private val repository: SearchRepository
 ) : SearchInteractor {
-    override fun search(request: HashMap<String, String>): Flow<Pair<List<VacancyShort>?, Int?>> {
-        return repository.search(request).map { result ->
+    override fun search(
+        searchText: String,
+        currentPage: Int
+    ): Flow<Pair<List<VacancyShort>?, Int?>> {
+        return repository.search(
+            searchText,
+            currentPage
+        ).map { result ->
             when (result) {
                 is Resource.Success -> {
                     Pair(result.data, null)
