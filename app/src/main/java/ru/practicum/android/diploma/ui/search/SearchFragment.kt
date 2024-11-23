@@ -56,7 +56,7 @@ class SearchFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchText = s.toString()
-                if (binding.searchEditText.hasFocus() && s?.isEmpty() == true) {
+                if (s?.isEmpty() == true) {
                     viewModel.clearScreen(true)
                     binding.vacancyListRv.visibility = View.GONE
                     binding.vacanciesFound.visibility = View.GONE
