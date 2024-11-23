@@ -22,6 +22,7 @@ class SearchViewModel(
     private var position: Int = ZERO
     private var isNextPageLoading = false
     private var isNextPageLoadingError = false
+    private var isNextPageCanBeLoad = (!isNextPageLoading && !isNextPageLoadingError)
     private val vacancyList: MutableList<VacancyShort> = mutableListOf()
 
     private val searchStateLiveData = MutableLiveData<SearchState>()
@@ -42,13 +43,12 @@ class SearchViewModel(
     }
 
     private fun request(state: SearchState) {
-        if (!isNextPageLoading && !isNextPageLoadingError) {
+        if (isNextPageCanBeLoad) {
             searchStateLiveData.postValue(state)
             isNextPageLoading = true
             viewModelScope.launch {
                 interactor.search(
-                    searchText,
-                    currentPage
+                    searchText, currentPage
                 ).collect { pair ->
                     when (pair.first) {
                         null -> {
@@ -71,7 +71,6 @@ class SearchViewModel(
                             vacancyList.addAll(vacancies)
                             isNextPageLoading = false
                             currentPage++
-                            if (vacancies.isNotEmpty()) pages = vacancyList[0].pages
                             searchStateLiveData.postValue(SearchState.Content(vacancyList))
                             positionNewPageToScroll.postValue((position))
                         }
@@ -82,6 +81,7 @@ class SearchViewModel(
     }
 
     fun getNextPage() {
+        if (vacancyList.size >= position) pages = vacancyList[position].pages
         if (interactor.checkNet()) isNextPageLoadingError = false
         if (currentPage < pages) {
             position = (currentPage - ONE) * PER_PAGE
