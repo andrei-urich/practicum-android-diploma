@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -72,8 +73,8 @@ class SearchFragment : Fragment() {
         }
         binding.searchEditText.addTextChangedListener(searchTextWatcher)
 
-        viewModel.getSearchStateLiveData().observe(viewLifecycleOwner) { pair ->
-            changeContentVisibility(pair.first, pair.second)
+        viewModel.getSearchStateLiveData().observe(viewLifecycleOwner) { state ->
+            changeContentVisibility(state)
         }
 
         viewModel.getOpenTrigger().observe(viewLifecycleOwner) { vacancy ->
@@ -81,6 +82,10 @@ class SearchFragment : Fragment() {
         }
         viewModel.getErrorLoadingNextPageTrigger().observe(viewLifecycleOwner) { errorCode ->
             showSearchError(errorCode, true)
+        }
+
+        viewModel.getPositionNewPageToScroll().observe(viewLifecycleOwner) { position ->
+            setRecyclerPositionNextPage(position)
         }
 
         binding.vacancyListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -108,7 +113,7 @@ class SearchFragment : Fragment() {
         )
     }
 
-    private fun changeContentVisibility(searchState: SearchState, position: Int?) {
+    private fun changeContentVisibility(searchState: SearchState) {
         when (searchState) {
             is SearchState.Prepared -> {
                 clearScreen()
@@ -123,7 +128,7 @@ class SearchFragment : Fragment() {
                 clearScreen()
                 vacancies.clear()
                 vacancies.addAll(searchState.vacancyList.toMutableList())
-                renderContent(vacancies, position)
+                renderContent(vacancies)
             }
 
             is SearchState.Loading -> {
@@ -207,7 +212,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun renderContent(vacancies: List<VacancyShort>, position: Int?) {
+    private fun renderContent(vacancies: List<VacancyShort>) {
         if (vacancies.isNotEmpty()) {
             binding.vacanciesFound.text = requireActivity().resources.getQuantityString(
                 R.plurals.vacancy_number,
@@ -219,9 +224,6 @@ class SearchFragment : Fragment() {
             binding.vacancyListRv.adapter = searchAdapter
             searchAdapter.notifyDataSetChanged()
 
-            if (position != null && vacancies.size >= position) {
-                binding.vacancyListRv.scrollToPosition(position)
-            }
         } else {
             showSearchError(null, false)
         }
@@ -230,6 +232,13 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         _viewBinding = null
         super.onDestroyView()
+    }
+
+    private fun setRecyclerPositionNextPage(position: Int) {
+        if (vacancies.size >= position) {
+            binding.vacancyListRv.scrollToPosition(position)
+            Log.d("MY", position.toString())
+        }
     }
 
     private companion object {
