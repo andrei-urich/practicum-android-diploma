@@ -25,9 +25,11 @@ class SearchViewModel(
 
     private val searchStateLiveData = MutableLiveData<Pair<SearchState, Int?>>()
     private val openTrigger = SingleEventLiveData<VacancyShort>()
+    private val errorLoadingNextPageTrigger = SingleEventLiveData<Int>()
 
     fun getSearchStateLiveData(): LiveData<Pair<SearchState, Int?>> = searchStateLiveData
     fun getOpenTrigger(): LiveData<VacancyShort> = openTrigger
+    fun getErrorLoadingNextPageTrigger(): LiveData<Int> = errorLoadingNextPageTrigger
 
     fun getSearchText(searchText: String) {
         if (searchText.isNotBlank() && this.searchText != searchText) {
@@ -39,11 +41,11 @@ class SearchViewModel(
     private fun request(state: SearchState, position: Int?) {
         if (!isNextPageLoading && !isNextPageLoadingError) {
             searchStateLiveData.postValue(Pair(state, position))
-            val request = constructRequest(searchText)
             isNextPageLoading = true
             viewModelScope.launch {
                 interactor.search(
-                    request
+                    searchText,
+                    currentPage
                 ).collect { pair ->
                     when (pair.first) {
                         null -> {
@@ -78,15 +80,6 @@ class SearchViewModel(
         searchStateLiveData.postValue(Pair(SearchState.Content(vacancyList), position))
     }
 
-    private fun constructRequest(searchText: String): HashMap<String, String> {
-        val options: HashMap<String, String> = HashMap()
-        options["text"] = searchText
-        if (currentPage != 1) {
-            options["page"] = currentPage.toString()
-        }
-        options["per_page"] = PER_PAGE.toString()
-        return options
-    }
 
     fun getNextPage() {
         if (interactor.checkNet()) isNextPageLoadingError = false
@@ -114,11 +107,12 @@ class SearchViewModel(
     fun clearScreen(flag: Boolean) {
         if (flag) searchStateLiveData.postValue(Pair(SearchState.Prepared, null))
     }
+
     private companion object {
         const val EMPTY_STRING = ""
         const val ONE = 1
         const val ZERO = 0
-        const val PER_PAGE = 20
         const val SEARCH_DEBOUNCE_DELAY = 2000L
+        const val PER_PAGE = 20
     }
 }
