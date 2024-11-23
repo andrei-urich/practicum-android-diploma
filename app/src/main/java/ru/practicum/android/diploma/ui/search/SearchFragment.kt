@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,7 +77,9 @@ class SearchFragment : Fragment() {
         }
 
         viewModel.getOpenTrigger().observe(viewLifecycleOwner) { vacancy ->
-            showVacancy(vacancy.vacancyId)
+            findNavController().navigate(
+                R.id.action_searchFragment_to_vacancyDetailsFragment,
+                VacancyDetailsFragment.createArgs(vacancy.vacancyId))
         }
         viewModel.getErrorLoadingNextPageTrigger().observe(viewLifecycleOwner) { errorCode ->
             showSearchError(errorCode, true)
@@ -104,13 +105,6 @@ class SearchFragment : Fragment() {
         binding.searchFilter.setOnClickListener {
             findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
         }
-    }
-
-    private fun showVacancy(vacancyId: String?) {
-        findNavController().navigate(
-            R.id.action_searchFragment_to_vacancyDetailsFragment,
-            VacancyDetailsFragment.createArgs(vacancyId)
-        )
     }
 
     private fun changeContentVisibility(searchState: SearchState) {
@@ -237,7 +231,6 @@ class SearchFragment : Fragment() {
     private fun setRecyclerPositionNextPage(position: Int) {
         if (vacancies.size >= position) {
             binding.vacancyListRv.scrollToPosition(position)
-            Log.d("MY", position.toString())
         }
     }
 

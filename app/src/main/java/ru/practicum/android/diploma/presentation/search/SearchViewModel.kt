@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.presentation.search
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -69,22 +68,17 @@ class SearchViewModel(
 
                         else -> {
                             val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
-                            vacanciesAddAndLoadStatus(vacancies)
+                            vacancyList.addAll(vacancies)
+                            isNextPageLoading = false
+                            currentPage++
+                            if (vacancies.isNotEmpty()) pages = vacancyList[0].pages
+                            searchStateLiveData.postValue(SearchState.Content(vacancyList))
+                            positionNewPageToScroll.postValue((position))
                         }
                     }
                 }
             }
         }
-    }
-
-    private fun vacanciesAddAndLoadStatus(vacancies: List<VacancyShort>) {
-        vacancyList.addAll(vacancies)
-        isNextPageLoading = false
-        currentPage++
-        if (vacancies.isNotEmpty()) pages = vacancyList[0].pages
-        searchStateLiveData.postValue(SearchState.Content(vacancyList))
-        positionNewPageToScroll.postValue((position))
-        Log.d("MY", position.toString())
     }
 
     fun getNextPage() {
