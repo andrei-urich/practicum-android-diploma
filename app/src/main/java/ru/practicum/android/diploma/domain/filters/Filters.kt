@@ -14,8 +14,6 @@ class Filters(
             salaryTarget != EMPTY_SALARY_TARGET &&
             !salaryShowCheck
     }
-
-
     companion object {
         const val EMPTY_SALARY_TARGET: Int = -1
         fun setNewAreaCity(oldFilter: Filters, newArea: String, newCity: String?): Filters {
