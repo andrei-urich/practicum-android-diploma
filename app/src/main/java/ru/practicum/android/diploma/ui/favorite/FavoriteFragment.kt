@@ -121,6 +121,6 @@ class FavoriteFragment : Fragment() {
         }
     }
     private companion object {
-        const val CLICK_FAVORITE_DEBOUNCE_DELAY = 2000L
+        const val CLICK_FAVORITE_DEBOUNCE_DELAY = 250L
     }
 }
