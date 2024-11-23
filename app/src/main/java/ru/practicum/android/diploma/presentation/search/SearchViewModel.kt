@@ -57,7 +57,7 @@ class SearchViewModel(
                             } else {
                                 isNextPageLoadingError = true
                                 searchStateLiveData.postValue(
-                                    Pair(SearchState.Content(vacancyList), null)
+                                    Pair(SearchState.Content(vacancyList), (vacancyList.size - ONE))
                                 )
                                 errorLoadingNextPageTrigger.postValue(pair.second)
                             }
