@@ -79,8 +79,8 @@ class SearchFragment : Fragment() {
         viewModel.getOpenTrigger().observe(viewLifecycleOwner) { vacancy ->
             showVacancy(vacancy.vacancyId)
         }
-        viewModel.getErrorLoadingNextPageTrigger().observe(viewLifecycleOwner) {
-            errorCode -> showSearchError(errorCode, true)
+        viewModel.getErrorLoadingNextPageTrigger().observe(viewLifecycleOwner) { errorCode ->
+            showSearchError(errorCode, true)
         }
 
         binding.vacancyListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -219,7 +219,7 @@ class SearchFragment : Fragment() {
             binding.vacancyListRv.adapter = searchAdapter
             searchAdapter.notifyDataSetChanged()
 
-            if (position != null) {
+            if (position != null && vacancies.size >= position) {
                 binding.vacancyListRv.scrollToPosition(position)
             }
         } else {
@@ -231,6 +231,7 @@ class SearchFragment : Fragment() {
         _viewBinding = null
         super.onDestroyView()
     }
+
     private companion object {
         const val EMPTY_STRING = ""
         const val RESULT_CODE_BAD_REQUEST = 400
