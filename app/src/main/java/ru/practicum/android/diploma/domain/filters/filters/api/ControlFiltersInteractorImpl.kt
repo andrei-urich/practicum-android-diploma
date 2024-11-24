@@ -13,6 +13,10 @@ class ControlFiltersInteractorImpl(
         return filtersControlRepository.isFiltersNotEmpty()
     }
 
+    override fun isSearchForced(): Boolean {
+        return filtersControlRepository.isSearchForced()
+    }
+
     override fun saveFilterConfiguration(filters: Filters) {
         filtersControlRepository.saveFiltersConfiguration(filters)
     }
@@ -45,5 +49,9 @@ class ControlFiltersInteractorImpl(
 
     override fun checkFiltresChanges(): Boolean {
         return filtersControlRepository.checkFiltersChanges()
+    }
+
+    override fun forceSearch() {
+        filtersControlRepository.forceSearch()
     }
 }

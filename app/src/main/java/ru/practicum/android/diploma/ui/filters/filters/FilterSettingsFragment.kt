@@ -78,6 +78,8 @@ class FilterSettingsFragment : Fragment() {
         }
         binding.btApply.setOnClickListener {
             viewModel.fixFiltres()
+            viewModel.forceSearch()
+            findNavController().navigateUp()
         }
     }
 

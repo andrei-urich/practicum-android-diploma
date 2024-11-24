@@ -24,6 +24,7 @@ class SearchViewModel(
     private var position: Int = ZERO
     private var noNextPageLoading = true
     private var noNextPageLoadingError = true
+    private var searchIsForcedByFilters = false
     private val vacancyList: MutableList<VacancyShort> = mutableListOf()
 
     private val searchStateLiveData = MutableLiveData<SearchState>()
@@ -37,9 +38,11 @@ class SearchViewModel(
     fun getPositionNewPageToScroll(): LiveData<Int> = positionNewPageToScroll
 
     fun getSearchText(searchText: String) {
-        if (searchText.isNotBlank() && this.searchText != searchText) {
+        if (searchText.isNotBlank() && (this.searchText != searchText || searchIsForcedByFilters)) {
             this.searchText = searchText
-            searchDebounce()
+            if (searchIsForcedByFilters) searchDebounce(SEARCH_DEBOUNCE_DELAY_FORCED)
+            else searchDebounce(SEARCH_DEBOUNCE_DELAY)
+            searchIsForcedByFilters = false
         }
     }
 
@@ -99,14 +102,14 @@ class SearchViewModel(
         openTrigger.postValue(vacancy)
     }
 
-    private fun searchDebounce() {
+    private fun searchDebounce(delay: Long) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             pages = ZERO
             currentPage = ONE
             position = ZERO
             vacancyList.clear()
-            delay(SEARCH_DEBOUNCE_DELAY)
+            delay(delay)
             request(SearchState.Loading)
         }
     }
@@ -122,11 +125,17 @@ class SearchViewModel(
         return searchFiltersInteractor.isFiltersNotEmpty()
     }
 
+    fun isSearchForced(): Boolean {
+        searchIsForcedByFilters = searchFiltersInteractor.isSearchForced()
+        return searchIsForcedByFilters
+    }
+
     private companion object {
         const val EMPTY_STRING = ""
         const val ONE = 1
         const val ZERO = 0
         const val SEARCH_DEBOUNCE_DELAY = 2000L
+        const val SEARCH_DEBOUNCE_DELAY_FORCED = 0L
         const val PER_PAGE = 20
     }
 }

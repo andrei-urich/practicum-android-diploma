@@ -13,6 +13,7 @@ class FiltersControlRepositoryImpls(
 ) : FiltersControlRepository {
     private var currentFilters: Filters = Filters()
     private var lastSavedFilters = Filters()
+    private var forcedSearchFlag = false
 
     init {
         currentFilters =
@@ -39,9 +40,11 @@ class FiltersControlRepositoryImpls(
         currentFilters = filters
         saveFiltersInSP(currentFilters)
     }
+
     override fun fixFilters() {
         lastSavedFilters = currentFilters
     }
+
     override fun checkFiltersChanges(): Boolean {
         return lastSavedFilters != currentFilters
     }
@@ -78,6 +81,17 @@ class FiltersControlRepositoryImpls(
     private fun saveFiltersInSP(filters: Filters) {
         val filtersJson = gson.toJson(filters)
         sharedPreferences.edit().putString(FILTERS_ACTIVE, filtersJson).apply()
+    }
+
+    override fun forceSearch() {
+        forcedSearchFlag = true
+    }
+
+    override fun isSearchForced(): Boolean {
+        if (forcedSearchFlag) {
+            forcedSearchFlag = false
+            return true
+        } else return false
     }
 
     companion object {

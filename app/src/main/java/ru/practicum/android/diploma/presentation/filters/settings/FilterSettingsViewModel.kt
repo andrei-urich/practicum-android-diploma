@@ -59,5 +59,8 @@ class FilterSettingsViewModel(
     private fun checkFiltresChanges() {
         isFiltresChanged.postValue(controlFiltersInteractor.checkFiltresChanges())
     }
+    fun forceSearch(){
+        controlFiltersInteractor.forceSearch()
+    }
 
 }

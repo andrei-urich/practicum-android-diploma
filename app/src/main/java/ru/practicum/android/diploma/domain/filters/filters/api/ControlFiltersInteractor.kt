@@ -13,4 +13,5 @@ interface ControlFiltersInteractor {
     fun saveSalaryShowCheckFilter(newCheck: Boolean)
     fun fixFiltres()
     fun checkFiltresChanges(): Boolean
+    fun forceSearch()
 }
