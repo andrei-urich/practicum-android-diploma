@@ -1,14 +1,14 @@
 package ru.practicum.android.diploma.ui.filters.area
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentCountryFilterBinding
 import ru.practicum.android.diploma.presentation.filters.area.CountryFilterViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CountryFilterFragment : Fragment() {
     private var _binding: FragmentCountryFilterBinding? = null

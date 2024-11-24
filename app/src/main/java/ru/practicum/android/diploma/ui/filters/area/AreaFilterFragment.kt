@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import ru.practicum.android.diploma.databinding.FragmentAreaFilterBinding
-import ru.practicum.android.diploma.presentation.filters.area.AreaFilterViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.databinding.FragmentAreaFilterBinding
+import ru.practicum.android.diploma.presentation.filters.area.AreaFilterViewModel
 import ru.practicum.android.diploma.presentation.filters.area.AreaState
 
 class AreaFilterFragment : Fragment() {
@@ -17,12 +17,11 @@ class AreaFilterFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: AreaFilterViewModel by viewModel()
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAreaFilterBinding.inflate(inflater, container, false)
         return binding.root
     }
