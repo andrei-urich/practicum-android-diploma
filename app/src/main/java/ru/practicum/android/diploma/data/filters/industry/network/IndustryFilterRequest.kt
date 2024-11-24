@@ -1,3 +1,3 @@
 package ru.practicum.android.diploma.data.filters.industry.network
 
-class IndustryFilterRequest
+data class IndustryFilterRequest(val query: String? = null)
