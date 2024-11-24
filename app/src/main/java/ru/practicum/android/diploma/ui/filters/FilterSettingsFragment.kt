@@ -13,7 +13,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
 import ru.practicum.android.diploma.domain.filters.Filters
-import ru.practicum.android.diploma.presentation.filters.FilterSettingsViewModel
+import ru.practicum.android.diploma.presentation.filters.settings.FilterSettingsViewModel
 import ru.practicum.android.diploma.util.debounce
 
 class FilterSettingsFragment : Fragment() {

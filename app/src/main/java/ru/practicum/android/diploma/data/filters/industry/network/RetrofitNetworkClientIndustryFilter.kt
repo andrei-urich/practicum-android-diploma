@@ -5,6 +5,7 @@ import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import ru.practicum.android.diploma.data.filters.industry.dto.IndustryFilterDTO
 import ru.practicum.android.diploma.data.vacancydetails.BadRequestError
 import ru.practicum.android.diploma.data.vacancydetails.NoInternetError
 import ru.practicum.android.diploma.data.vacancydetails.ResponseBase
@@ -21,9 +22,11 @@ class RetrofitNetworkClientIndustryFilter(val api: AppApiIndustryFilter, val con
         if (!isConnected(context)) {
             return ResponseBase(NoInternetError())
         }
+        val query = (dto as? IndustryFilterRequest)?.query
+        val response = api.getIndustries(query)
+
         return withContext(Dispatchers.IO) {
             try {
-                val response = api.getIndustries()
                 when (response.code()) {
                     HttpURLConnection.HTTP_OK -> convertIndustryResponse(response.body())
                     HttpURLConnection.HTTP_BAD_REQUEST -> ResponseBase(IndustryFilterErrorType())
@@ -39,12 +42,12 @@ class RetrofitNetworkClientIndustryFilter(val api: AppApiIndustryFilter, val con
         }
     }
 
-    private fun convertIndustryResponse(responseBody: IndustryFilterResponse?): ResponseBase =
+    private fun convertIndustryResponse(responseBody: List<IndustryFilterDTO>?): ResponseBase =
         if (responseBody == null) {
             ResponseBase(IndustryFilterErrorType())
         } else {
             IndustryFilterResponse(
-                responseBody.industries
+                responseBody
             )
         }
 }

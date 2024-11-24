@@ -53,6 +53,7 @@
         android:label="AreaFilterFragment" />
     <fragment
         android:id="@+id/industryFilterFragment"
-        android:name="ru.practicum.android.diploma.ui.filters.IndustryFilterFragment"
-        android:label="IndustryFilterFragment" />
+        android:name="ru.practicum.android.diploma.ui.filters.industry.IndustryFilterFragment"
+        android:label="IndustryFilterFragment"
+        tools:layout="@layout/fragment_industry_chooser"/>
 </navigation>
