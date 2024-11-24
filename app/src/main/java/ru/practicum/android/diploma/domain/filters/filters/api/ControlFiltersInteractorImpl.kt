@@ -2,13 +2,13 @@ package ru.practicum.android.diploma.domain.filters.filters.api
 
 import ru.practicum.android.diploma.domain.filters.Filters
 import ru.practicum.android.diploma.domain.filters.filters.repository.FiltersControlRepository
-import ru.practicum.android.diploma.domain.search.models.CheckFiltersUseCase
+import ru.practicum.android.diploma.domain.search.SearchFiltersInteractor
 
 class ControlFiltersInteractorImpl(
     private val filtersControlRepository: FiltersControlRepository
-) : ControlFiltersInteractor, CheckFiltersUseCase {
-    override fun isFiltersOn(): Boolean {
-        return filtersControlRepository.isFiltersOn()
+) : ControlFiltersInteractor, SearchFiltersInteractor {
+    override fun isFiltersNotEmpty(): Boolean {
+        return filtersControlRepository.isFiltersNotEmpty()
     }
 
     override fun saveFilterConfiguration(filters: Filters) {

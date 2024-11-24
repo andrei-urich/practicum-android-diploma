@@ -2,7 +2,6 @@ package ru.practicum.android.diploma.data.filters.filters
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import ru.practicum.android.diploma.FILTERS_ACTIVE
 import ru.practicum.android.diploma.domain.filters.Filters
 import ru.practicum.android.diploma.domain.filters.filters.repository.FiltersControlRepository
 
@@ -21,13 +20,15 @@ class FiltersControlRepositoryImpls(
                     Filters::class.java
                 )
             } catch (e: Exception) {
+                val filtersJson = gson.toJson(Filters())
+                sharedPreferences.edit().putString(FILTERS_ACTIVE, filtersJson).apply()
                 Filters()
             }
     }
 
-    override fun isFiltersOn(): Boolean {
+    override fun isFiltersNotEmpty(): Boolean {
         getFilterConfiguration()
-        return currentFilters.isFiltersEmpty()
+        return currentFilters.isFiltersNotEmpty()
     }
 
     override fun saveFiltersConfiguration(filters: Filters) {
@@ -70,6 +71,7 @@ class FiltersControlRepositoryImpls(
     }
 
     companion object {
+        private const val FILTERS_ACTIVE = "FILTERS_ACTIVE"
         private const val EMPTY_STRING = ""
     }
 }
