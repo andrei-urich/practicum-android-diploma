@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.presentation.search.SearchViewModel
 
 val searchViewModelModule = module {
     viewModel {
-        SearchViewModel(get())
+        SearchViewModel(get(), get())
     }
     single<SearchRepository> {
         SearchRepositoryImpl(get(), get())

@@ -48,7 +48,6 @@ class SearchFragment : Fragment() {
 
         startPlaceholderVisibility(true)
         binding.vacancyListRv.layoutManager = LinearLayoutManager(requireActivity())
-
         val searchTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 println()
@@ -105,6 +104,11 @@ class SearchFragment : Fragment() {
         })
         binding.searchFilter.setOnClickListener {
             findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
+        }
+        if (viewModel.checkFiltersNotEmpty()) {
+            binding.searchFilter.setImageResource(R.drawable.filter_on_icon)
+        } else {
+            binding.searchFilter.setImageResource(R.drawable.filter_off_icon)
         }
     }
 
