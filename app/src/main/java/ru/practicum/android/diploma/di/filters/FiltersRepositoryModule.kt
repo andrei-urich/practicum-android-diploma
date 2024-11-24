@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.domain.filters.filters.repository.FiltersCon
 import ru.practicum.android.diploma.domain.filters.industry.api.IndustryFilterRepository
 import ru.practicum.android.diploma.domain.filters.industry.impl.IndustryFilterRepositoryImpl
 
-val FiltersRepositoryModule = module {
+val filtersRepositoryModule = module {
     single<IndustryFilterRepository> {
         IndustryFilterRepositoryImpl(get(named("industry")))
     }
