@@ -20,9 +20,8 @@ class SearchViewModel(
     private var pages: Int = ZERO
     private var currentPage: Int = ZERO
     private var position: Int = ZERO
-    private var isNextPageLoading = false
-    private var isNextPageLoadingError = false
-    private var isNextPageCanBeLoad = !isNextPageLoading && !isNextPageLoadingError
+    private var noNextPageLoading = true
+    private var noNextPageLoadingError = true
     private val vacancyList: MutableList<VacancyShort> = mutableListOf()
 
     private val searchStateLiveData = MutableLiveData<SearchState>()
@@ -43,9 +42,9 @@ class SearchViewModel(
     }
 
     private fun request(state: SearchState) {
-        if (isNextPageCanBeLoad) {
+        if (noNextPageLoading && noNextPageLoadingError) {
             searchStateLiveData.postValue(state)
-            isNextPageLoading = true
+            noNextPageLoading = false
             viewModelScope.launch {
                 interactor.search(
                     searchText,
@@ -53,12 +52,12 @@ class SearchViewModel(
                 ).collect { pair ->
                     when (pair.first) {
                         null -> {
-                            isNextPageLoading = false
+                            noNextPageLoading = true
                             if (state is SearchState.Loading) {
                                 searchStateLiveData.postValue(SearchState.LoadingError(pair.second))
 
                             } else {
-                                isNextPageLoadingError = true
+                                noNextPageLoadingError = false
                                 searchStateLiveData.postValue(
                                     SearchState.Content(vacancyList)
                                 )
@@ -70,7 +69,7 @@ class SearchViewModel(
                         else -> {
                             val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
                             vacancyList.addAll(vacancies)
-                            isNextPageLoading = false
+                            noNextPageLoading = true
                             currentPage++
                             searchStateLiveData.postValue(SearchState.Content(vacancyList))
                             positionNewPageToScroll.postValue(position)
@@ -87,7 +86,7 @@ class SearchViewModel(
         } else {
             pages = vacancyList[ZERO].pages
         }
-        if (interactor.checkNet()) isNextPageLoadingError = false
+        if (interactor.checkNet()) noNextPageLoadingError = true
         if (currentPage < pages) {
             position = (currentPage - ONE) * PER_PAGE
             request(SearchState.LoadingNextPage)
@@ -111,7 +110,10 @@ class SearchViewModel(
     }
 
     fun clearScreen(flag: Boolean) {
-        if (flag) searchStateLiveData.postValue(SearchState.Prepared)
+        if (flag) {
+            searchStateLiveData.postValue(SearchState.Prepared)
+            searchJob?.cancel()
+        }
     }
 
     private companion object {
