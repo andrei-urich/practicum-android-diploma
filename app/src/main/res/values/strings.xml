@@ -7,6 +7,7 @@
     <string name="toast_unknown_error">Произошла ошибка</string>
     <string name="server_throwable_tv">Ошибка сервера</string>
     <string name="load_vacancy_throwable_tv">Не удалось получить\nсписок вакансий</string>
+    <string name="load_list_throwable_tv">Не удалось получить список</string>
 
     <!-- bottom navigation -->
     <string name="main_bottom_nav">Главная</string>
@@ -50,6 +51,7 @@
     <!-- выбор отрасли -->
     <string name="choosing_industry_title_tv">Выбор отрасли</string>
     <string name="choosing_industry_hint_tet">Введите отрасль</string>
+    <string name="choosing_industry_error">Отрасль не найдена</string>
 
     <!-- детали вакансии -->
     <string name="vacancy_detail_title_tv">Вакансия</string>
