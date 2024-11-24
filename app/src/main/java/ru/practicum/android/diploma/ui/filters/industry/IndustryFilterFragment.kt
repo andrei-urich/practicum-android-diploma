@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -39,7 +38,7 @@ class IndustryFilterFragment : Fragment() {
 
     private val searchDebounce by lazy {
         debounce<String>(
-            delayMillis = 300L,
+            delayMillis = DELAY_300_MILLS,
             coroutineScope = viewLifecycleOwner.lifecycleScope,
             useLastParam = true
         ) { query ->
@@ -60,11 +59,11 @@ class IndustryFilterFragment : Fragment() {
         industryFilterViewModel.observeIndustryState().observe(viewLifecycleOwner) { state: IndustryFilterStates ->
             when (state) {
                 is IndustryFilterStates.Content -> {
-                    binding.industryProgressBar.isVisible = false
-                    binding.errorIndustryCl.isVisible = false
-                    binding.errorPlaceholderIv.isVisible = false
-                    binding.errorPlaceholderTv.isVisible = false
-                    binding.rvIndustry.isVisible = true
+                    binding.industryProgressBar.visibility = View.GONE
+                    binding.errorIndustryCl.visibility = View.GONE
+                    binding.errorPlaceholderIv.visibility = View.GONE
+                    binding.errorPlaceholderTv.visibility = View.GONE
+                    binding.rvIndustry.visibility = View.VISIBLE
                     val selectedIndustry = industryFilterViewModel.getSelectedIndustry()
                     industriesAdapter.setItems(state.industries, selectedIndustry)
                 }
@@ -75,11 +74,11 @@ class IndustryFilterFragment : Fragment() {
                     showTypeErrorOrEmpty(IndustryFilterErrorType())
                 }
                 is IndustryFilterStates.Loading -> {
-                    binding.industryProgressBar.isVisible = true
-                    binding.errorPlaceholderIv.isVisible = false
-                    binding.errorPlaceholderTv.isVisible = false
-                    binding.errorIndustryCl.isVisible = false
-                    binding.rvIndustry.isVisible = false
+                    binding.industryProgressBar.visibility = View.VISIBLE
+                    binding.errorPlaceholderIv.visibility = View.GONE
+                    binding.errorPlaceholderTv.visibility = View.GONE
+                    binding.errorIndustryCl.visibility = View.GONE
+                    binding.rvIndustry.visibility = View.GONE
                 }
             }
         }
@@ -89,8 +88,8 @@ class IndustryFilterFragment : Fragment() {
         industryFilterViewModel.observeIndustryStateFilterChosen()
             .observe(viewLifecycleOwner) { state: ChosenStatesFilter ->
                 when (state) {
-                    is ChosenStatesFilter.Chosen -> binding.btApply.isVisible = true
-                    is ChosenStatesFilter.NotChosen -> binding.btApply.isVisible = false
+                    is ChosenStatesFilter.Chosen -> binding.btApply.visibility = View.VISIBLE
+                    is ChosenStatesFilter.NotChosen -> binding.btApply.visibility = View.GONE
                 }
             }
         industryFilterViewModel.getIndustry()
@@ -130,7 +129,7 @@ class IndustryFilterFragment : Fragment() {
         binding.searchLayoutField.setEndIconOnClickListener {
             if (!binding.searchEditText.text.isNullOrEmpty()) {
                 binding.searchEditText.text?.clear()
-                industryFilterViewModel.searchIndustries("")
+                industryFilterViewModel.searchIndustries(EMPTY_STRING)
             }
         }
     }
@@ -141,11 +140,11 @@ class IndustryFilterFragment : Fragment() {
     }
 
     private fun showTypeErrorOrEmpty(errorType: ErrorType) {
-        binding.rvIndustry.isVisible = false
-        binding.industryProgressBar.isVisible = false
-        binding.errorIndustryCl.isVisible = true
-        binding.errorPlaceholderIv.isVisible = true
-        binding.errorPlaceholderTv.isVisible = true
+        binding.rvIndustry.visibility = View.GONE
+        binding.industryProgressBar.visibility = View.GONE
+        binding.errorIndustryCl.visibility = View.VISIBLE
+        binding.errorPlaceholderIv.visibility = View.VISIBLE
+        binding.errorPlaceholderTv.visibility = View.VISIBLE
         when (errorType) {
             is ServerInternalError -> {
                 binding.errorPlaceholderIv.setImageResource(R.drawable.server_error_search_image)
@@ -164,5 +163,9 @@ class IndustryFilterFragment : Fragment() {
 
             else -> {}
         }
+    }
+    private companion object {
+        const val EMPTY_STRING = ""
+        const val DELAY_300_MILLS = 300L
     }
 }

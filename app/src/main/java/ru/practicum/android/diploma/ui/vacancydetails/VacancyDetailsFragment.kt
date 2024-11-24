@@ -232,13 +232,13 @@ class VacancyDetailsFragment : Fragment() {
     }
 
     private fun setEmployment(binding: FragmentVacancydetailsItemsBinding, state: VacancyDetailsState.Content) {
-        val employment = state.vacancy.details.employment?.name ?: ""
-        val schedule = state.vacancy.details.schedule?.name ?: ""
+        val employment = state.vacancy.details.employment?.name ?: EMPTY_STRING
+        val schedule = state.vacancy.details.schedule?.name ?: EMPTY_STRING
         binding.formatWorkTv.text = "$employment, $schedule"
     }
 
     private fun setCompanyLogo(binding: FragmentVacancydetailsItemsBinding, state: VacancyDetailsState.Content) {
-        val placeHolderCornerRadius: Int = resources.getDimensionPixelSize(R.dimen.font_12)
+        val placeHolderCornerRadius: Int = resources.getDimensionPixelSize(R.dimen.vacancy_corner_radius)
         Glide.with(binding.root)
             .load(state.vacancy.employerInfo.employerLogoUrl)
             .placeholder(R.drawable.placeholder)
@@ -250,6 +250,7 @@ class VacancyDetailsFragment : Fragment() {
 
     companion object {
         const val DETAILS_VACANCY_ID = "vacancyID"
+        const val EMPTY_STRING = ""
         fun createArgs(vacancyId: String?) = bundleOf(
             DETAILS_VACANCY_ID to vacancyId
         )
