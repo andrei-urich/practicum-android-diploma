@@ -36,13 +36,18 @@ class Filters(
         return salaryShowChecked
     }
 
-    fun equals(other: Filters): Boolean {
+    override fun equals(other: Any?): Boolean {
         if (this === other) return true
+        if (other !is Filters) return false
         return this.area == other.area &&
             this.city == other.city &&
             this.industry == other.industry &&
             this.salaryTarget == other.salaryTarget &&
             this.salaryShowChecked == other.salaryShowChecked
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
     }
 
     companion object {

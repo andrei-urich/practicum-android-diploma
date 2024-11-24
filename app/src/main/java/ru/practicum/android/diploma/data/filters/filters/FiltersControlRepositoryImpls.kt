@@ -37,11 +37,11 @@ class FiltersControlRepositoryImpls(
         currentFilters = filters
         saveFiltersInSP(currentFilters)
     }
-    override fun fixFiltres(){
+    override fun fixFiltres() {
         lastSavedFilters = currentFilters
     }
-    override fun checkFiltresChanges(): Boolean{
-        return (!lastSavedFilters.equals(currentFilters))
+    override fun checkFiltresChanges(): Boolean {
+        return lastSavedFilters != currentFilters
     }
 
     override fun saveAreaCityFilter(area: String, city: String?) {
