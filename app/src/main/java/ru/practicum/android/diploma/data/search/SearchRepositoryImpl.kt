@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.data.search
 
 import android.content.Context
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.data.search.network.NetworkClient
@@ -21,6 +22,9 @@ class SearchRepositoryImpl(
     ): Flow<Resource<List<VacancyShort>>> = flow {
         val request: HashMap<String, String> = constructRequest(searchText, currentPage)
         val response = networkClient.doRequest(VacancySearchRequest(request))
+
+        Log.d("MY", request.toString())
+
         when (response.resultCode) {
             in CODE_200..CODE_299 -> {
                 if (response is VacanciesResponse) {

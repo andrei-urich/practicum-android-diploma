@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.search
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,9 +21,8 @@ class SearchViewModel(
     private var pages: Int = ZERO
     private var currentPage: Int = ZERO
     private var position: Int = ZERO
-    private var isNextPageLoading = false
-    private var isNextPageLoadingError = false
-    private var isNextPageCanBeLoad = !isNextPageLoading && !isNextPageLoadingError
+    private var noNextPageLoading = true
+    private var noNextPageLoadingError = true
     private val vacancyList: MutableList<VacancyShort> = mutableListOf()
 
     private val searchStateLiveData = MutableLiveData<SearchState>()
@@ -43,9 +43,12 @@ class SearchViewModel(
     }
 
     private fun request(state: SearchState) {
-        if (isNextPageCanBeLoad) {
+        if (noNextPageLoading && noNextPageLoadingError) {
             searchStateLiveData.postValue(state)
-            isNextPageLoading = true
+            noNextPageLoading = false
+
+            Log.d("MY", "новый запрос ${searchText} страница ${currentPage}")
+
             viewModelScope.launch {
                 interactor.search(
                     searchText,
@@ -53,12 +56,12 @@ class SearchViewModel(
                 ).collect { pair ->
                     when (pair.first) {
                         null -> {
-                            isNextPageLoading = false
+                            noNextPageLoading = true
                             if (state is SearchState.Loading) {
                                 searchStateLiveData.postValue(SearchState.LoadingError(pair.second))
 
                             } else {
-                                isNextPageLoadingError = true
+                                noNextPageLoadingError = false
                                 searchStateLiveData.postValue(
                                     SearchState.Content(vacancyList)
                                 )
@@ -70,7 +73,10 @@ class SearchViewModel(
                         else -> {
                             val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
                             vacancyList.addAll(vacancies)
-                            isNextPageLoading = false
+
+                            Log.d("MY", "всего вакансий в списке ${vacancyList.size}")
+
+                            noNextPageLoading = true
                             currentPage++
                             searchStateLiveData.postValue(SearchState.Content(vacancyList))
                             positionNewPageToScroll.postValue(position)
@@ -87,7 +93,7 @@ class SearchViewModel(
         } else {
             pages = vacancyList[ZERO].pages
         }
-        if (interactor.checkNet()) isNextPageLoadingError = false
+        if (interactor.checkNet()) noNextPageLoadingError = true
         if (currentPage < pages) {
             position = (currentPage - ONE) * PER_PAGE
             request(SearchState.LoadingNextPage)
