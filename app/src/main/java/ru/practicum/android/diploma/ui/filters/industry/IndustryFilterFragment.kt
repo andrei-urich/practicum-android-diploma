@@ -38,7 +38,7 @@ class IndustryFilterFragment : Fragment() {
 
     private val searchDebounce by lazy {
         debounce<String>(
-            delayMillis = DELAY_300_MILLS,
+            delayMillis = DELAY_1000_MILLS,
             coroutineScope = viewLifecycleOwner.lifecycleScope,
             useLastParam = true
         ) { query ->
@@ -166,6 +166,6 @@ class IndustryFilterFragment : Fragment() {
     }
     private companion object {
         const val EMPTY_STRING = ""
-        const val DELAY_300_MILLS = 300L
+        const val DELAY_1000_MILLS = 1000L
     }
 }
