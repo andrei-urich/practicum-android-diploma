@@ -230,7 +230,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setRecyclerPositionNextPage(position: Int) {
-        if (vacancies.size >= position) {
+        if (vacancies.size > position) {
             binding.vacancyListRv.scrollToPosition(position)
         }
     }
