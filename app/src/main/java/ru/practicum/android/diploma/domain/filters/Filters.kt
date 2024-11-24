@@ -19,7 +19,7 @@ class Filters(
         return isNotEmpty
     }
 
-    fun getAreaNCity(): String {
+    fun getAreaNCityNames(): String {
         return if (area.id.isNotEmpty() && city.id.isNotEmpty()) {
             "${area.name}, ${city.name}"
         } else {
@@ -27,8 +27,15 @@ class Filters(
         }
     }
 
-    fun getIndustry(): String {
+    fun getAreaId(): String {
+        return if (city.id == EMPTY_STRING) return area.id else city.id
+    }
+
+    fun getIndustryName(): String {
         return industry.name
+    }
+    fun getIndustryId(): String{
+        return industry.id
     }
 
     fun getSalaryTarget(): String {

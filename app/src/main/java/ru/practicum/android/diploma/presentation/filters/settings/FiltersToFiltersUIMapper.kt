@@ -5,8 +5,8 @@ import ru.practicum.android.diploma.domain.filters.Filters
 class FiltersToFiltersUIMapper {
     fun map(filters: Filters): FiltersUIModel {
         return FiltersUIModel(
-            filters.getAreaNCity(),
-            filters.getIndustry(),
+            filters.getAreaNCityNames(),
+            filters.getIndustryName(),
             filters.getSalaryTarget(),
             filters.getSalaryShowChecked()
         )
