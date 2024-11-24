@@ -1,3 +1,5 @@
 package ru.practicum.android.diploma.presentation.filters
 
-class FilterSettingsViewModel
+import androidx.lifecycle.ViewModel
+
+class FilterSettingsViewModel : ViewModel()
