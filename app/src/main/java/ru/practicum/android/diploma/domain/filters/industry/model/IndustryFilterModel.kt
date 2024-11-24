@@ -1,3 +1,6 @@
 package ru.practicum.android.diploma.domain.filters.industry.model
 
-class IndustryFilterModel
+data class IndustryFilterModel(
+    val id: String,
+    val name: String,
+)
