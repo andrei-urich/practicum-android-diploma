@@ -5,5 +5,5 @@ import org.koin.dsl.module
 import ru.practicum.android.diploma.presentation.filters.FilterSettingsViewModel
 
 val filtersViewModelModule = module {
-    viewModel { FilterSettingsViewModel() }
+    viewModel { FilterSettingsViewModel(get(), get()) }
 }

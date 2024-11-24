@@ -7,12 +7,14 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.search.SearchFiltersInteractor
 import ru.practicum.android.diploma.domain.search.SearchInteractor
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
 import ru.practicum.android.diploma.presentation.SingleEventLiveData
 
 class SearchViewModel(
-    private val interactor: SearchInteractor
+    private val interactor: SearchInteractor,
+    private val searchFiltersInteractor: SearchFiltersInteractor
 ) : ViewModel() {
 
     private var searchText = EMPTY_STRING
@@ -114,6 +116,10 @@ class SearchViewModel(
             searchStateLiveData.postValue(SearchState.Prepared)
             searchJob?.cancel()
         }
+    }
+
+    fun checkFiltersNotEmpty(): Boolean {
+        return searchFiltersInteractor.isFiltersNotEmpty()
     }
 
     private companion object {

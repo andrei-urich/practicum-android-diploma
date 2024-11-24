@@ -5,14 +5,31 @@ class Filters(
     private val city: String = EMPTY_STRING,
     private val industry: String = EMPTY_STRING,
     private val salaryTarget: Int = EMPTY_SALARY_TARGET,
-    private val salaryShowCheck: Boolean = false
+    private val salaryShowChecked: Boolean = false
 ) {
-    fun isFiltersEmpty(): Boolean {
-        return area.isNotEmpty() &&
-            city.isNotEmpty() &&
-            industry.isNotEmpty() &&
-            salaryTarget != EMPTY_SALARY_TARGET &&
-            !salaryShowCheck
+    fun isFiltersNotEmpty(): Boolean {
+        val isNotEmpty = area != EMPTY_STRING ||
+            city != EMPTY_STRING ||
+            industry != EMPTY_STRING ||
+            salaryTarget != EMPTY_SALARY_TARGET ||
+            salaryShowChecked
+        return isNotEmpty
+    }
+    fun getAreaNCity(): String {
+        return if (area.isNotEmpty() && city.isNotEmpty()) {
+            "$area, $city"
+        } else {
+            area
+        }
+    }
+    fun getIndustry(): String {
+        return industry
+    }
+    fun getSalaryTarget(): String {
+        return if (salaryTarget > 0) salaryTarget.toString() else EMPTY_STRING
+    }
+    fun getSalaryShowChecked(): Boolean {
+        return salaryShowChecked
     }
     companion object {
         private const val EMPTY_SALARY_TARGET: Int = -1
@@ -23,7 +40,7 @@ class Filters(
                 newCity ?: EMPTY_STRING,
                 oldFilter.industry,
                 oldFilter.salaryTarget,
-                oldFilter.salaryShowCheck
+                oldFilter.salaryShowChecked
             )
         }
 
@@ -33,7 +50,7 @@ class Filters(
                 oldFilter.city,
                 newIndustry,
                 oldFilter.salaryTarget,
-                oldFilter.salaryShowCheck
+                oldFilter.salaryShowChecked
             )
         }
 
@@ -43,7 +60,7 @@ class Filters(
                 oldFilter.city,
                 oldFilter.industry,
                 newTargetSalary,
-                oldFilter.salaryShowCheck
+                oldFilter.salaryShowChecked
             )
         }
 
