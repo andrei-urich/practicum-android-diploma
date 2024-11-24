@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.presentation.filters.area.CountryFilterViewM
 import ru.practicum.android.diploma.presentation.filters.area.RegionFilterViewModel
 
 val filtersViewModelModule = module {
-    viewModel { FilterSettingsViewModel() }
+    viewModel { FilterSettingsViewModel(get(), get()) }
     viewModel { AreaFilterViewModel() }
     viewModel { CountryFilterViewModel() }
     viewModel { RegionFilterViewModel() }
