@@ -4,17 +4,19 @@ import ru.practicum.android.diploma.domain.filters.Filters
 import ru.practicum.android.diploma.domain.filters.area.model.AreaFilterModel
 import ru.practicum.android.diploma.domain.filters.filters.repository.FiltersControlRepository
 import ru.practicum.android.diploma.domain.filters.industry.model.IndustryFilterModel
+import ru.practicum.android.diploma.domain.search.SearchFilterRepository
 import ru.practicum.android.diploma.domain.search.SearchFiltersInteractor
 
 class ControlFiltersInteractorImpl(
-    private val filtersControlRepository: FiltersControlRepository
+    private val filtersControlRepository: FiltersControlRepository,
+    private val searchFilterRepository: SearchFilterRepository
 ) : ControlFiltersInteractor, SearchFiltersInteractor {
     override fun isFiltersNotEmpty(): Boolean {
         return filtersControlRepository.isFiltersNotEmpty()
     }
 
     override fun isSearchForced(): Boolean {
-        return filtersControlRepository.isSearchForced()
+        return searchFilterRepository.isSearchForced()
     }
 
     override fun saveFilterConfiguration(filters: Filters) {
@@ -52,6 +54,6 @@ class ControlFiltersInteractorImpl(
     }
 
     override fun forceSearch() {
-        filtersControlRepository.forceSearch()
+        searchFilterRepository.forceSearch()
     }
 }

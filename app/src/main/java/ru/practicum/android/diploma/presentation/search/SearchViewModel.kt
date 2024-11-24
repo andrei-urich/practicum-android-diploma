@@ -41,6 +41,7 @@ class SearchViewModel(
         if (searchText.isNotBlank() && (this.searchText != searchText || searchIsForcedByFilters)) {
             this.searchText = searchText
             if (searchIsForcedByFilters) {
+                searchStateLiveData.postValue(SearchState.Loading)
                 searchDebounce(SEARCH_DEBOUNCE_DELAY_FORCED)
             } else {
                 searchDebounce(SEARCH_DEBOUNCE_DELAY)

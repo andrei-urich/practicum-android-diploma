@@ -110,7 +110,9 @@ class SearchFragment : Fragment() {
         } else {
             binding.searchFilter.setImageResource(R.drawable.filter_off_icon)
         }
-        if (viewModel.isSearchForced()) viewModel.getSearchText(binding.searchEditText.text.toString())
+        if (viewModel.isSearchForced()) {
+            viewModel.getSearchText(binding.searchEditText.text.toString())
+        }
     }
 
     private fun changeContentVisibility(searchState: SearchState) {

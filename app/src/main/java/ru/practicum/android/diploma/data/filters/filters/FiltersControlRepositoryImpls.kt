@@ -37,6 +37,15 @@ class FiltersControlRepositoryImpls(
         return currentFilters.isFiltersNotEmpty()
     }
 
+    override fun isSearchForced(): Boolean {
+        if (forcedSearchFlag) {
+            forcedSearchFlag = false
+            return true
+        } else {
+            return false
+        }
+    }
+
     override fun saveFiltersConfiguration(filters: Filters) {
         currentFilters = filters
         saveFiltersInSP(currentFilters)
@@ -86,15 +95,7 @@ class FiltersControlRepositoryImpls(
 
     override fun forceSearch() {
         forcedSearchFlag = true
-    }
-
-    override fun isSearchForced(): Boolean {
-        if (forcedSearchFlag) {
-            forcedSearchFlag = false
-            return true
-        } else {
-            return false
-        }
+        println()
     }
 
     companion object {

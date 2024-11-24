@@ -14,5 +14,4 @@ interface FiltersControlRepository {
     fun getFilterConfiguration(): Filters
     fun fixFilters()
     fun checkFiltersChanges(): Boolean
-    fun forceSearch()
 }
