@@ -1,9 +1,9 @@
 package ru.practicum.android.diploma.domain.filters
 
 class Filters(
-    private val area: String = "",
-    private val city: String = "",
-    private val industry: String = "",
+    private val area: String = EMPTY_STRING,
+    private val city: String = EMPTY_STRING,
+    private val industry: String = EMPTY_STRING,
     private val salaryTarget: Int = EMPTY_SALARY_TARGET,
     private val salaryShowCheck: Boolean = false
 ) {
@@ -15,11 +15,12 @@ class Filters(
             !salaryShowCheck
     }
     companion object {
-        const val EMPTY_SALARY_TARGET: Int = -1
+        private const val EMPTY_SALARY_TARGET: Int = -1
+        private const val EMPTY_STRING = ""
         fun setNewAreaCity(oldFilter: Filters, newArea: String, newCity: String?): Filters {
             return Filters(
                 newArea,
-                newCity ?: "",
+                newCity ?: EMPTY_STRING,
                 oldFilter.industry,
                 oldFilter.salaryTarget,
                 oldFilter.salaryShowCheck

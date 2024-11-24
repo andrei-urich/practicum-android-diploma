@@ -16,7 +16,10 @@ class FiltersControlRepositoryImpls(
         currentFilters =
             @Suppress("SwallowedException", "TooGenericExceptionCaught")
             try {
-                gson.fromJson(sharedPreferences.getString(FILTERS_ACTIVE, "") ?: "", Filters::class.java)
+                gson.fromJson(
+                    sharedPreferences.getString(FILTERS_ACTIVE, EMPTY_STRING) ?: EMPTY_STRING,
+                    Filters::class.java
+                )
             } catch (e: Exception) {
                 Filters()
             }
@@ -54,12 +57,19 @@ class FiltersControlRepositoryImpls(
 
     override fun getFilterConfiguration(): Filters {
         currentFilters =
-            gson.fromJson(sharedPreferences.getString(FILTERS_ACTIVE, "") ?: "", Filters::class.java)
+            gson.fromJson(
+                sharedPreferences.getString(FILTERS_ACTIVE, EMPTY_STRING) ?: EMPTY_STRING,
+                Filters::class.java
+            )
         return currentFilters
     }
 
     private fun saveFiltersInSP(filters: Filters) {
         val filtersJson = gson.toJson(filters)
         sharedPreferences.edit().putString(FILTERS_ACTIVE, filtersJson).apply()
+    }
+
+    companion object {
+        private const val EMPTY_STRING = ""
     }
 }

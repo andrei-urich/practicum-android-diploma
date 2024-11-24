@@ -27,8 +27,10 @@ class ControlFiltersInteractorImpl(
         filtersControlRepository.saveIndustryFilter(industry)
     }
 
-    override fun saveSalaryTargetFilter(newSalaryTarget: Int) {
-        filtersControlRepository.saveSalaryTargetFilter(newSalaryTarget)
+    override fun saveSalaryTargetFilter(newSalaryTarget: String) {
+        val newSalaryTargetInt =
+            if (newSalaryTarget.isNotEmpty() && newSalaryTarget.toInt() > 0) newSalaryTarget.toInt() else -1
+        filtersControlRepository.saveSalaryTargetFilter(newSalaryTargetInt)
     }
 
     override fun saveSalaryShowCheckFilter(newCheck: Boolean) {
