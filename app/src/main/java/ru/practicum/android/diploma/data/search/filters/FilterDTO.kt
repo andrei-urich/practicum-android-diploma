@@ -6,7 +6,7 @@ data class FilterDTO(
     val salaryTarget: String = EMPTY_STRING,
     val showSalaryFlag: String = EMPTY_STRING
 ) {
-    companion object{
+    companion object {
         private const val EMPTY_STRING = ""
     }
 }

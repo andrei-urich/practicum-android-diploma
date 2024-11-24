@@ -6,11 +6,12 @@ import ru.practicum.android.diploma.domain.filters.Filters
 import ru.practicum.android.diploma.domain.filters.area.model.AreaFilterModel
 import ru.practicum.android.diploma.domain.filters.filters.repository.FiltersControlRepository
 import ru.practicum.android.diploma.domain.filters.industry.model.IndustryFilterModel
+import ru.practicum.android.diploma.domain.search.SearchFilterRepository
 
 class FiltersControlRepositoryImpls(
     private val sharedPreferences: SharedPreferences,
     private val gson: Gson
-) : FiltersControlRepository {
+) : FiltersControlRepository, SearchFilterRepository {
     private var currentFilters: Filters = Filters()
     private var lastSavedFilters = Filters()
     private var forcedSearchFlag = false
@@ -91,7 +92,9 @@ class FiltersControlRepositoryImpls(
         if (forcedSearchFlag) {
             forcedSearchFlag = false
             return true
-        } else return false
+        } else {
+            return false
+        }
     }
 
     companion object {

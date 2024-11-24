@@ -34,7 +34,8 @@ class Filters(
     fun getIndustryName(): String {
         return industry.name
     }
-    fun getIndustryId(): String{
+
+    fun getIndustryId(): String {
         return industry.id
     }
 

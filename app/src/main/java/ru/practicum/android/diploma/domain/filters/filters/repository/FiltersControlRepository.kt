@@ -15,5 +15,4 @@ interface FiltersControlRepository {
     fun fixFilters()
     fun checkFiltersChanges(): Boolean
     fun forceSearch()
-    fun isSearchForced(): Boolean
 }

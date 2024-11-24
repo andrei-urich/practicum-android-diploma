@@ -40,8 +40,11 @@ class SearchViewModel(
     fun getSearchText(searchText: String) {
         if (searchText.isNotBlank() && (this.searchText != searchText || searchIsForcedByFilters)) {
             this.searchText = searchText
-            if (searchIsForcedByFilters) searchDebounce(SEARCH_DEBOUNCE_DELAY_FORCED)
-            else searchDebounce(SEARCH_DEBOUNCE_DELAY)
+            if (searchIsForcedByFilters) {
+                searchDebounce(SEARCH_DEBOUNCE_DELAY_FORCED)
+            } else {
+                searchDebounce(SEARCH_DEBOUNCE_DELAY)
+            }
             searchIsForcedByFilters = false
         }
     }
