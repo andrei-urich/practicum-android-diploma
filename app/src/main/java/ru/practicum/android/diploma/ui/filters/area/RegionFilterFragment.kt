@@ -1,32 +1,41 @@
 package ru.practicum.android.diploma.ui.filters.area
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import ru.practicum.android.diploma.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.databinding.FragmentRegionFilterBinding
 import ru.practicum.android.diploma.presentation.filters.area.RegionFilterViewModel
 
 class RegionFilterFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = RegionFilterFragment()
-    }
-
-    private val viewModel: RegionFilterViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
+    private var _binding: FragmentRegionFilterBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: RegionFilterViewModel by viewModel()
+    private val regionList = mutableListOf<String>()
+    private val adapter: AreaListAdapter by lazy {
+        AreaListAdapter(regionList, viewModel::setArea)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_region_filter, container, false)
+        _binding = FragmentRegionFilterBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.rvRegion.layoutManager = LinearLayoutManager(context)
+        binding.rvRegion.adapter = adapter
+        binding.toolbar.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+        binding.pbRegion.visibility = View.VISIBLE
+        viewModel.getAreaList()
     }
 }

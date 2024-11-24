@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/countryItemLayout"
+    android:id="@+id/areaItemLayout"
     android:layout_width="match_parent"
     android:layout_height="@dimen/size_60"
     android:background="@color/white_day_night"
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/countryName"
+        android:id="@+id/areaName"
         style="@style/Widget.EdText.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="@dimen/size_60"

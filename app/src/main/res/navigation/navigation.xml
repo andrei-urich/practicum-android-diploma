@@ -49,10 +49,25 @@
     </fragment>
     <fragment
         android:id="@+id/areaFilterFragment"
-        android:name="ru.practicum.android.diploma.ui.filters.AreaFilterFragment"
-        android:label="AreaFilterFragment" />
+        android:name="ru.practicum.android.diploma.ui.filters.area.AreaFilterFragment"
+        android:label="AreaFilterFragment" >
+        <action
+            android:id="@+id/action_areaFilterFragment_to_countryFilterFragment"
+            app:destination="@id/countryFilterFragment" />
+        <action
+            android:id="@+id/action_areaFilterFragment_to_regionFilterFragment"
+            app:destination="@id/regionFilterFragment" />
+    </fragment>
     <fragment
         android:id="@+id/industryFilterFragment"
         android:name="ru.practicum.android.diploma.ui.filters.IndustryFilterFragment"
         android:label="IndustryFilterFragment" />
+    <fragment
+        android:id="@+id/countryFilterFragment"
+        android:name="ru.practicum.android.diploma.ui.filters.area.CountryFilterFragment"
+        android:label="CountryFilterFragment" />
+    <fragment
+        android:id="@+id/regionFilterFragment"
+        android:name="ru.practicum.android.diploma.ui.filters.area.RegionFilterFragment"
+        android:label="RegionFilterFragment" />
 </navigation>
