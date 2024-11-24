@@ -1,7 +1,9 @@
 package ru.practicum.android.diploma.domain.filters.filters.api
 
 import ru.practicum.android.diploma.domain.filters.Filters
+import ru.practicum.android.diploma.domain.filters.area.model.AreaFilterModel
 import ru.practicum.android.diploma.domain.filters.filters.repository.FiltersControlRepository
+import ru.practicum.android.diploma.domain.filters.industry.model.IndustryFilterModel
 import ru.practicum.android.diploma.domain.search.SearchFiltersInteractor
 
 class ControlFiltersInteractorImpl(
@@ -19,11 +21,11 @@ class ControlFiltersInteractorImpl(
         return filtersControlRepository.getFilterConfiguration()
     }
 
-    override fun saveAreaCityFilter(area: String, city: String?) {
-        filtersControlRepository.saveAreaCityFilter(area, city)
+    override fun saveAreaCityFilter(area: AreaFilterModel, city: AreaFilterModel?) {
+        filtersControlRepository.saveAreaCityFilter(area, city ?: AreaFilterModel())
     }
 
-    override fun saveIndustryFilter(industry: String) {
+    override fun saveIndustryFilter(industry: IndustryFilterModel) {
         filtersControlRepository.saveIndustryFilter(industry)
     }
 
@@ -38,10 +40,10 @@ class ControlFiltersInteractorImpl(
     }
 
     override fun fixFiltres() {
-        filtersControlRepository.fixFiltres()
+        filtersControlRepository.fixFilters()
     }
 
     override fun checkFiltresChanges(): Boolean {
-        return filtersControlRepository.checkFiltresChanges()
+        return filtersControlRepository.checkFiltersChanges()
     }
 }

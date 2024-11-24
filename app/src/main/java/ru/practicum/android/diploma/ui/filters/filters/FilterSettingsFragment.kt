@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.ui.filters
+package ru.practicum.android.diploma.ui.filters.filters
 
 import android.os.Bundle
 import android.text.Editable
@@ -12,8 +12,8 @@ import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
-import ru.practicum.android.diploma.domain.filters.Filters
 import ru.practicum.android.diploma.presentation.filters.settings.FilterSettingsViewModel
+import ru.practicum.android.diploma.presentation.filters.settings.FiltersUIModel
 import ru.practicum.android.diploma.util.debounce
 
 class FilterSettingsFragment : Fragment() {
@@ -97,12 +97,12 @@ class FilterSettingsFragment : Fragment() {
         binding.btApply.visibility = View.VISIBLE
     }
 
-    private fun renderFilters(filter: Filters) {
+    private fun renderFilters(filterUI: FiltersUIModel) {
         with(binding) {
-            edWorkPlace.setText(filter.getAreaNCity())
-            edIndustry.setText(filter.getIndustry())
-            textInputEditTextSalary.setText(filter.getSalaryTarget())
-            checkBoxSalary.isChecked = filter.getSalaryShowChecked()
+            edWorkPlace.setText(filterUI.areaNCity)
+            edIndustry.setText(filterUI.industry)
+            textInputEditTextSalary.setText(filterUI.salaryTarget)
+            checkBoxSalary.isChecked = filterUI.salaryShowChecked
         }
     }
 }

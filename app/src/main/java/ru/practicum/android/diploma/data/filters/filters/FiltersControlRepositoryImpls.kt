@@ -3,7 +3,9 @@ package ru.practicum.android.diploma.data.filters.filters
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import ru.practicum.android.diploma.domain.filters.Filters
+import ru.practicum.android.diploma.domain.filters.area.model.AreaFilterModel
 import ru.practicum.android.diploma.domain.filters.filters.repository.FiltersControlRepository
+import ru.practicum.android.diploma.domain.filters.industry.model.IndustryFilterModel
 
 class FiltersControlRepositoryImpls(
     private val sharedPreferences: SharedPreferences,
@@ -37,19 +39,19 @@ class FiltersControlRepositoryImpls(
         currentFilters = filters
         saveFiltersInSP(currentFilters)
     }
-    override fun fixFiltres() {
+    override fun fixFilters() {
         lastSavedFilters = currentFilters
     }
-    override fun checkFiltresChanges(): Boolean {
+    override fun checkFiltersChanges(): Boolean {
         return lastSavedFilters != currentFilters
     }
 
-    override fun saveAreaCityFilter(area: String, city: String?) {
+    override fun saveAreaCityFilter(area: AreaFilterModel, city: AreaFilterModel) {
         currentFilters = Filters.setNewAreaCity(currentFilters, area, city)
         saveFiltersInSP(currentFilters)
     }
 
-    override fun saveIndustryFilter(industry: String) {
+    override fun saveIndustryFilter(industry: IndustryFilterModel) {
         currentFilters = Filters.setNewIndustry(currentFilters, industry)
         saveFiltersInSP(currentFilters)
     }
