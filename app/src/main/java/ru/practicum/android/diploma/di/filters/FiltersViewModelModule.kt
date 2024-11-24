@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.presentation.filters.industry.IndustryFilter
 import ru.practicum.android.diploma.presentation.filters.settings.FilterSettingsViewModel
 
 val filtersViewModelModule = module {
-    viewModel { FilterSettingsViewModel(get(), get()) }
+    viewModel { FilterSettingsViewModel(get(), get(), get()) }
     viewModel { IndustryFilterViewModel(get()) }
     viewModel { AreaFilterViewModel() }
     viewModel { CountryFilterViewModel() }

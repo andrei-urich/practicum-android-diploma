@@ -36,4 +36,12 @@ class ControlFiltersInteractorImpl(
     override fun saveSalaryShowCheckFilter(newCheck: Boolean) {
         filtersControlRepository.saveSalaryShowCheckFilter(newCheck)
     }
+
+    override fun fixFiltres() {
+        filtersControlRepository.fixFiltres()
+    }
+
+    override fun checkFiltresChanges(): Boolean {
+        return filtersControlRepository.checkFiltresChanges()
+    }
 }

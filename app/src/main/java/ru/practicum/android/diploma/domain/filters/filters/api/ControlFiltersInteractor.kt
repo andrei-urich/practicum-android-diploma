@@ -9,4 +9,6 @@ interface ControlFiltersInteractor {
     fun saveIndustryFilter(newIndustry: String)
     fun saveSalaryTargetFilter(newSalaryTarget: String)
     fun saveSalaryShowCheckFilter(newCheck: Boolean)
+    fun fixFiltres()
+    fun checkFiltresChanges(): Boolean
 }
