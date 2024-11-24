@@ -3,7 +3,7 @@ package ru.practicum.android.diploma.domain.filters.filters.repository
 import ru.practicum.android.diploma.domain.filters.Filters
 
 interface FiltersControlRepository {
-    fun isFiltersOn(): Boolean
+    fun isFiltersNotEmpty(): Boolean
     fun saveFiltersConfiguration(filters: Filters)
     fun saveAreaCityFilter(area: String, city: String?)
     fun saveIndustryFilter(industry: String)
