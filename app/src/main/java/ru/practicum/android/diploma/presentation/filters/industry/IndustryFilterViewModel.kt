@@ -10,6 +10,7 @@ import ru.practicum.android.diploma.data.vacancydetails.Success
 import ru.practicum.android.diploma.domain.filters.industry.api.IndustryFilterInteractor
 import ru.practicum.android.diploma.domain.filters.industry.model.IndustryFilterModel
 import ru.practicum.android.diploma.domain.filters.industry.model.IndustryFilterResult
+import ru.practicum.android.diploma.presentation.filters.industry.model.ChosenStatesFilter
 import ru.practicum.android.diploma.presentation.filters.industry.model.IndustryFilterStates
 
 class IndustryFilterViewModel(private val interactor: IndustryFilterInteractor) : ViewModel() {
@@ -19,6 +20,9 @@ class IndustryFilterViewModel(private val interactor: IndustryFilterInteractor) 
     private var selectedIndustry: IndustryFilterModel? = null
     private var allIndustries: List<IndustryFilterModel> = listOf()
 
+    private val _chosenStatesFilter: MutableLiveData<ChosenStatesFilter> = MutableLiveData()
+    fun observeIndustryStateFilterChosen(): LiveData<ChosenStatesFilter> = _chosenStatesFilter
+
     fun getIndustry() {
         renderState(IndustryFilterStates.Loading)
         viewModelScope.launch {
@@ -27,6 +31,7 @@ class IndustryFilterViewModel(private val interactor: IndustryFilterInteractor) 
             }
         }
     }
+
     private fun processResult(result: IndustryFilterResult?, errorType: ErrorType) {
         when (errorType) {
             is Success -> {
@@ -37,22 +42,38 @@ class IndustryFilterViewModel(private val interactor: IndustryFilterInteractor) 
                     renderState(IndustryFilterStates.Empty)
                 }
             }
+
             else -> {
                 renderState(IndustryFilterStates.Error(errorType))
             }
         }
     }
+
     private fun renderState(state: IndustryFilterStates) {
         _stateIndustry.postValue(state)
     }
-    fun selectIndustry(industry: IndustryFilterModel) {
-        selectedIndustry = if (selectedIndustry == industry) null else industry
+
+    private fun renderChosen(state: ChosenStatesFilter) {
+        _chosenStatesFilter.postValue(state)
     }
+
+    fun selectIndustry(industry: IndustryFilterModel) {
+        if (selectedIndustry == industry) {
+            selectedIndustry = null
+            renderChosen(ChosenStatesFilter.NotChosen)
+        } else {
+            selectedIndustry = industry
+            renderChosen(ChosenStatesFilter.Chosen)
+        }
+    }
+
     fun saveSelectedIndustry() {
         selectedIndustry?.let {
             interactor.saveIndustrySettings(it)
         }
     }
+
+    fun getSelectedIndustry(): IndustryFilterModel? = interactor.getIndustrySettings()
 
     fun searchIndustries(query: String) {
         val filteredIndustries = if (query.isEmpty()) {
