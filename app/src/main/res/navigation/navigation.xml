@@ -54,5 +54,6 @@
     <fragment
         android:id="@+id/industryFilterFragment"
         android:name="ru.practicum.android.diploma.ui.filters.industry.IndustryFilterFragment"
-        android:label="IndustryFilterFragment" />
+        android:label="IndustryFilterFragment"
+        tools:layout="@layout/fragment_industry_chooser"/>
 </navigation>
