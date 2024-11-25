@@ -31,4 +31,3 @@ class AreaListAdapter(
         return areaList.size
     }
 }
-

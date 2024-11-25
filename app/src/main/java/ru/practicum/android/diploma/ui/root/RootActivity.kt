@@ -22,7 +22,9 @@ class RootActivity : AppCompatActivity(R.layout.activity_root) {
                 R.id.filterSettingsFragment,
                 R.id.areaFilterFragment,
                 R.id.industryFilterFragment,
-                R.id.vacancyDetailsFragment
+                R.id.vacancyDetailsFragment,
+                R.id.countryFilterFragment,
+                R.id.regionFilterFragment
                 -> {
                     bottomNavView.visibility = View.GONE
                 }

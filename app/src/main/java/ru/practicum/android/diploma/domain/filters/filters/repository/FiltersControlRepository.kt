@@ -10,4 +10,6 @@ interface FiltersControlRepository {
     fun saveSalaryTargetFilter(newSalaryTarget: Int)
     fun saveSalaryShowCheckFilter(newCheck: Boolean)
     fun getFilterConfiguration(): Filters
+    fun fixFiltres()
+    fun checkFiltresChanges(): Boolean
 }

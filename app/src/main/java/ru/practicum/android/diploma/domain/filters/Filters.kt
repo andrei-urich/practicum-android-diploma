@@ -15,6 +15,7 @@ class Filters(
             salaryShowChecked
         return isNotEmpty
     }
+
     fun getAreaNCity(): String {
         return if (area.isNotEmpty() && city.isNotEmpty()) {
             "$area, $city"
@@ -22,15 +23,33 @@ class Filters(
             area
         }
     }
+
     fun getIndustry(): String {
         return industry
     }
+
     fun getSalaryTarget(): String {
         return if (salaryTarget > 0) salaryTarget.toString() else EMPTY_STRING
     }
+
     fun getSalaryShowChecked(): Boolean {
         return salaryShowChecked
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Filters) return false
+        return this.area == other.area &&
+            this.city == other.city &&
+            this.industry == other.industry &&
+            this.salaryTarget == other.salaryTarget &&
+            this.salaryShowChecked == other.salaryShowChecked
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+
     companion object {
         private const val EMPTY_SALARY_TARGET: Int = -1
         private const val EMPTY_STRING = ""

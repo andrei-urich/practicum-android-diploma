@@ -38,6 +38,9 @@ class FilterSettingsFragment : Fragment() {
         viewModel.getFiltersConfigurationLD().observe(viewLifecycleOwner) {
             renderFilters(it)
         }
+        viewModel.getIsFiltresChangedLD().observe(viewLifecycleOwner) {
+            if (it) showApplyButton() else hideApplyButton()
+        }
         viewModel.getFiltersConfiguration()
         val saveSalaryTargetDebounce =
             debounce<String>(SAVE_SALARY_TARGET_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, true) { newSalary ->
@@ -73,18 +76,25 @@ class FilterSettingsFragment : Fragment() {
         binding.btClear.setOnClickListener {
             viewModel.clearFilters()
         }
-    }
-
-    private fun showClearButton() {
-        with(binding) {
-            btClear.visibility = View.VISIBLE
+        binding.btApply.setOnClickListener {
+            viewModel.fixFiltres()
         }
     }
 
     private fun hideClearButton() {
-        with(binding) {
-            btClear.visibility = View.GONE
-        }
+        binding.btClear.visibility = View.GONE
+    }
+
+    private fun showClearButton() {
+        binding.btClear.visibility = View.VISIBLE
+    }
+
+    private fun hideApplyButton() {
+        binding.btApply.visibility = View.GONE
+    }
+
+    private fun showApplyButton() {
+        binding.btApply.visibility = View.VISIBLE
     }
 
     private fun renderFilters(filter: Filters) {

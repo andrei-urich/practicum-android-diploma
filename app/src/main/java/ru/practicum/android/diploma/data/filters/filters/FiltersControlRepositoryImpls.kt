@@ -10,6 +10,7 @@ class FiltersControlRepositoryImpls(
     private val gson: Gson
 ) : FiltersControlRepository {
     private var currentFilters: Filters = Filters()
+    private var lastSavedFilters = Filters()
 
     init {
         currentFilters =
@@ -24,6 +25,7 @@ class FiltersControlRepositoryImpls(
                 sharedPreferences.edit().putString(FILTERS_ACTIVE, filtersJson).apply()
                 Filters()
             }
+        lastSavedFilters = currentFilters
     }
 
     override fun isFiltersNotEmpty(): Boolean {
@@ -34,6 +36,12 @@ class FiltersControlRepositoryImpls(
     override fun saveFiltersConfiguration(filters: Filters) {
         currentFilters = filters
         saveFiltersInSP(currentFilters)
+    }
+    override fun fixFiltres() {
+        lastSavedFilters = currentFilters
+    }
+    override fun checkFiltresChanges(): Boolean {
+        return lastSavedFilters != currentFilters
     }
 
     override fun saveAreaCityFilter(area: String, city: String?) {
