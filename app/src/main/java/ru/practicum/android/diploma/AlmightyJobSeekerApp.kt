@@ -10,6 +10,8 @@ import ru.practicum.android.diploma.di.filters.filtersInteractorModule
 import ru.practicum.android.diploma.di.filters.filtersRepositoryModule
 import ru.practicum.android.diploma.di.filters.filtersViewModelModule
 import ru.practicum.android.diploma.di.search.searchDataModule
+import ru.practicum.android.diploma.di.search.searchInteractorModule
+import ru.practicum.android.diploma.di.search.searchRepositoryModule
 import ru.practicum.android.diploma.di.search.searchViewModelModule
 import ru.practicum.android.diploma.di.vacancydetails.vacancyDetailsDataModule
 import ru.practicum.android.diploma.di.vacancydetails.vacancyDetailsInteractorModule
@@ -27,6 +29,8 @@ class AlmightyJobSeekerApp : Application() {
             modules(
                 searchDataModule,
                 searchViewModelModule,
+                searchInteractorModule,
+                searchRepositoryModule,
                 vacancyDetailsDataModule,
                 vacancyDetailsRepositoryModule,
                 vacancyDetailsInteractorModule,

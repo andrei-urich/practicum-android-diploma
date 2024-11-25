@@ -38,7 +38,7 @@
         tools:layout="@layout/fragment_vacancy"/>
     <fragment
         android:id="@+id/filterSettingsFragment"
-        android:name="ru.practicum.android.diploma.ui.filters.FilterSettingsFragment"
+        android:name="ru.practicum.android.diploma.ui.filters.filters.FilterSettingsFragment"
         android:label="FilterSettingsFragment" >
         <action
             android:id="@+id/action_filterSettingsFragment_to_areaFilterFragment"

@@ -11,6 +11,7 @@ import ru.practicum.android.diploma.FILTERS_ACTIVE
 import ru.practicum.android.diploma.data.filters.industry.network.AppApiIndustryFilter
 import ru.practicum.android.diploma.data.filters.industry.network.RetrofitNetworkClientIndustryFilter
 import ru.practicum.android.diploma.data.vacancydetails.network.NetworkRequestDetails
+import ru.practicum.android.diploma.presentation.filters.settings.FiltersToFiltersUIMapper
 
 val filtersDataModule = module {
     single<AppApiIndustryFilter> {
@@ -25,4 +26,5 @@ val filtersDataModule = module {
     single<NetworkRequestDetails>(named("industry")) {
         RetrofitNetworkClientIndustryFilter(get(), androidContext())
     }
+    single<FiltersToFiltersUIMapper> { FiltersToFiltersUIMapper() }
 }

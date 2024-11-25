@@ -11,6 +11,6 @@ val filtersInteractorModule = module {
     factory<IndustryFilterInteractor> {
         IndustryFilterInteractorImpl(get())
     }
-    single<ControlFiltersInteractor> { ControlFiltersInteractorImpl(get()) }
-    single<SearchFiltersInteractor> { ControlFiltersInteractorImpl(get()) }
+    single<ControlFiltersInteractor> { ControlFiltersInteractorImpl(get(), get()) }
+    single<SearchFiltersInteractor> { ControlFiltersInteractorImpl(get(), get()) }
 }

@@ -1,31 +1,42 @@
 package ru.practicum.android.diploma.domain.filters
 
+import ru.practicum.android.diploma.domain.filters.area.model.AreaFilterModel
+import ru.practicum.android.diploma.domain.filters.industry.model.IndustryFilterModel
+
 class Filters(
-    private val area: String = EMPTY_STRING,
-    private val city: String = EMPTY_STRING,
-    private val industry: String = EMPTY_STRING,
+    private val area: AreaFilterModel = AreaFilterModel(),
+    private val city: AreaFilterModel = AreaFilterModel(),
+    private val industry: IndustryFilterModel = IndustryFilterModel(),
     private val salaryTarget: Int = EMPTY_SALARY_TARGET,
     private val salaryShowChecked: Boolean = false
 ) {
     fun isFiltersNotEmpty(): Boolean {
-        val isNotEmpty = area != EMPTY_STRING ||
-            city != EMPTY_STRING ||
-            industry != EMPTY_STRING ||
+        val isNotEmpty = area.id != EMPTY_STRING ||
+            city.id != EMPTY_STRING ||
+            industry.id != EMPTY_STRING ||
             salaryTarget != EMPTY_SALARY_TARGET ||
             salaryShowChecked
         return isNotEmpty
     }
 
-    fun getAreaNCity(): String {
-        return if (area.isNotEmpty() && city.isNotEmpty()) {
-            "$area, $city"
+    fun getAreaNCityNames(): String {
+        return if (area.id.isNotEmpty() && city.id.isNotEmpty()) {
+            "${area.name}, ${city.name}"
         } else {
-            area
+            area.name
         }
     }
 
-    fun getIndustry(): String {
-        return industry
+    fun getAreaId(): String {
+        return if (city.id == EMPTY_STRING) return area.id else city.id
+    }
+
+    fun getIndustryName(): String {
+        return industry.name
+    }
+
+    fun getIndustryId(): String {
+        return industry.id
     }
 
     fun getSalaryTarget(): String {
@@ -39,9 +50,9 @@ class Filters(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Filters) return false
-        return this.area == other.area &&
-            this.city == other.city &&
-            this.industry == other.industry &&
+        return this.area.id == other.area.id &&
+            this.city.id == other.city.id &&
+            this.industry.id == other.industry.id &&
             this.salaryTarget == other.salaryTarget &&
             this.salaryShowChecked == other.salaryShowChecked
     }
@@ -53,17 +64,17 @@ class Filters(
     companion object {
         private const val EMPTY_SALARY_TARGET: Int = -1
         private const val EMPTY_STRING = ""
-        fun setNewAreaCity(oldFilter: Filters, newArea: String, newCity: String?): Filters {
+        fun setNewAreaCity(oldFilter: Filters, newArea: AreaFilterModel, newCity: AreaFilterModel?): Filters {
             return Filters(
                 newArea,
-                newCity ?: EMPTY_STRING,
+                newCity ?: AreaFilterModel(),
                 oldFilter.industry,
                 oldFilter.salaryTarget,
                 oldFilter.salaryShowChecked
             )
         }
 
-        fun setNewIndustry(oldFilter: Filters, newIndustry: String): Filters {
+        fun setNewIndustry(oldFilter: Filters, newIndustry: IndustryFilterModel): Filters {
             return Filters(
                 oldFilter.area,
                 oldFilter.city,
