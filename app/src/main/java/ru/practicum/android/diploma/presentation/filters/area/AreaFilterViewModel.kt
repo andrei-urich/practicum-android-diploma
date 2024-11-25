@@ -3,12 +3,36 @@ package ru.practicum.android.diploma.presentation.filters.area
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.practicum.android.diploma.domain.filters.area.AreaFilterInteractor
+import ru.practicum.android.diploma.domain.filters.area.model.AreaFilterModel
+import ru.practicum.android.diploma.domain.filters.filters.api.ControlFiltersInteractor
 
 class AreaFilterViewModel(
-    val interactor: AreaFilterInteractor
+    val interactor: ControlFiltersInteractor
 ) : ViewModel() {
-    private val stateLiveData = MutableLiveData<AreaState>()
+    private var currentCountry = AreaFilterModel()
+    private var currentRegion = AreaFilterModel()
+    private val filterValueLiveData = MutableLiveData<Pair<String, String>>()
+    fun getFilterValueLiveData(): LiveData<Pair<String, String>> = filterValueLiveData
 
-    fun getStateLiveData(): LiveData<AreaState> = stateLiveData
+    fun getFilterSettings() {
+        val currentFilterSettings = interactor.getFiltersConfiguration()
+        val settings = currentFilterSettings.getArea()
+        currentCountry = settings.first
+        currentRegion = settings.second
+        filterValueLiveData.postValue(Pair(currentCountry.name, currentRegion.name))
+    }
+
+    fun setCountry(pair: Pair<Int, String>) {
+        val newCountry = AreaFilterModel(pair.first.toString(), pair.second)
+        currentCountry = newCountry
+    }
+
+    fun setRegion(pair: Pair<Int, String>) {
+        val newRegion = AreaFilterModel(pair.first.toString(), pair.second)
+        currentRegion = newRegion
+    }
+
+    fun setFilterSettings() {
+        interactor.saveAreaCityFilter(currentCountry, currentRegion)
+    }
 }
