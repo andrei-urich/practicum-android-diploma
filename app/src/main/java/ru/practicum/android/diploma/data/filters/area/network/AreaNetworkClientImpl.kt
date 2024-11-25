@@ -13,6 +13,12 @@ class AreaNetworkClientImpl(
             try {
                 when (dto) {
                     is CountryListRequest -> apiService.getCountries(dto.locale).apply { resultCode = CODE_200 }
+                    is RegionsRequest -> apiService.getAllRegions(dto.locale).apply { resultCode = CODE_200 }
+                    is InnerRegionsRequest -> apiService.getInnerRegions(
+                        dto.locale,
+                        dto.areaId
+                    )
+
                     else -> Response().apply { resultCode = RESULT_CODE_BAD_REQUEST }
                 }
             } catch (e: retrofit2.HttpException) {
