@@ -8,15 +8,16 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentCountryFilterBinding
+import ru.practicum.android.diploma.domain.filters.area.model.Region
 import ru.practicum.android.diploma.presentation.filters.area.CountryFilterViewModel
 
 class CountryFilterFragment : Fragment() {
     private var _binding: FragmentCountryFilterBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CountryFilterViewModel by viewModel()
-    private val countryList = mutableListOf<String>()
+    private val countryList = mutableListOf<Region>()
     private val adapter: AreaListAdapter by lazy {
-        AreaListAdapter(countryList, viewModel::setArea)
+        AreaListAdapter(countryList, viewModel::setCountry)
     }
 
     override fun onCreateView(

@@ -11,24 +11,24 @@ import ru.practicum.android.diploma.data.filters.area.network.RegionListResponse
 import ru.practicum.android.diploma.data.filters.area.network.RegionsRequest
 import ru.practicum.android.diploma.data.search.network.NetworkClient
 import ru.practicum.android.diploma.domain.filters.area.AreaFilterRepository
-import ru.practicum.android.diploma.domain.filters.area.model.Country
 import ru.practicum.android.diploma.domain.filters.area.model.Region
 import ru.practicum.android.diploma.domain.search.Resource
 
 class AreaFilterRepositoryImpl(
     private val networkClient: NetworkClient,
 ) : AreaFilterRepository {
-    override suspend fun getCountriesList(): Flow<Resource<List<Country>>> = flow {
+    override suspend fun getCountriesList(): Flow<Resource<List<Region>>> = flow {
         val request = CountryListRequest(LOCALE_RU)
         val response = networkClient.doRequest(request)
         when (response.resultCode) {
             in CODE_200..CODE_299 -> {
                 if (response is CountryListResponse) {
                     val result: List<CountryDTO> = response.countries
-                    val countries: List<Country> = result.map {
-                        Country(
+                    val countries: List<Region> = result.map {
+                        Region(
                             id = it.id,
                             name = it.name,
+                            parentId = null
                         )
                     }
                     emit(Resource.Success(countries))
