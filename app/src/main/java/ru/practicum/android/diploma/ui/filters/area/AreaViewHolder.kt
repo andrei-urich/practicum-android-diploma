@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.ui.filters.area
 
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.AreaItemBinding
+import ru.practicum.android.diploma.domain.filters.area.model.Region
 
 class AreaViewHolder(
     private val binding: AreaItemBinding,
@@ -13,8 +14,8 @@ class AreaViewHolder(
         }
     }
 
-    fun bind(area: String) {
-        binding.areaName.text = area
+    fun bind(region: Region) {
+        binding.areaName.text = region.name
     }
 
 }

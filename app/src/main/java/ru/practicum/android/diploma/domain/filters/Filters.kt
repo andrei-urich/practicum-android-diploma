@@ -61,6 +61,10 @@ class Filters(
         return super.hashCode()
     }
 
+    fun getArea(): Pair<AreaFilterModel, AreaFilterModel> {
+        return Pair(area, city)
+    }
+
     companion object {
         private const val EMPTY_SALARY_TARGET: Int = -1
         private const val EMPTY_STRING = ""
