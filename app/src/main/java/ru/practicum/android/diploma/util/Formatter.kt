@@ -11,28 +11,24 @@ object Formatter {
         vacancy: VacancyShort
     ): String {
         if (vacancy.salaryFrom == null && vacancy.salaryTo == null) {
-            return "Зарплата не указана"
+            return SALARY_NOT_SPECIFIED
         }
-        var string = ""
+        var string = EMPTY_STRING
         val string_: String
-        if (vacancy.salaryFrom != null) string = "от " + vacancy.salaryFrom.toString()
+        if (vacancy.salaryFrom != null) string = FROM + vacancy.salaryFrom.toString()
         if (vacancy.salaryTo != null) {
-            string_ = "до " + vacancy.salaryTo.toString() + " " + currencyFromStr(vacancy.currency)
+            string_ = TO + vacancy.salaryTo.toString() + EMPTY_STRING_WITH_SPACE + currencyFromStr(vacancy.currency)
             string += " $string_"
         } else {
-            string += " " + currencyFromStr(vacancy.currency)
+            string += EMPTY_STRING_WITH_SPACE + currencyFromStr(vacancy.currency)
         }
         return string
     }
 
-    fun moneyFormat(num: Int) = "%,d".format(num).replace(",", " ")
-
-    inline fun <reified T : Enum<T>> enumValueOfOrNull(name: String): T? {
-        return enumValues<T>().find { it.name == name }
-    }
+    private fun moneyFormat(num: Int) = "%,d".format(num).replace(",", EMPTY_STRING_WITH_SPACE)
 
     private fun currencyFromStr(name: String?): String {
-        return enumValueOfOrNull<Currency>(name.toString())?.abbr ?: name.toString()
+        return Currency.valueOrNull(name.toString())?.abbr ?: name.toString()
     }
 
     fun formatSalary(context: Context, salaryInfo: SalaryInfo?): String {
@@ -70,4 +66,10 @@ object Formatter {
             }
         }
     }
+    private const val EMPTY_STRING = ""
+    private const val EMPTY_STRING_WITH_SPACE = " "
+    private const val SALARY_NOT_SPECIFIED = "Зарплата не указана"
+    private const val FROM = "от "
+    private const val TO = "до "
+
 }
