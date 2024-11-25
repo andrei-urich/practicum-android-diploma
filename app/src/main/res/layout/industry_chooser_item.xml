@@ -17,6 +17,8 @@
         app:layout_constraintEnd_toStartOf="@id/radioButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:layout_marginEnd="@dimen/space_4"
         tools:text="Автокомпоненты, запчасти, шины (продвижение, оптовая торговля)" />
 
