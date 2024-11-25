@@ -12,12 +12,22 @@ class AreaNetworkClientImpl(
         return withContext(Dispatchers.IO) {
             try {
                 when (dto) {
-                    is CountryListRequest -> apiService.getCountries(dto.locale).apply { resultCode = CODE_200 }
-                    is RegionsRequest -> apiService.getAllRegions(dto.locale).apply { resultCode = CODE_200 }
-                    is InnerRegionsRequest -> apiService.getInnerRegions(
-                        dto.locale,
-                        dto.areaId
-                    )
+                    is CountryListRequest -> {
+                        CountryListResponse(apiService.getCountries(dto.locale).body()).apply { resultCode = CODE_200 }
+                    }
+
+                    is RegionsRequest -> {
+                        RegionListResponse(apiService.getAllRegions(dto.locale).body()).apply { resultCode = CODE_200 }
+                    }
+
+                    is InnerRegionsRequest -> {
+                        RegionListResponse(
+                            apiService.getInnerRegions(
+                                dto.locale,
+                                dto.areaId
+                            ).body()
+                        ).apply { resultCode = CODE_200 }
+                    }
 
                     else -> Response().apply { resultCode = RESULT_CODE_BAD_REQUEST }
                 }

@@ -8,13 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentRegionFilterBinding
+import ru.practicum.android.diploma.domain.filters.area.model.Region
 import ru.practicum.android.diploma.presentation.filters.area.RegionFilterViewModel
 
 class RegionFilterFragment : Fragment() {
     private var _binding: FragmentRegionFilterBinding? = null
     private val binding get() = _binding!!
     private val viewModel: RegionFilterViewModel by viewModel()
-    private val regionList = mutableListOf<String>()
+    private val regionList = mutableListOf<Region>()
     private val adapter: AreaListAdapter by lazy {
         AreaListAdapter(regionList, viewModel::setArea)
     }

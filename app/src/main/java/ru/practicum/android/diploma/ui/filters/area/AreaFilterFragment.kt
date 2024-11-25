@@ -76,4 +76,9 @@ class AreaFilterFragment : Fragment() {
             binding.regionSupportText.visibility = View.GONE
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getFilterSettings()
+    }
 }

@@ -4,18 +4,18 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.data.filters.area.dto.CountryDTO
 import ru.practicum.android.diploma.data.filters.area.dto.RegionDTO
+import ru.practicum.android.diploma.data.filters.area.network.AreaNetworkClient
 import ru.practicum.android.diploma.data.filters.area.network.CountryListRequest
 import ru.practicum.android.diploma.data.filters.area.network.CountryListResponse
 import ru.practicum.android.diploma.data.filters.area.network.InnerRegionsRequest
 import ru.practicum.android.diploma.data.filters.area.network.RegionListResponse
 import ru.practicum.android.diploma.data.filters.area.network.RegionsRequest
-import ru.practicum.android.diploma.data.search.network.NetworkClient
 import ru.practicum.android.diploma.domain.filters.area.AreaFilterRepository
 import ru.practicum.android.diploma.domain.filters.area.model.Region
 import ru.practicum.android.diploma.domain.search.Resource
 
 class AreaFilterRepositoryImpl(
-    private val networkClient: NetworkClient,
+    private val networkClient: AreaNetworkClient,
 ) : AreaFilterRepository {
     override suspend fun getCountriesList(): Flow<Resource<List<Region>>> = flow {
         val request = CountryListRequest(LOCALE_RU)
@@ -23,7 +23,7 @@ class AreaFilterRepositoryImpl(
         when (response.resultCode) {
             in CODE_200..CODE_299 -> {
                 if (response is CountryListResponse) {
-                    val result: List<CountryDTO> = response.countries
+                    val result: List<CountryDTO> = response.result as List<CountryDTO>
                     val countries: List<Region> = result.map {
                         Region(
                             id = it.id,
@@ -47,7 +47,7 @@ class AreaFilterRepositoryImpl(
         when (response.resultCode) {
             in CODE_200..CODE_299 -> {
                 if (response is RegionListResponse) {
-                    val result: List<RegionDTO> = response.regions
+                    val result: List<RegionDTO> = response.regions as List<RegionDTO>
                     val allRegions: List<Region> = result.map {
                         Region(
                             id = it.id,
@@ -71,7 +71,7 @@ class AreaFilterRepositoryImpl(
         when (response.resultCode) {
             in CODE_200..CODE_299 -> {
                 if (response is RegionListResponse) {
-                    val result: List<RegionDTO> = response.regions
+                    val result: List<RegionDTO> = response.regions as List<RegionDTO>
                     val innerRegions: List<Region> = result.map {
                         Region(
                             id = it.id,

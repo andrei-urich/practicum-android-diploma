@@ -15,7 +15,7 @@ class CountryFilterFragment : Fragment() {
     private var _binding: FragmentCountryFilterBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CountryFilterViewModel by viewModel()
-    private val countryList = mutableListOf<Region>()
+    private var countryList = mutableListOf<Region>()
     private val adapter: AreaListAdapter by lazy {
         AreaListAdapter(countryList, viewModel::setCountry)
     }
@@ -32,11 +32,38 @@ class CountryFilterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rvCountry.layoutManager = LinearLayoutManager(context)
-        binding.rvCountry.adapter = adapter
+
         binding.toolbar.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.pbCountry.visibility = View.VISIBLE
+
         viewModel.getAreaList()
+
+        viewModel.getCountryListState().observe(viewLifecycleOwner) {
+            renderState(it)
+        }
+        viewModel.getScreenExitTrigger().observe(viewLifecycleOwner) { flag ->
+            if (flag) {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
+        }
+    }
+
+    private fun renderState(pair: Pair<List<Region>?, Int?>) {
+        binding.pbCountry.visibility = View.GONE
+        when (pair.first) {
+            null -> {
+                binding.rvCountry.visibility = View.GONE
+            }
+
+            else -> {
+                binding.rvCountry.visibility = View.VISIBLE
+                binding.rvCountry.adapter = adapter
+                countryList.clear()
+                countryList.addAll(pair.first as MutableList<Region>)
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 }

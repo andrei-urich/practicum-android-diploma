@@ -9,6 +9,7 @@ import ru.practicum.android.diploma.domain.filters.area.AreaFilterInteractor
 import ru.practicum.android.diploma.domain.filters.area.model.AreaFilterModel
 import ru.practicum.android.diploma.domain.filters.area.model.Region
 import ru.practicum.android.diploma.domain.filters.filters.api.ControlFiltersInteractor
+import ru.practicum.android.diploma.presentation.SingleEventLiveData
 
 class CountryFilterViewModel(
     private val interactor: AreaFilterInteractor,
@@ -16,12 +17,15 @@ class CountryFilterViewModel(
 ) : ViewModel() {
 
     private val countryListState = MutableLiveData<Pair<List<Region>?, Int?>>()
+    private val screenExitTrigger = SingleEventLiveData<Boolean>()
 
     fun getCountryListState(): LiveData<Pair<List<Region>?, Int?>> = countryListState
+    fun getScreenExitTrigger(): LiveData<Boolean> = screenExitTrigger
 
     fun setCountry(region: Region) {
         val newCountry = AreaFilterModel(region.id, region.name)
         filtersInteractor.saveAreaCityFilter(newCountry, AreaFilterModel())
+        exitScreen()
     }
 
     fun getAreaList() {
@@ -38,5 +42,9 @@ class CountryFilterViewModel(
                 }
             }
         }
+    }
+
+    fun exitScreen() {
+        screenExitTrigger.postValue(true)
     }
 }
