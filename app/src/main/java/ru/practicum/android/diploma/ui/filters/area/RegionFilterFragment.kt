@@ -17,7 +17,7 @@ class RegionFilterFragment : Fragment() {
     private val viewModel: RegionFilterViewModel by viewModel()
     private val regionList = mutableListOf<Region>()
     private val adapter: AreaListAdapter by lazy {
-        AreaListAdapter(regionList, viewModel::setArea)
+        AreaListAdapter(regionList, viewModel::setRegion)
     }
 
     override fun onCreateView(
@@ -38,5 +38,30 @@ class RegionFilterFragment : Fragment() {
         }
         binding.pbRegion.visibility = View.VISIBLE
         viewModel.getAreaList()
+        viewModel.getRegionsListState().observe(viewLifecycleOwner) {
+            renderState(it)
+        }
+        viewModel.getScreenExitTrigger().observe(viewLifecycleOwner) { flag ->
+            if (flag) {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
+        }
+    }
+
+    private fun renderState(pair: Pair<List<Region>?, Int?>) {
+        binding.pbRegion.visibility = View.GONE
+        when (pair.first) {
+            null -> {
+                binding.rvRegion.visibility = View.GONE
+            }
+
+            else -> {
+                binding.rvRegion.visibility = View.VISIBLE
+                binding.rvRegion.adapter = adapter
+                regionList.clear()
+                regionList.addAll(pair.first as MutableList<Region>)
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 }
