@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.practicum.android.diploma.domain.filters.area.AreaFilterInteractor
 
-class AreaFilterViewModel (
+class AreaFilterViewModel(
     val interactor: AreaFilterInteractor
 ) : ViewModel() {
     private val stateLiveData = MutableLiveData<AreaState>()
