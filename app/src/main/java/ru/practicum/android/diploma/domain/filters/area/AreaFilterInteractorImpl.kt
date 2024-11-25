@@ -4,7 +4,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import ru.practicum.android.diploma.domain.filters.area.model.Region
 import ru.practicum.android.diploma.domain.search.Resource
-import ru.practicum.android.diploma.domain.search.models.VacancyShort
 
 class AreaFilterInteractorImpl(
     val repository: AreaFilterRepository
