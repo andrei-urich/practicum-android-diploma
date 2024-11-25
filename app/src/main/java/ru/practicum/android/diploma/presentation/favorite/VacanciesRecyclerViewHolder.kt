@@ -19,12 +19,13 @@ class VacanciesRecyclerViewHolder(parentView: View) : RecyclerView.ViewHolder(pa
     private var employerLogoIV: ImageView = parentView.findViewById(R.id.employerLogoIVRecycler)
     private val vacancyCornerRadius: Int
         get() = itemView.context.resources.getDimensionPixelSize(R.dimen.vacancy_corner_radius)
+
     fun bind(vacancy: VacancyShort) {
         vacancyNameAndCityTV.text = itemView.context.getString(R.string.vacancy_item_title, vacancy.name, vacancy.area)
         companyNameTV.text = vacancy.employer
         salaryTV.text = Formatter.getSalary(vacancy)
         Glide.with(itemView)
-            .load(Uri.parse(vacancy.logoLink))
+            .load(Uri.parse(vacancy.logoLink ?: " "))
             .placeholder(R.drawable.placeholder)
             .error(R.drawable.placeholder)
             .fitCenter()
