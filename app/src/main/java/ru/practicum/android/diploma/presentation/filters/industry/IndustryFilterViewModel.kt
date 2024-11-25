@@ -73,7 +73,13 @@ class IndustryFilterViewModel(private val interactor: IndustryFilterInteractor) 
         }
     }
 
-    fun getSelectedIndustry(): IndustryFilterModel? = interactor.getIndustrySettings()
+    fun getSelectedIndustry(): IndustryFilterModel? {
+        return if (selectedIndustry == null) {
+            interactor.getIndustrySettings()
+        } else {
+            selectedIndustry
+        }
+    }
 
     fun searchIndustries(query: String) {
         val filteredIndustries = if (query.isEmpty()) {

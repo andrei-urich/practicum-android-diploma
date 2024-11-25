@@ -102,6 +102,10 @@ class SearchFragment : Fragment() {
                 }
             }
         })
+        setFilterIconAndCheckSearchText()
+    }
+
+    private fun setFilterIconAndCheckSearchText() {
         binding.searchFilter.setOnClickListener {
             findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
         }
@@ -110,8 +114,12 @@ class SearchFragment : Fragment() {
         } else {
             binding.searchFilter.setImageResource(R.drawable.filter_off_icon)
         }
-        if (viewModel.isSearchForced()) {
-            viewModel.getSearchText(binding.searchEditText.text.toString())
+        if (searchText.isNotEmpty()) {
+            if (viewModel.isSearchForced()) {
+                viewModel.getSearchText(binding.searchEditText.text.toString())
+            } else {
+                println()
+            }
         }
     }
 
