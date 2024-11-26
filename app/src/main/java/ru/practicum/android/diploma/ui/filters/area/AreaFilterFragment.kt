@@ -69,7 +69,7 @@ class AreaFilterFragment : Fragment() {
             binding.regionBtnTitle.visibility = View.GONE
             binding.regionName.visibility = View.VISIBLE
             binding.regionSupportText.visibility = View.VISIBLE
-            binding.regionName.text = pair.first
+            binding.regionName.text = pair.second
         } else {
             binding.regionBtnTitle.visibility = View.VISIBLE
             binding.regionName.visibility = View.GONE

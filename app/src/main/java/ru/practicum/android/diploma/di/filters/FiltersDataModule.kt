@@ -13,6 +13,7 @@ import ru.practicum.android.diploma.data.filters.area.network.AreaNetworkClient
 import ru.practicum.android.diploma.data.filters.area.network.AreaNetworkClientImpl
 import ru.practicum.android.diploma.data.filters.industry.network.AppApiIndustryFilter
 import ru.practicum.android.diploma.data.filters.industry.network.RetrofitNetworkClientIndustryFilter
+import ru.practicum.android.diploma.data.utils.RegionsConverter
 import ru.practicum.android.diploma.data.vacancydetails.network.NetworkRequestDetails
 import ru.practicum.android.diploma.presentation.filters.settings.FiltersToFiltersUIMapper
 
@@ -41,4 +42,5 @@ val filtersDataModule = module {
     factory<AreaNetworkClient> {
         AreaNetworkClientImpl(get())
     }
+    factory { RegionsConverter() }
 }

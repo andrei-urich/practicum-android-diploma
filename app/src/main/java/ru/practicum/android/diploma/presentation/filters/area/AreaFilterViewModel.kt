@@ -17,22 +17,9 @@ class AreaFilterViewModel(
     fun getFilterSettings() {
         val currentFilterSettings = interactor.getFiltersConfiguration()
         val settings = currentFilterSettings.getArea()
+
         currentCountry = settings.first
         currentRegion = settings.second
         filterValueLiveData.postValue(Pair(currentCountry.name, currentRegion.name))
-    }
-
-    fun setCountry(pair: Pair<Int, String>) {
-        val newCountry = AreaFilterModel(pair.first.toString(), pair.second)
-        currentCountry = newCountry
-    }
-
-    fun setRegion(pair: Pair<Int, String>) {
-        val newRegion = AreaFilterModel(pair.first.toString(), pair.second)
-        currentRegion = newRegion
-    }
-
-    fun setFilterSettings() {
-        interactor.saveAreaCityFilter(currentCountry, currentRegion)
     }
 }

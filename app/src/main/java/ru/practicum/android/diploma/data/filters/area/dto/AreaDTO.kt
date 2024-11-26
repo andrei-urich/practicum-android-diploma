@@ -1,6 +1,8 @@
+
 package ru.practicum.android.diploma.data.filters.area.dto
 
-data class CountryDTO(
+data class AreaDTO(
     val id: String,
-    val name: String
+    val name: String,
+    val parentId: String?
 )

@@ -18,6 +18,6 @@ val filtersRepositoryModule = module {
     single<FiltersControlRepository> { FiltersControlRepositoryImpls(get(), get()) }
     single<IndustryFilterStorageRepository> { IndustryFilterStorageRepositoryImpl(get(), get()) }
     single<AreaFilterRepository> {
-        AreaFilterRepositoryImpl(get())
+        AreaFilterRepositoryImpl(get(), get())
     }
 }
