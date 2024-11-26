@@ -96,7 +96,6 @@ class RegionFilterViewModel(
                     parentId = region.parentId
                 }
             }
-            break
         }
     }
 
@@ -106,10 +105,7 @@ class RegionFilterViewModel(
             viewModelScope.launch {
                 interactor.getAllRegions().collect { pair ->
                     when (pair.first) {
-                        null -> {
-                            regionsListState.postValue(Pair(null, pair.second))
-                        }
-
+                        null -> { regionsListState.postValue(Pair(null, pair.second)) }
                         else -> {
                             regionsList.clear()
                             regionsList.addAll(pair.first as List<Region>)

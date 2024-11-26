@@ -1,7 +1,9 @@
 package ru.practicum.android.diploma.data.utils
 
 import ru.practicum.android.diploma.data.filters.area.dto.AreaDTO
+import ru.practicum.android.diploma.data.filters.area.dto.InnerRegionDTO
 import ru.practicum.android.diploma.data.filters.area.dto.RegionDTO
+import ru.practicum.android.diploma.data.filters.area.dto.SubInnerRegionDTO
 import ru.practicum.android.diploma.domain.filters.area.model.Region
 
 class RegionsConverter {
@@ -15,39 +17,36 @@ class RegionsConverter {
 
     fun allInnerRegions(list: List<RegionDTO>): List<AreaDTO> {
         val innerList = mutableListOf<AreaDTO>()
+        addAllRegions(innerList, list)
         for (region in list) {
-            if (region.innerRegions.isNotEmpty()) {
-                for (innerRegion in region.innerRegions) {
-                    if (!innerRegion.innerRegions.isNullOrEmpty()) {
-                        for (subInnerRegion in innerRegion.innerRegions) {
-                            innerList.add(
-                                AreaDTO(
-                                    id = subInnerRegion.id,
-                                    name = subInnerRegion.name,
-                                    parentId = subInnerRegion.parentId
-                                )
-                            )
-                        }
-                    }
-                    innerList.add(
-                        AreaDTO(
-                            id = innerRegion.id,
-                            name = innerRegion.name,
-                            parentId = innerRegion.parentId
-                        )
-                    )
-                }
+            addAllInnerRegions(innerList, region.innerRegions)
+            for (innerRegions in region.innerRegions) {
+                addAllSubInnerRegions(innerList, innerRegions.innerRegions)
             }
-            innerList.add(
-                AreaDTO(
-                    id = region.id,
-                    name = region.name,
-                    parentId = region.parentId
-                )
-            )
-
         }
         return innerList
+    }
+
+    fun addAllRegions(innerList: MutableList<AreaDTO>, list: List<RegionDTO>) {
+        for (region in list) {
+            innerList.add(AreaDTO(region.id, region.name, region.parentId))
+        }
+    }
+
+    fun addAllInnerRegions(innerList: MutableList<AreaDTO>, list: List<InnerRegionDTO>) {
+        if (list.isNotEmpty()) {
+            for (innerRegion in list) {
+                innerList.add(AreaDTO(innerRegion.id, innerRegion.name, innerRegion.parentId))
+            }
+        }
+    }
+
+    fun addAllSubInnerRegions(innerList: MutableList<AreaDTO>, list: List<SubInnerRegionDTO>) {
+        if (list.isNullOrEmpty()) {
+            for (sunInnerRegion in list) {
+                innerList.add(AreaDTO(sunInnerRegion.id, sunInnerRegion.name, sunInnerRegion.parentId))
+            }
+        }
     }
 
     fun areaDTOinRegion(list: List<AreaDTO>): List<Region> {
