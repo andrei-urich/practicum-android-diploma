@@ -13,11 +13,8 @@ class RegionsConverter {
         return countries
     }
 
-    fun allInnerRegions(listTotal: List<RegionDTO>): List<AreaDTO> {
+    fun allInnerRegions(list: List<RegionDTO>): List<AreaDTO> {
         val innerList = mutableListOf<AreaDTO>()
-        val list = listTotal.filter { region ->
-            region.parentId != null
-        }
         for (region in list) {
             if (region.innerRegions.isNotEmpty()) {
                 for (innerRegion in region.innerRegions) {
@@ -49,7 +46,7 @@ class RegionsConverter {
         return innerList
     }
 
-    fun AreaDTOinRegion(list: List<AreaDTO>): List<Region> {
+    fun areaDTOinRegion(list: List<AreaDTO>): List<Region> {
         return list.map {
             Region(
                 id = it.id,

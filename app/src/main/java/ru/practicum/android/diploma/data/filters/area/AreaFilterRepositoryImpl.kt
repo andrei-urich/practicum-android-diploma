@@ -49,7 +49,7 @@ class AreaFilterRepositoryImpl(
                 if (response is RegionListResponse) {
                     val result: List<RegionDTO> = response.regions as List<RegionDTO>
                     val areas: List<AreaDTO> = converter.allInnerRegions(result)
-                    val regions = converter.AreaDTOinRegion(areas)
+                    val regions = converter.areaDTOinRegion(areas)
                     emit(Resource.Success(converter.sortByAlfabeth(regions)))
                 } else {
                     emit(Resource.Error(response.resultCode))

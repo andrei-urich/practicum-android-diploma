@@ -69,15 +69,26 @@ class RegionFilterViewModel(
 
         getCountry(region.parentId)
         filtersInteractor.saveAreaCityFilter(country, newRegion)
+
+        Log.d("MY", "send ${country.name} ${newRegion.name}")
+
         exitScreen()
     }
 
-    private fun getCountry(parentId: String?) {
-        viewModelScope.launch {
-            interactor.getCountriesList().collect { pair ->
-                val list = pair.first?.filter { region: Region -> region.id == parentId }
-                if (list.isNullOrEmpty()) AreaFilterModel() else AreaFilterModel(list[ZERO].id, list[ZERO].name)
+    private fun getCountry(id: String?) {
+        val startList = regionsList
+        var parentId = id
+        while (true) {
+            var region = startList.find { region: Region -> region.id == parentId }
+            if (region != null) {
+                if (region.parentId == null) {
+                    country = AreaFilterModel(region.id, region.name)
+                    break
+                } else {
+                    parentId = region.parentId
+                }
             }
+            break
         }
     }
 
@@ -92,7 +103,10 @@ class RegionFilterViewModel(
                     else -> {
                         regionsList.clear()
                         regionsList.addAll(pair.first as List<Region>)
-                        regionsListState.postValue(Pair(pair.first, null))
+                        val filteredList = regionsList.filter { region ->
+                            region.parentId != null
+                        }
+                        regionsListState.postValue(Pair(filteredList, null))
                     }
                 }
             }
