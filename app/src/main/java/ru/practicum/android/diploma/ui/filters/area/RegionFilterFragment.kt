@@ -59,7 +59,7 @@ class RegionFilterFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchText = s.toString()
                 if (s?.isEmpty() == true) {
-//                    viewModel.clearScreen(true)
+                    viewModel.clearScreen(true)
                 }
                 viewModel.getSearchText(searchText)
             }

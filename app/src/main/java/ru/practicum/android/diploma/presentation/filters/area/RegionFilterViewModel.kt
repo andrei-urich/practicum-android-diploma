@@ -21,7 +21,7 @@ class RegionFilterViewModel(
 ) : ViewModel() {
 
     private val regionsList = mutableListOf<Region>()
-
+    private var country = AreaFilterModel()
     private var searchText = EMPTY_STRING
     private var searchJob: Job? = null
 
@@ -55,10 +55,7 @@ class RegionFilterViewModel(
 
     private fun search() {
         val regex = searchText.toRegex()
-        val filteredList = regionsList.filter { region -> region.name.toLowerCase(Locale.ROOT).contains(regex) }
-
-        Log.d("MY", "Filtered List ${filteredList.toString()}")
-
+        val filteredList = regionsList.filter { region -> region.name.lowercase(Locale.ROOT).contains(regex) }
         if (filteredList.isNotEmpty()) {
             regionsListState.postValue(Pair(filteredList, null))
         } else {
@@ -68,20 +65,20 @@ class RegionFilterViewModel(
 
     fun setRegion(region: Region) {
         val newRegion = AreaFilterModel(region.id, region.name)
-        val country = getCountry(region.parentId)
-        if (country != null) {
-            filtersInteractor.saveAreaCityFilter(AreaFilterModel(country.id, country.name), newRegion)
-        } else {
-            filtersInteractor.saveAreaCityFilter(AreaFilterModel(EMPTY_STRING, EMPTY_STRING), newRegion)
-        }
+        Log.d("MY", region.name)
+
+        getCountry(region.parentId)
+        filtersInteractor.saveAreaCityFilter(country, newRegion)
         exitScreen()
     }
 
-    private fun getCountry(parentId: String?): Region? {
-        for (item in regionsList) {
-            if (item.parentId == parentId) return item
+    private fun getCountry(parentId: String?) {
+        viewModelScope.launch {
+            interactor.getCountriesList().collect { pair ->
+                val list = pair.first?.filter { region: Region -> region.id == parentId }
+                if (list.isNullOrEmpty()) AreaFilterModel() else AreaFilterModel(list[ZERO].id, list[ZERO].name)
+            }
         }
-        return null
     }
 
     fun getAreaList() {
@@ -110,5 +107,6 @@ class RegionFilterViewModel(
         const val EMPTY_STRING = ""
         const val SEARCH_DEBOUNCE_DELAY = 2000L
         const val NOTHING_FOUND = 0
+        const val ZERO = 0
     }
 }
