@@ -8,18 +8,18 @@ import ru.practicum.android.diploma.domain.search.models.VacancyShort
 
 object Formatter {
     fun getSalary(
-        vacancy: VacancyShort
+        vacancy: VacancyShort,
     ): String {
         if (vacancy.salaryFrom == null && vacancy.salaryTo == null) {
             return SALARY_NOT_SPECIFIED
         }
         var string = EMPTY_STRING
         val string_: String
-        if (vacancy.salaryFrom != null) string = FROM + moneyFormat(vacancy.salaryFrom)
         if (vacancy.salaryFrom != null && vacancy.salaryTo == null) string = FROM + moneyFormat(vacancy.salaryFrom)
-        if (vacancy.salaryTo != null) {
+        if (vacancy.salaryFrom == null && vacancy.salaryTo != null) string = TO + moneyFormat(vacancy.salaryTo)
+        if (vacancy.salaryFrom != null && vacancy.salaryTo != null) {
             string_ = TO + moneyFormat(vacancy.salaryTo) + EMPTY_STRING_WITH_SPACE + currencyFromStr(vacancy.currency)
-            string += " $string_"
+            string += FROM + moneyFormat(vacancy.salaryFrom) + " $string_"
         } else {
             string += EMPTY_STRING_WITH_SPACE + currencyFromStr(vacancy.currency)
         }
