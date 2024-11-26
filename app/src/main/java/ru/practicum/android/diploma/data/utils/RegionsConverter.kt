@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.data.utils
 
-import android.util.Log
 import ru.practicum.android.diploma.data.filters.area.dto.AreaDTO
 import ru.practicum.android.diploma.data.filters.area.dto.InnerRegionDTO
 import ru.practicum.android.diploma.data.filters.area.dto.RegionDTO
@@ -77,23 +76,20 @@ class RegionsConverter {
                 parentId = it.parentId
             )
         }
-        Log.d("MY", "countries AreaDTO ${areas.toString()}")
         return areas
     }
 
     fun allInnerRegions(list: List<RegionDTO>): List<AreaDTO> {
-        Log.d("MY", "List ${list.toString()}")
         val innerList = mutableListOf<AreaDTO>()
         val countries = onlyCountriesDTO(list)
         innerList.addAll(regionsDTOToAreaDTO(countries))
-        val bigCyties = bigCitiesDTO(list)
-        innerList.addAll(regionsDTOToAreaDTO(bigCyties))
+        val bigCities = bigCitiesDTO(list)
+        innerList.addAll(regionsDTOToAreaDTO(bigCities))
         val notEmptyRegions = notEmptyRegions(list)
         notEmptyRegions.forEach { region ->
             innerList.addAll(getInnerList(region.innerRegions))
         }
         innerList.addAll(getRegionList(notEmptyRegions))
-        Log.d("MY", "innerList ${innerList.toString()}")
         return innerList
     }
 
