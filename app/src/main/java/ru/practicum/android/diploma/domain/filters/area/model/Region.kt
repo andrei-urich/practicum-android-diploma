@@ -4,5 +4,5 @@ data class Region(
     val id: String,
     val name: String,
     val parentId: String?,
-    val innerRegions: List<InnerRegion>
+    val innerRegions: List<InnerRegion>?
 )

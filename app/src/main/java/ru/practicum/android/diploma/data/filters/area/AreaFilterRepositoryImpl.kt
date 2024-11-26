@@ -50,7 +50,7 @@ class AreaFilterRepositoryImpl(
             in CODE_200..CODE_299 -> {
                 if (response is RegionListResponse) {
                     val result: List<RegionDTO> = response.regions as List<RegionDTO>
-                    val allRegions: List<Region> = result.map {
+                    val regions: List<Region> = result.map {
                         Region(
                             id = it.id,
                             name = it.name,
@@ -58,10 +58,27 @@ class AreaFilterRepositoryImpl(
                             innerRegions = converter.innerRegionDTOtoInnerRegion(it.innerRegions)
                         )
                     }
-                    Log.d("MY", allRegions.size.toString())
-                    val regions = converter.allInnerRegions(allRegions)
-                    Log.d("MY", regions.size.toString())
-                    emit(Resource.Success(regions))
+                    val innerRegions = converter.allInnerRegions(regions) as MutableList<Region>
+                    println(innerRegions.size)
+                    for( i in innerRegions) {
+                        println(i.name)
+                    }
+
+                    val subInnerRegion = converter.allInnerRegions(innerRegions)
+                    println(subInnerRegion.size)
+                    for( i in subInnerRegion) {
+                        println(i.name)
+                    }
+
+                    val subSubInnerRegion = converter.allInnerRegions(subInnerRegion)
+                    println(subSubInnerRegion.size)
+                    for( i in subSubInnerRegion) {
+                        println(i.name)
+                    }
+
+                    innerRegions.addAll(subInnerRegion)
+                    innerRegions.addAll(subSubInnerRegion)
+                    emit(Resource.Success(converter.sortByAlfabeth(innerRegions)))
                 } else {
                     emit(Resource.Error(response.resultCode))
                 }

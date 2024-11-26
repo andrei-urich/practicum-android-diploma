@@ -12,6 +12,7 @@ class RegionsConverter {
                 id = it.id,
                 name = it.name,
                 parentId = it.parentId,
+                innerRegions = it.innerRegions ?: emptyList()
             )
         }
     }
@@ -27,15 +28,22 @@ class RegionsConverter {
         val innerList = mutableListOf<InnerRegion>()
         for (region in list) {
             if (region.innerRegions.isNotEmpty())
-                innerList.addAll(region.innerRegions)
+                println(region.innerRegions)
+
+            innerList.addAll(region.innerRegions)
         }
         return innerList.map {
             Region(
                 id = it.id,
                 name = it.name,
                 parentId = it.parentId,
-                innerRegions = emptyList()
+                innerRegions = it.innerRegions
             )
         }
     }
+
+    fun sortByAlfabeth(list: List<Region>): List<Region> {
+        return list.sortedWith(compareBy { it.name })
+    }
 }
+

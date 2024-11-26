@@ -9,5 +9,5 @@ data class RegionDTO(
     val parentId: String?,
 
     @SerializedName("areas")
-    val innerRegions: List<InnerRegionDTO>
+    val innerRegions: List<InnerRegionDTO>?
 )
