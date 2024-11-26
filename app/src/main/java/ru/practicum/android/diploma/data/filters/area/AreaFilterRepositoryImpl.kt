@@ -1,8 +1,8 @@
 package ru.practicum.android.diploma.data.filters.area
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import ru.practicum.android.diploma.data.filters.area.dto.AreaDTO
 import ru.practicum.android.diploma.data.filters.area.dto.RegionDTO
 import ru.practicum.android.diploma.data.filters.area.network.AreaNetworkClient
 import ru.practicum.android.diploma.data.filters.area.network.InnerRegionsRequest
@@ -14,8 +14,7 @@ import ru.practicum.android.diploma.domain.filters.area.model.Region
 import ru.practicum.android.diploma.domain.search.Resource
 
 class AreaFilterRepositoryImpl(
-    private val networkClient: AreaNetworkClient,
-    private val converter: RegionsConverter
+    private val networkClient: AreaNetworkClient, private val converter: RegionsConverter
 ) : AreaFilterRepository {
     override suspend fun getCountriesList(): Flow<Resource<List<Region>>> = flow {
         val request = RegionsRequest(LOCALE_RU)
@@ -29,7 +28,6 @@ class AreaFilterRepositoryImpl(
                             id = it.id,
                             name = it.name,
                             parentId = it.parentId,
-                            innerRegions = converter.innerRegionDTOtoInnerRegion(it.innerRegions)
                         )
                     }
                     val countries = converter.regionsToCountriesMapper(allRegions)
@@ -50,18 +48,9 @@ class AreaFilterRepositoryImpl(
             in CODE_200..CODE_299 -> {
                 if (response is RegionListResponse) {
                     val result: List<RegionDTO> = response.regions as List<RegionDTO>
-                    val allRegions: List<Region> = result.map {
-                        Region(
-                            id = it.id,
-                            name = it.name,
-                            parentId = it.parentId,
-                            innerRegions = converter.innerRegionDTOtoInnerRegion(it.innerRegions)
-                        )
-                    }
-                    Log.d("MY", allRegions.size.toString())
-                    val regions = converter.allInnerRegions(allRegions)
-                    Log.d("MY", regions.size.toString())
-                    emit(Resource.Success(regions))
+                    val areas: List<AreaDTO> = converter.allInnerRegions(result)
+                    val regions = converter.AreaDTOinRegion(areas)
+                    emit(Resource.Success(converter.sortByAlfabeth(regions)))
                 } else {
                     emit(Resource.Error(response.resultCode))
                 }
@@ -83,7 +72,6 @@ class AreaFilterRepositoryImpl(
                             id = it.id,
                             name = it.name,
                             parentId = it.parentId,
-                            innerRegions = converter.innerRegionDTOtoInnerRegion(it.innerRegions)
                         )
                     }
                     emit(Resource.Success(innerRegions))
