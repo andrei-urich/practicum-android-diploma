@@ -25,14 +25,9 @@ class AreaFilterRepositoryImpl(
             in CODE_200..CODE_299 -> {
                 if (response is RegionListResponse) {
                     val result: List<RegionDTO> = response.regions as List<RegionDTO>
-                    val allRegions: List<Region> = result.map {
-                        Region(
-                            id = it.id,
-                            name = it.name,
-                            parentId = it.parentId,
-                        )
-                    }
-                    val countries = converter.regionsToCountriesMapper(allRegions)
+                    val countriesDTO = converter.onlyCountriesDTO(result)
+                    val countriesAreaDTO = converter.regionsDTOToAreaDTO(countriesDTO)
+                    val countries = converter.areaDTOinRegion(countriesAreaDTO)
                     emit(Resource.Success(countries))
                 } else {
                     emit(Resource.Error(response.resultCode))
