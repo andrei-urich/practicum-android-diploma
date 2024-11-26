@@ -23,7 +23,6 @@ class RegionFilterViewModel(
     private var country = AreaFilterModel()
     private var searchText = EMPTY_STRING
     private var searchJob: Job? = null
-
     private var currentCountry = AreaFilterModel()
 
     init {
@@ -75,7 +74,11 @@ class RegionFilterViewModel(
 
     fun setRegion(region: Region) {
         val newRegion = AreaFilterModel(region.id, region.name)
-        getCountry(region.parentId)
+        if (currentCountry.id.isBlank()) {
+            getCountry(region.parentId)
+        } else {
+            country = currentCountry
+        }
         filtersInteractor.saveAreaCityFilter(country, newRegion)
         screenExitTrigger.postValue(true)
     }
@@ -143,6 +146,5 @@ class RegionFilterViewModel(
         const val EMPTY_STRING = ""
         const val SEARCH_DEBOUNCE_DELAY = 2000L
         const val NOTHING_FOUND = 0
-        const val ZERO = 0
     }
 }
