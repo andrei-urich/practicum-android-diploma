@@ -7,15 +7,7 @@ import ru.practicum.android.diploma.data.filters.area.dto.RegionDTO
 import ru.practicum.android.diploma.domain.filters.area.model.Region
 
 class RegionsConverter {
-
-    fun regionsToCountriesMapper(list: List<Region>): List<Region> {
-        val countries = list.filter { region ->
-            region.parentId == null
-        }
-        return countries
-    }
-
-    fun notEmptyRegions (list: List<RegionDTO>): List<RegionDTO> {
+    fun notEmptyRegions(list: List<RegionDTO>): List<RegionDTO> {
         val regions = list.filter { region ->
             region.innerRegions.isNotEmpty()
         }
@@ -27,6 +19,13 @@ class RegionsConverter {
             region.parentId == null
         }
         return countries
+    }
+
+    fun bigCitiesDTO(list: List<RegionDTO>): List<RegionDTO> {
+        val cities = list.filter { region ->
+            region.innerRegions.isEmpty()
+        }
+        return cities
     }
 
     fun getRegionList(list: List<RegionDTO>): List<AreaDTO> {
@@ -70,18 +69,14 @@ class RegionsConverter {
         return innerList
     }
 
-    fun regionsToAreaDTO(list: List<RegionDTO>): List<AreaDTO> {
-        val countries = list.filter { region ->
-            region.parentId != null
-        }
-        var areas = countries.map {
+    fun regionsDTOToAreaDTO(list: List<RegionDTO>): List<AreaDTO> {
+        var areas = list.map {
             AreaDTO(
                 id = it.id,
                 name = it.name,
                 parentId = it.parentId
             )
         }
-
         Log.d("MY", "countries AreaDTO ${areas.toString()}")
         return areas
     }
@@ -90,15 +85,15 @@ class RegionsConverter {
         Log.d("MY", "List ${list.toString()}")
         val innerList = mutableListOf<AreaDTO>()
         val countries = onlyCountriesDTO(list)
-        innerList.addAll(regionsToAreaDTO(countries))
+        innerList.addAll(regionsDTOToAreaDTO(countries))
+        val bigCyties = bigCitiesDTO(list)
+        innerList.addAll(regionsDTOToAreaDTO(bigCyties))
         val notEmptyRegions = notEmptyRegions(list)
         notEmptyRegions.forEach { region ->
             innerList.addAll(getInnerList(region.innerRegions))
         }
         innerList.addAll(getRegionList(notEmptyRegions))
-
         Log.d("MY", "innerList ${innerList.toString()}")
-
         return innerList
     }
 
