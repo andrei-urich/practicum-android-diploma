@@ -35,6 +35,8 @@ class RegionFilterViewModel(
         val currentFilterSettings = filtersInteractor.getFiltersConfiguration()
         val settings = currentFilterSettings.getArea()
         currentCountry = settings.first
+
+        Log.d("MY", "ID ${currentCountry.id}")
     }
 
     private val regionsListState = MutableLiveData<Pair<List<Region>?, Int?>>()
@@ -43,7 +45,7 @@ class RegionFilterViewModel(
     fun getScreenExitTrigger(): LiveData<Boolean> = screenExitTrigger
 
     fun getSearchText(searchText: String) {
-        if (searchText.isNotBlank() && (this.searchText != searchText)) {
+        if (searchText.isNotBlank() && this.searchText != searchText) {
             this.searchText = searchText
             searchDebounce(SEARCH_DEBOUNCE_DELAY)
         }
@@ -76,13 +78,8 @@ class RegionFilterViewModel(
 
     fun setRegion(region: Region) {
         val newRegion = AreaFilterModel(region.id, region.name)
-        Log.d("MY", region.name)
-
         getCountry(region.parentId)
         filtersInteractor.saveAreaCityFilter(country, newRegion)
-
-        Log.d("MY", "send ${country.name} ${newRegion.name}")
-
         exitScreen()
     }
 
@@ -104,7 +101,8 @@ class RegionFilterViewModel(
     }
 
     fun getAreaList() {
-        if (currentCountry.id == EMPTY_STRING) {
+        Log.d("MY", "ID ${currentCountry.id}")
+        if (currentCountry.id.isNullOrBlank()) {
             viewModelScope.launch {
                 interactor.getAllRegions().collect { pair ->
                     when (pair.first) {

@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.ui.filters.area
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -86,9 +85,6 @@ class RegionFilterFragment : Fragment() {
             }
 
             else -> {
-
-                Log.d("MY", pair.first.toString())
-
                 binding.rvRegion.visibility = View.VISIBLE
                 binding.rvRegion.adapter = adapter
                 regionList.clear()

@@ -15,7 +15,8 @@ import ru.practicum.android.diploma.domain.filters.area.model.Region
 import ru.practicum.android.diploma.domain.search.Resource
 
 class AreaFilterRepositoryImpl(
-    private val networkClient: AreaNetworkClient, private val converter: RegionsConverter
+    private val networkClient: AreaNetworkClient,
+    private val converter: RegionsConverter
 ) : AreaFilterRepository {
     override suspend fun getCountriesList(): Flow<Resource<List<Region>>> = flow {
         val request = RegionsRequest(LOCALE_RU)

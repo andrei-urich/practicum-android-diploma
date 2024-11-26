@@ -31,14 +31,18 @@ class RegionsConverter {
                     }
                     innerList.add(
                         AreaDTO(
-                            id = innerRegion.id, name = innerRegion.name, parentId = innerRegion.parentId
+                            id = innerRegion.id,
+                            name = innerRegion.name,
+                            parentId = innerRegion.parentId
                         )
                     )
                 }
             }
             innerList.add(
                 AreaDTO(
-                    id = region.id, name = region.name, parentId = region.parentId
+                    id = region.id,
+                    name = region.name,
+                    parentId = region.parentId
                 )
             )
 
