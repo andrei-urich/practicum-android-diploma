@@ -35,8 +35,6 @@ class RegionFilterViewModel(
         val currentFilterSettings = filtersInteractor.getFiltersConfiguration()
         val settings = currentFilterSettings.getArea()
         currentCountry = settings.first
-
-        Log.d("MY", "ID ${currentCountry.id}")
     }
 
     private val regionsListState = MutableLiveData<Pair<List<Region>?, Int?>>()
@@ -68,7 +66,13 @@ class RegionFilterViewModel(
 
     private fun search() {
         val regex = searchText.toRegex()
+
+        Log.d("MY", regex.toString())
+
         val filteredList = regionsList.filter { region -> region.name.lowercase(Locale.ROOT).contains(regex) }
+
+        Log.d("MY", filteredList.toString())
+
         if (filteredList.isNotEmpty()) {
             regionsListState.postValue(Pair(filteredList, null))
         } else {
@@ -86,23 +90,22 @@ class RegionFilterViewModel(
     private fun getCountry(id: String?) {
         val startList = regionsList
         var parentId = id
-        while (true) {
+        var flag = true
+        while (flag) {
             var region = startList.find { region: Region -> region.id == parentId }
             if (region != null) {
                 if (region.parentId == null) {
                     country = AreaFilterModel(region.id, region.name)
-                    break
+                    flag = false
                 } else {
                     parentId = region.parentId
                 }
             }
-            break
         }
     }
 
     fun getAreaList() {
-        Log.d("MY", "ID ${currentCountry.id}")
-        if (currentCountry.id.isNullOrBlank()) {
+        if (currentCountry.id.isBlank()) {
             viewModelScope.launch {
                 interactor.getAllRegions().collect { pair ->
                     when (pair.first) {
