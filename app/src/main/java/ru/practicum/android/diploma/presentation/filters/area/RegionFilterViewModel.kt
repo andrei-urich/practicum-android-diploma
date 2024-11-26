@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.presentation.filters.area
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,8 +34,6 @@ class RegionFilterViewModel(
         val currentFilterSettings = filtersInteractor.getFiltersConfiguration()
         val settings = currentFilterSettings.getArea()
         currentCountry = settings.first
-
-        Log.d("MY", "ID ${currentCountry.id}")
     }
 
     private val regionsListState = MutableLiveData<Pair<List<Region>?, Int?>>()
@@ -80,29 +77,28 @@ class RegionFilterViewModel(
         val newRegion = AreaFilterModel(region.id, region.name)
         getCountry(region.parentId)
         filtersInteractor.saveAreaCityFilter(country, newRegion)
-        exitScreen()
+        screenExitTrigger.postValue(true)
     }
 
     private fun getCountry(id: String?) {
         val startList = regionsList
         var parentId = id
-        while (true) {
+        var flag = true
+        while (flag) {
             var region = startList.find { region: Region -> region.id == parentId }
             if (region != null) {
                 if (region.parentId == null) {
                     country = AreaFilterModel(region.id, region.name)
-                    break
+                    flag = false
                 } else {
                     parentId = region.parentId
                 }
             }
-            break
         }
     }
 
     fun getAreaList() {
-        Log.d("MY", "ID ${currentCountry.id}")
-        if (currentCountry.id.isNullOrBlank()) {
+        if (currentCountry.id.isBlank()) {
             viewModelScope.launch {
                 interactor.getAllRegions().collect { pair ->
                     when (pair.first) {
@@ -141,10 +137,6 @@ class RegionFilterViewModel(
                 }
             }
         }
-    }
-
-    fun exitScreen() {
-        screenExitTrigger.postValue(true)
     }
 
     private companion object {
