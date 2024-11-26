@@ -37,6 +37,7 @@ class CountryFilterViewModel(
                     }
 
                     else -> {
+
                         countryListState.postValue(Pair(pair.first, null))
                     }
                 }

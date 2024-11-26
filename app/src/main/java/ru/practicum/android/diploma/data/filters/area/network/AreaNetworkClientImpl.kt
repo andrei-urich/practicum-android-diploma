@@ -12,10 +12,6 @@ class AreaNetworkClientImpl(
         return withContext(Dispatchers.IO) {
             try {
                 when (dto) {
-                    is CountryListRequest -> {
-                        CountryListResponse(apiService.getCountries(dto.locale).body()).apply { resultCode = CODE_200 }
-                    }
-
                     is RegionsRequest -> {
                         RegionListResponse(apiService.getAllRegions(dto.locale).body()).apply { resultCode = CODE_200 }
                     }

@@ -1,36 +1,38 @@
 package ru.practicum.android.diploma.data.filters.area
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import ru.practicum.android.diploma.data.filters.area.dto.CountryDTO
 import ru.practicum.android.diploma.data.filters.area.dto.RegionDTO
 import ru.practicum.android.diploma.data.filters.area.network.AreaNetworkClient
-import ru.practicum.android.diploma.data.filters.area.network.CountryListRequest
-import ru.practicum.android.diploma.data.filters.area.network.CountryListResponse
 import ru.practicum.android.diploma.data.filters.area.network.InnerRegionsRequest
 import ru.practicum.android.diploma.data.filters.area.network.RegionListResponse
 import ru.practicum.android.diploma.data.filters.area.network.RegionsRequest
+import ru.practicum.android.diploma.data.utils.RegionsConverter
 import ru.practicum.android.diploma.domain.filters.area.AreaFilterRepository
 import ru.practicum.android.diploma.domain.filters.area.model.Region
 import ru.practicum.android.diploma.domain.search.Resource
 
 class AreaFilterRepositoryImpl(
     private val networkClient: AreaNetworkClient,
+    private val converter: RegionsConverter
 ) : AreaFilterRepository {
     override suspend fun getCountriesList(): Flow<Resource<List<Region>>> = flow {
-        val request = CountryListRequest(LOCALE_RU)
+        val request = RegionsRequest(LOCALE_RU)
         val response = networkClient.doRequest(request)
         when (response.resultCode) {
             in CODE_200..CODE_299 -> {
-                if (response is CountryListResponse) {
-                    val result: List<CountryDTO> = response.result as List<CountryDTO>
-                    val countries: List<Region> = result.map {
+                if (response is RegionListResponse) {
+                    val result: List<RegionDTO> = response.regions as List<RegionDTO>
+                    val allRegions: List<Region> = result.map {
                         Region(
                             id = it.id,
                             name = it.name,
-                            parentId = null
+                            parentId = it.parentId,
+                            innerRegions = converter.innerRegionDTOtoInnerRegion(it.innerRegions)
                         )
                     }
+                    val countries = converter.regionsToCountriesMapper(allRegions)
                     emit(Resource.Success(countries))
                 } else {
                     emit(Resource.Error(response.resultCode))
@@ -52,10 +54,14 @@ class AreaFilterRepositoryImpl(
                         Region(
                             id = it.id,
                             name = it.name,
-                            parentId = it.parentId
+                            parentId = it.parentId,
+                            innerRegions = converter.innerRegionDTOtoInnerRegion(it.innerRegions)
                         )
                     }
-                    emit(Resource.Success(allRegions))
+                    Log.d("MY", allRegions.size.toString())
+                    val regions = converter.allInnerRegions(allRegions)
+                    Log.d("MY", regions.size.toString())
+                    emit(Resource.Success(regions))
                 } else {
                     emit(Resource.Error(response.resultCode))
                 }
@@ -76,7 +82,8 @@ class AreaFilterRepositoryImpl(
                         Region(
                             id = it.id,
                             name = it.name,
-                            parentId = it.parentId
+                            parentId = it.parentId,
+                            innerRegions = converter.innerRegionDTOtoInnerRegion(it.innerRegions)
                         )
                     }
                     emit(Resource.Success(innerRegions))
