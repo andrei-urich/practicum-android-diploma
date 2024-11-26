@@ -47,7 +47,23 @@
             android:textColor="@color/black_day_night"
             android:textSize="@dimen/font_16" />
 
+
     </com.google.android.material.textfield.TextInputLayout>
+    <ImageView
+        android:id="@+id/clearAreaButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/edWorkPlaceLayout"
+        app:layout_constraintEnd_toEndOf="@id/edWorkPlaceLayout"
+        app:layout_constraintTop_toTopOf="@id/edWorkPlaceLayout"
+        app:srcCompat="@drawable/close_icon"
+        app:tint="?attr/colorSecondary"
+        android:padding="@dimen/space_8"
+        android:layout_marginEnd="@dimen/space_8"
+        android:layout_marginBottom="@dimen/space_8"
+        android:background="?attr/colorSecondaryVariant"
+        android:visibility="gone"/>
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edIndustryLayout"
@@ -71,6 +87,20 @@
             android:textSize="@dimen/font_16" />
 
     </com.google.android.material.textfield.TextInputLayout>
+    <ImageView
+        android:id="@+id/clearIndustryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/edIndustryLayout"
+        app:layout_constraintEnd_toEndOf="@id/edIndustryLayout"
+        app:layout_constraintTop_toTopOf="@id/edIndustryLayout"
+        app:srcCompat="@drawable/close_icon"
+        app:tint="?attr/colorSecondary"
+        android:padding="@dimen/space_8"
+        android:layout_marginEnd="@dimen/space_8"
+        android:layout_marginBottom="@dimen/space_8"
+        android:background="?attr/colorSecondaryVariant"
+        android:visibility="gone"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutSalary"

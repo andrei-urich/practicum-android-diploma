@@ -48,14 +48,13 @@ class FilterSettingsViewModel(
 
     fun clearAreas() {
         controlFiltersInteractor.saveAreaCityFilter(AreaFilterModel(), AreaFilterModel())
-        checkIsFiltresOn()
-        checkFiltresChanges()
+        getFiltersConfiguration()
     }
 
     fun clearIndustry() {
+        industryFilterInteractor.deleteIndustrySettings()
         controlFiltersInteractor.saveIndustryFilter(IndustryFilterModel())
-        checkIsFiltresOn()
-        checkFiltresChanges()
+        getFiltersConfiguration()
     }
 
     fun clearFilters() {
