@@ -18,9 +18,9 @@ interface AreaFilterApi {
 
     @GET("/areas/{area_id}")
     suspend fun getInnerRegions(
-        @Query("locale") query: String?,
-        @Path("area_id") id: Int,
-    ): Response<ArrayList<RegionDTO>>
+        @Path("area_id") id: String,
+        @Query("locale") query: String?
+    ): InnerRegionsResponse
 
     private companion object {
         const val HH_REQUEST_HEADER = "Almighty job seeker/1.0 (andrei.urich@yandex.ru)"

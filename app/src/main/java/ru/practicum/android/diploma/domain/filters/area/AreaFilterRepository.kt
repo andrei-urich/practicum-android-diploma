@@ -7,5 +7,5 @@ import ru.practicum.android.diploma.domain.search.Resource
 interface AreaFilterRepository {
     suspend fun getCountriesList(): Flow<Resource<List<Region>>>
     suspend fun getAllRegions(): Flow<Resource<List<Region>>>
-    suspend fun getInnerRegionsList(areaId: Int): Flow<Resource<List<Region>>>
+    suspend fun getInnerRegionsList(areaId: String): Flow<Resource<List<Region>>>
 }

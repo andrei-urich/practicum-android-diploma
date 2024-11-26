@@ -6,6 +6,7 @@ import ru.practicum.android.diploma.data.filters.area.dto.AreaDTO
 import ru.practicum.android.diploma.data.filters.area.dto.RegionDTO
 import ru.practicum.android.diploma.data.filters.area.network.AreaNetworkClient
 import ru.practicum.android.diploma.data.filters.area.network.InnerRegionsRequest
+import ru.practicum.android.diploma.data.filters.area.network.InnerRegionsResponse
 import ru.practicum.android.diploma.data.filters.area.network.RegionListResponse
 import ru.practicum.android.diploma.data.filters.area.network.RegionsRequest
 import ru.practicum.android.diploma.data.utils.RegionsConverter
@@ -60,21 +61,16 @@ class AreaFilterRepositoryImpl(
         }
     }
 
-    override suspend fun getInnerRegionsList(areaId: Int): Flow<Resource<List<Region>>> = flow {
+    override suspend fun getInnerRegionsList(areaId: String): Flow<Resource<List<Region>>> = flow {
         val request = InnerRegionsRequest(LOCALE_RU, areaId)
         val response = networkClient.doRequest(request)
         when (response.resultCode) {
             in CODE_200..CODE_299 -> {
-                if (response is RegionListResponse) {
-                    val result: List<RegionDTO> = response.regions as List<RegionDTO>
-                    val innerRegions: List<Region> = result.map {
-                        Region(
-                            id = it.id,
-                            name = it.name,
-                            parentId = it.parentId,
-                        )
-                    }
-                    emit(Resource.Success(innerRegions))
+                if (response is InnerRegionsResponse) {
+                    val result: List<RegionDTO> = response.areas
+                    val areas: List<AreaDTO> = converter.allInnerRegions(result)
+                    val regions = converter.areaDTOinRegion(areas)
+                    emit(Resource.Success(converter.sortByAlfabeth(regions)))
                 } else {
                     emit(Resource.Error(response.resultCode))
                 }

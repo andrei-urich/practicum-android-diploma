@@ -36,7 +36,7 @@ class AreaFilterInteractorImpl(
         }
     }
 
-    override suspend fun getInnerRegionsList(areaId: Int): Flow<Pair<List<Region>?, Int?>> {
+    override suspend fun getInnerRegionsList(areaId: String): Flow<Pair<List<Region>?, Int?>> {
         return repository.getInnerRegionsList(areaId).map { result ->
             when (result) {
                 is Resource.Success -> {

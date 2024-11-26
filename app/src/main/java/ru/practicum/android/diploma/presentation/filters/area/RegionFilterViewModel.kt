@@ -25,6 +25,17 @@ class RegionFilterViewModel(
     private var searchText = EMPTY_STRING
     private var searchJob: Job? = null
 
+    private var currentCountry = AreaFilterModel()
+
+    init {
+        getFilterSettings()
+    }
+
+    fun getFilterSettings() {
+        val currentFilterSettings = filtersInteractor.getFiltersConfiguration()
+        val settings = currentFilterSettings.getArea()
+        currentCountry = settings.first
+    }
 
     private val regionsListState = MutableLiveData<Pair<List<Region>?, Int?>>()
     private val screenExitTrigger = SingleEventLiveData<Boolean>()
@@ -93,20 +104,41 @@ class RegionFilterViewModel(
     }
 
     fun getAreaList() {
-        viewModelScope.launch {
-            interactor.getAllRegions().collect { pair ->
-                when (pair.first) {
-                    null -> {
-                        regionsListState.postValue(Pair(null, pair.second))
-                    }
-
-                    else -> {
-                        regionsList.clear()
-                        regionsList.addAll(pair.first as List<Region>)
-                        val filteredList = regionsList.filter { region ->
-                            region.parentId != null
+        if (currentCountry.id == EMPTY_STRING) {
+            viewModelScope.launch {
+                interactor.getAllRegions().collect { pair ->
+                    when (pair.first) {
+                        null -> {
+                            regionsListState.postValue(Pair(null, pair.second))
                         }
-                        regionsListState.postValue(Pair(filteredList, null))
+
+                        else -> {
+                            regionsList.clear()
+                            regionsList.addAll(pair.first as List<Region>)
+                            val filteredList = regionsList.filter { region ->
+                                region.parentId != null
+                            }
+                            regionsListState.postValue(Pair(filteredList, null))
+                        }
+                    }
+                }
+            }
+        } else {
+            viewModelScope.launch {
+                interactor.getInnerRegionsList(currentCountry.id).collect { pair ->
+                    when (pair.first) {
+                        null -> {
+                            regionsListState.postValue(Pair(null, pair.second))
+                        }
+
+                        else -> {
+                            regionsList.clear()
+                            regionsList.addAll(pair.first as List<Region>)
+                            val filteredList = regionsList.filter { region ->
+                                region.parentId != null
+                            }
+                            regionsListState.postValue(Pair(filteredList, null))
+                        }
                     }
                 }
             }
