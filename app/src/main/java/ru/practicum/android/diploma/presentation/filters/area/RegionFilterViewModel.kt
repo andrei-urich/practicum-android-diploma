@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.presentation.filters.area
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -66,13 +65,7 @@ class RegionFilterViewModel(
 
     private fun search() {
         val regex = searchText.toRegex()
-
-        Log.d("MY", regex.toString())
-
         val filteredList = regionsList.filter { region -> region.name.lowercase(Locale.ROOT).contains(regex) }
-
-        Log.d("MY", filteredList.toString())
-
         if (filteredList.isNotEmpty()) {
             regionsListState.postValue(Pair(filteredList, null))
         } else {
@@ -84,7 +77,7 @@ class RegionFilterViewModel(
         val newRegion = AreaFilterModel(region.id, region.name)
         getCountry(region.parentId)
         filtersInteractor.saveAreaCityFilter(country, newRegion)
-        exitScreen()
+        screenExitTrigger.postValue(true)
     }
 
     private fun getCountry(id: String?) {
@@ -144,10 +137,6 @@ class RegionFilterViewModel(
                 }
             }
         }
-    }
-
-    fun exitScreen() {
-        screenExitTrigger.postValue(true)
     }
 
     private companion object {
