@@ -6,13 +6,6 @@ import ru.practicum.android.diploma.data.filters.area.dto.RegionDTO
 import ru.practicum.android.diploma.domain.filters.area.model.Region
 
 class RegionsConverter {
-    fun notEmptyRegions(list: List<RegionDTO>): List<RegionDTO> {
-        val regions = list.filter { region ->
-            region.innerRegions.isNotEmpty()
-        }
-        return regions
-    }
-
     fun onlyCountriesDTO(list: List<RegionDTO>): List<RegionDTO> {
         val countries = list.filter { region ->
             region.parentId == null
@@ -20,34 +13,38 @@ class RegionsConverter {
         return countries
     }
 
-    fun bigCitiesDTO(list: List<RegionDTO>): List<RegionDTO> {
-        val cities = list.filter { region ->
-            region.innerRegions.isEmpty()
+    fun allInnerRegions(list: List<RegionDTO>): List<AreaDTO> {
+        val innerList = mutableListOf<AreaDTO>()
+        val childlessRegions = getChildlessRegionDTO(list)
+        val regionsWithChildes = notEmptyRegions(list)
+        innerList.addAll(regionsDTOToAreaDTO(childlessRegions))
+        innerList.addAll(regionsDTOToAreaDTO(regionsWithChildes))
+        regionsWithChildes.forEach { region ->
+            innerList.addAll(getInnerList(region.innerRegions))
         }
-        return cities
+
+        return innerList
     }
 
-    fun getRegionList(list: List<RegionDTO>): List<AreaDTO> {
-        val innerList = mutableListOf<AreaDTO>()
-        for (region in list) {
-            if (region.innerRegions.isNotEmpty()) {
-                innerList.add(
-                    AreaDTO(
-                        id = region.id,
-                        name = region.name,
-                        parentId = region.parentId
-                    )
-                )
-            }
+    fun getChildlessRegionDTO(list: List<RegionDTO>): List<RegionDTO> {
+        val countries = list.filter { region ->
+            region.innerRegions.isEmpty()
         }
-        return innerList
+        return countries
+    }
+
+    fun notEmptyRegions(list: List<RegionDTO>): List<RegionDTO> {
+        val regions = list.filter { region ->
+            region.innerRegions.isNotEmpty()
+        }
+        return regions
     }
 
     fun getInnerList(list: List<InnerRegionDTO>): List<AreaDTO> {
         val innerList = mutableListOf<AreaDTO>()
-        for (region in list) {
-            if (region.innerRegions.isNotEmpty()) {
-                for (subInnerRegion in region.innerRegions) {
+        for (innerRegion in list) {
+            if (innerRegion.innerRegions.isNotEmpty()) {
+                for (subInnerRegion in innerRegion.innerRegions) {
                     innerList.add(
                         AreaDTO(
                             id = subInnerRegion.id,
@@ -58,9 +55,9 @@ class RegionsConverter {
                 }
                 innerList.add(
                     AreaDTO(
-                        id = region.id,
-                        name = region.name,
-                        parentId = region.parentId
+                        id = innerRegion.id,
+                        name = innerRegion.name,
+                        parentId = innerRegion.parentId
                     )
                 )
             }
@@ -77,20 +74,6 @@ class RegionsConverter {
             )
         }
         return areas
-    }
-
-    fun allInnerRegions(list: List<RegionDTO>): List<AreaDTO> {
-        val innerList = mutableListOf<AreaDTO>()
-        val countries = onlyCountriesDTO(list)
-        innerList.addAll(regionsDTOToAreaDTO(countries))
-        val bigCities = bigCitiesDTO(list)
-        innerList.addAll(regionsDTOToAreaDTO(bigCities))
-        val notEmptyRegions = notEmptyRegions(list)
-        notEmptyRegions.forEach { region ->
-            innerList.addAll(getInnerList(region.innerRegions))
-        }
-        innerList.addAll(getRegionList(notEmptyRegions))
-        return innerList
     }
 
     fun areaDTOinRegion(list: List<AreaDTO>): List<Region> {

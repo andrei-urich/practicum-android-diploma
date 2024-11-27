@@ -1,11 +1,13 @@
 package ru.practicum.android.diploma.ui.filters.area
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -21,6 +23,9 @@ class RegionFilterFragment : Fragment() {
     private var searchText = EMPTY_STRING
     private val adapter: AreaListAdapter by lazy {
         AreaListAdapter(regionList, viewModel::setRegion)
+    }
+    private val inputMethodManager by lazy {
+        requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
     }
 
     override fun onCreateView(
@@ -59,6 +64,8 @@ class RegionFilterFragment : Fragment() {
                 searchText = s.toString()
                 if (s?.isEmpty() == true) {
                     viewModel.clearScreen(true)
+                } else {
+                    binding.iconSearch.visibility = View.GONE
                 }
                 viewModel.getSearchText(searchText)
             }
@@ -76,6 +83,7 @@ class RegionFilterFragment : Fragment() {
         when (pair.first) {
             null -> {
                 binding.rvRegion.visibility = View.GONE
+                inputMethodManager?.hideSoftInputFromWindow(binding.regionFilter.windowToken, 0)
                 val errorCode = pair.second
                 if (errorCode != null) {
                     showError(errorCode)
@@ -95,7 +103,6 @@ class RegionFilterFragment : Fragment() {
     }
 
     private fun showError(error: Int) {
-        binding.rvRegion.visibility = View.GONE
         when (error) {
             NOTHING_FOUND -> {
                 binding.errorNoRegion.visibility = View.VISIBLE
@@ -108,9 +115,11 @@ class RegionFilterFragment : Fragment() {
     }
 
     private fun clearScreen() {
+        binding.iconSearch.visibility = View.VISIBLE
         binding.rvRegion.visibility = View.VISIBLE
         binding.errorNoRegion.visibility = View.GONE
         binding.errorNoList.visibility = View.GONE
+        inputMethodManager?.hideSoftInputFromWindow(binding.regionFilter.windowToken, 0)
         viewModel.getAreaList()
     }
 

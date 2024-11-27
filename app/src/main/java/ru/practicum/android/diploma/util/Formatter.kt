@@ -16,7 +16,7 @@ object Formatter {
         var string = EMPTY_STRING
         val string_: String
         if (vacancy.salaryFrom != null) string = FROM + moneyFormat(vacancy.salaryFrom)
-        if (vacancy.salaryFrom != null && vacancy.salaryTo == null) string = moneyFormat(vacancy.salaryFrom)
+        if (vacancy.salaryFrom != null && vacancy.salaryTo == null) string = FROM + moneyFormat(vacancy.salaryFrom)
         if (vacancy.salaryTo != null) {
             string_ = TO + moneyFormat(vacancy.salaryTo) + EMPTY_STRING_WITH_SPACE + currencyFromStr(vacancy.currency)
             string += " $string_"
