@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/regionFilter"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_day_night">
@@ -79,10 +80,10 @@
             android:id="@+id/errorNoListIv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/cant_take_list_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/cant_take_list_image"
             tools:visibility="gone" />
 
         <TextView
@@ -91,11 +92,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_16"
+            android:text="@string/search_throwable_choosing_region_tv"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/errorNoListIv"
-            tools:text="@string/search_throwable_choosing_region_tv"
             tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -115,10 +116,11 @@
             android:id="@+id/errorNoRegionIv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/cant_take_list_of_vacancy_or_region_image"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/cant_take_list_of_vacancy_or_region_image"
             tools:visibility="visible" />
 
         <TextView
@@ -127,11 +129,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_16"
+            android:text="@string/nothing_found_choosing_region_tv"
             android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/errorNoRegionIv"
-            tools:text="@string/nothing_found_choosing_region_tv"
             tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
