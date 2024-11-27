@@ -37,8 +37,8 @@
         android:layout_height="56dp"
         android:layout_marginHorizontal="@dimen/space_16"
         android:layout_marginVertical="@dimen/space_8"
-        app:endIconDrawable="@drawable/search_icon"
-        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/close_icon"
+        app:endIconMode="clear_text"
         app:expandedHintEnabled="false"
         app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,6 +63,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchLayoutField" />
+
+    <ImageView
+        android:id="@+id/iconSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/space_16"
+        android:src="@drawable/search_icon"
+        app:layout_constraintBottom_toBottomOf="@id/searchLayoutField"
+        app:layout_constraintEnd_toEndOf="@id/searchLayoutField"
+        app:layout_constraintTop_toTopOf="@id/searchLayoutField" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/errorNoList"

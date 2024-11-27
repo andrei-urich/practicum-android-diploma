@@ -64,6 +64,8 @@ class RegionFilterFragment : Fragment() {
                 searchText = s.toString()
                 if (s?.isEmpty() == true) {
                     viewModel.clearScreen(true)
+                } else {
+                    binding.iconSearch.visibility = View.GONE
                 }
                 viewModel.getSearchText(searchText)
             }
@@ -113,6 +115,7 @@ class RegionFilterFragment : Fragment() {
     }
 
     private fun clearScreen() {
+        binding.iconSearch.visibility = View.VISIBLE
         binding.rvRegion.visibility = View.VISIBLE
         binding.errorNoRegion.visibility = View.GONE
         binding.errorNoList.visibility = View.GONE
