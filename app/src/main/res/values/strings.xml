@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">Almighty job seeker</string>
+    <string name="app_name" translatable="false">Almighty job seeker</string>
 
     <!-- общие ошибки -->
     <string name="internet_throwable_tv">Нет интернета</string>
     <string name="toast_internet_throwable">Проверьте подключение к интернету</string>
     <string name="toast_unknown_error">Произошла ошибка</string>
     <string name="server_throwable_tv">Ошибка сервера</string>
-    <string name="load_vacancy_throwable_tv">Не удалось получить\nсписок вакансий</string>
+    <string name="load_vacancy_throwable_tv">Не удалось получить список вакансий</string>
     <string name="load_list_throwable_tv">Не удалось получить список</string>
 
     <!-- bottom navigation -->
@@ -40,13 +40,13 @@
 
     <!-- выбор страны -->
     <string name="choosing_country_title_tv">Выбор страны</string>
-    <string name="search_throwable_choosing_country_tv">Не удалось получить\nсписок</string>
+    <string name="search_throwable_choosing_country_tv">Не удалось получить список</string>
 
     <!-- выбор региона -->
     <string name="choosing_region_title_tv">Выбор региона</string>
     <string name="hint_choosing_region_et">Введите регион</string>
     <string name="nothing_found_choosing_region_tv">Такого региона нет</string>
-    <string name="search_throwable_choosing_region_tv">Не удалось получить\nсписок</string>
+    <string name="search_throwable_choosing_region_tv">Не удалось получить список</string>
 
     <!-- выбор отрасли -->
     <string name="choosing_industry_title_tv">Выбор отрасли</string>
@@ -64,7 +64,7 @@
     <string name="share_vacancy">Поделиться вакансией</string>
     <string name="add_favorite_vacancy">Добавить в избранное</string>
     <string name="salary_not_found">Зарплата не указана</string>
-    <string name="salary_exact">%s %s</string>
+    <string name="salary_exact" translatable="false">%s %s</string>
     <string name="salary_from">от %1$s %2$s</string>
     <string name="salary_to">до %1$s %2$s</string>
     <string name="salary_from_to">от %1$s до %2$s %3$s</string>
@@ -75,21 +75,21 @@
 
     <!-- команда -->
     <string name="about_title_tv">Команда</string>
-    <string name="workers_title_tv">Над приложением\nработали</string>
+    <string name="workers_title_tv">Над приложением работали</string>
     <string name="worker_1">Андрей Курышев</string>
     <string name="worker_2">Вячеслав Иванов</string>
     <string name="worker_3">Маркуш Казанцев</string>
     <string name="worker_4">Дмитрий Кузнецов</string>
 
     <!-- валютные обозначения -->
-    <string name="currency_symbol_azn">₼</string>
-    <string name="currency_symbol_byr">Br</string>
-    <string name="currency_symbol_eur">€</string>
-    <string name="currency_symbol_gel">₾</string>
-    <string name="currency_symbol_kgs">c</string>
-    <string name="currency_symbol_kzt">₸</string>
-    <string name="currency_symbol_rub">₽</string>
-    <string name="currency_symbol_uah">₴</string>
-    <string name="currency_symbol_usd">$</string>
-    <string name="currency_symbol_uzs">сум</string>
+    <string name="currency_symbol_azn" translatable="false">₼</string>
+    <string name="currency_symbol_byr" translatable="false">Br</string>
+    <string name="currency_symbol_eur" translatable="false">€</string>
+    <string name="currency_symbol_gel" translatable="false">₾</string>
+    <string name="currency_symbol_kgs" translatable="false">c</string>
+    <string name="currency_symbol_kzt" translatable="false">₸</string>
+    <string name="currency_symbol_rub" translatable="false">₽</string>
+    <string name="currency_symbol_uah" translatable="false">₴</string>
+    <string name="currency_symbol_usd" translatable="false">$</string>
+    <string name="currency_symbol_uzs" translatable="false">сум</string>
 </resources>
