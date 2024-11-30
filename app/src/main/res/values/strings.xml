@@ -40,7 +40,7 @@
 
     <!-- выбор страны -->
     <string name="choosing_country_title_tv">Выбор страны</string>
-    <string name="search_throwable_choosing_country_tv">>Не удалось получить\nсписок</string>
+    <string name="search_throwable_choosing_country_tv">Не удалось получить\nсписок</string>
 
     <!-- выбор региона -->
     <string name="choosing_region_title_tv">Выбор региона</string>
