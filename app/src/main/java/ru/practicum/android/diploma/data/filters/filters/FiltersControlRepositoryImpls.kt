@@ -15,22 +15,7 @@ class FiltersControlRepositoryImpls(
     private var currentFilters: Filters = Filters()
     private var lastSavedFilters = Filters()
     private var forcedSearchFlag = false
-
-    init {
-        currentFilters =
-            @Suppress("SwallowedException", "TooGenericExceptionCaught")
-            try {
-                gson.fromJson(
-                    sharedPreferences.getString(FILTERS_ACTIVE, EMPTY_STRING) ?: EMPTY_STRING,
-                    Filters::class.java
-                )
-            } catch (e: Exception) {
-                val filtersJson = gson.toJson(Filters())
-                sharedPreferences.edit().putString(FILTERS_ACTIVE, filtersJson).apply()
-                Filters()
-            }
-        lastSavedFilters = currentFilters
-    }
+    private var firstRequest = true
 
     override fun isFiltersNotEmpty(): Boolean {
         getFilterConfiguration()
@@ -80,6 +65,23 @@ class FiltersControlRepositoryImpls(
     }
 
     override fun getFilterConfiguration(): Filters {
+        if (firstRequest) {
+            currentFilters =
+                @Suppress("SwallowedException", "TooGenericExceptionCaught")
+                try {
+                    gson.fromJson(
+                        sharedPreferences.getString(FILTERS_ACTIVE, EMPTY_STRING) ?: EMPTY_STRING,
+                        Filters::class.java
+                    )
+                } catch (e: Exception) {
+                    val filtersJson = gson.toJson(Filters())
+                    sharedPreferences.edit().putString(FILTERS_ACTIVE, filtersJson).apply()
+                    Filters()
+                }
+            lastSavedFilters = currentFilters
+            firstRequest = false
+            return currentFilters
+        }
         currentFilters =
             gson.fromJson(
                 sharedPreferences.getString(FILTERS_ACTIVE, EMPTY_STRING) ?: EMPTY_STRING,
@@ -95,7 +97,6 @@ class FiltersControlRepositoryImpls(
 
     override fun forceSearch() {
         forcedSearchFlag = true
-        println()
     }
 
     companion object {

@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -73,7 +74,12 @@ class FilterSettingsFragment : Fragment() {
             viewModel.saveSalaryShowCheckFilter(binding.checkBoxSalary.isChecked)
         }
         binding.textInputEditTextSalary.addTextChangedListener(textWatcher)
-        binding.backFromFilter.setOnClickListener { findNavController().navigateUp() }
+        binding.backFromFilter.setOnClickListener { backPress() }
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                backPress()
+            }
+        })
         binding.edWorkPlace.setOnClickListener {
             findNavController().navigate(R.id.action_filterSettingsFragment_to_areaFilterFragment)
         }
@@ -106,5 +112,18 @@ class FilterSettingsFragment : Fragment() {
 
     private fun makeGone(view: View) {
         view.visibility = View.GONE
+    }
+    private fun backPress() {
+        viewModel.fixFiltres()
+        findNavController().navigateUp()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigateUp()
+            }
+        })
     }
 }
