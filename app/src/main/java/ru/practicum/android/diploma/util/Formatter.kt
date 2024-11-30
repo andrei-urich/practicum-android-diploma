@@ -70,10 +70,17 @@ object Formatter {
         }
     }
     private fun changeLanguage(language: String = Locale.getDefault().displayLanguage) {
-        if (language == "English") {
-            SALARY_NOT_SPECIFIED = "The salary is not specified"
-            FROM = "from "
-            TO = "to "
+        when (language) {
+            "Russian" -> {
+                SALARY_NOT_SPECIFIED = "Зарплата не указана"
+                FROM = "от "
+                TO = "до "
+            }
+            else -> {
+                SALARY_NOT_SPECIFIED = "The salary is not specified"
+                FROM = "from "
+                TO = "to "
+            }
         }
     }
     private const val EMPTY_STRING = ""

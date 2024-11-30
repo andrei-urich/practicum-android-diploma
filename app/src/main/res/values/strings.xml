@@ -6,7 +6,7 @@
     <string name="toast_internet_throwable">Проверьте подключение к интернету</string>
     <string name="toast_unknown_error">Произошла ошибка</string>
     <string name="server_throwable_tv">Ошибка сервера</string>
-    <string name="load_vacancy_throwable_tv">Не удалось получить список вакансий</string>
+    <string name="load_vacancy_throwable_tv">Не удалось получить\nсписок вакансий</string>
     <string name="load_list_throwable_tv">Не удалось получить список</string>
 
     <!-- bottom navigation -->
@@ -40,7 +40,7 @@
 
     <!-- выбор страны -->
     <string name="choosing_country_title_tv">Выбор страны</string>
-    <string name="search_throwable_choosing_country_tv">Не удалось получить список</string>
+    <string name="search_throwable_choosing_country_tv">>Не удалось получить\nсписок</string>
 
     <!-- выбор региона -->
     <string name="choosing_region_title_tv">Выбор региона</string>
@@ -75,7 +75,7 @@
 
     <!-- команда -->
     <string name="about_title_tv">Команда</string>
-    <string name="workers_title_tv">Над приложением работали</string>
+    <string name="workers_title_tv">Над приложением\nработали</string>
     <string name="worker_1">Андрей Курышев</string>
     <string name="worker_2">Вячеслав Иванов</string>
     <string name="worker_3">Маркуш Казанцев</string>
