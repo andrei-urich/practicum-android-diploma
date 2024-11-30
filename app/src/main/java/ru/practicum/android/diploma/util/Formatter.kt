@@ -5,11 +5,13 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.data.utils.Currency
 import ru.practicum.android.diploma.data.vacancydetails.SalaryInfo
 import ru.practicum.android.diploma.domain.search.models.VacancyShort
+import java.util.Locale
 
 object Formatter {
     fun getSalary(
-        vacancy: VacancyShort
+        vacancy: VacancyShort,
     ): String {
+        changeLanguage()
         if (vacancy.salaryFrom == null && vacancy.salaryTo == null) {
             return SALARY_NOT_SPECIFIED
         }
@@ -67,10 +69,24 @@ object Formatter {
             }
         }
     }
+    private fun changeLanguage(language: String = Locale.getDefault().displayLanguage) {
+        when (language) {
+            "Russian" -> {
+                SALARY_NOT_SPECIFIED = "Зарплата не указана"
+                FROM = "от "
+                TO = "до "
+            }
+            else -> {
+                SALARY_NOT_SPECIFIED = "The salary is not specified"
+                FROM = "from "
+                TO = "to "
+            }
+        }
+    }
     private const val EMPTY_STRING = ""
     private const val EMPTY_STRING_WITH_SPACE = " "
-    private const val SALARY_NOT_SPECIFIED = "Зарплата не указана"
-    private const val FROM = "от "
-    private const val TO = "до "
+    private var SALARY_NOT_SPECIFIED = "Зарплата не указана"
+    private var FROM = "от "
+    private var TO = "до "
 
 }
