@@ -46,15 +46,19 @@ class AreaFilterFragment : Fragment() {
         }
 
         binding.countryBtnLayout.setOnClickListener {
-            if (countryIsBlank) findNavController().navigate(
-                R.id.action_areaFilterFragment_to_countryFilterFragment
-            )
+            if (countryIsBlank) {
+                findNavController().navigate(
+                    R.id.action_areaFilterFragment_to_countryFilterFragment
+                )
+            }
         }
 
         binding.regionBtnLayout.setOnClickListener {
-            if (regionIsBlank) findNavController().navigate(
-                R.id.action_areaFilterFragment_to_regionFilterFragment
-            )
+            if (regionIsBlank) {
+                findNavController().navigate(
+                    R.id.action_areaFilterFragment_to_regionFilterFragment
+                )
+            }
         }
 
         binding.btApply.setOnClickListener {
