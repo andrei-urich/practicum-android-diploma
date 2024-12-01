@@ -21,8 +21,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginEnd="@dimen/space_20"
-            android:src="@drawable/filter_off_icon"
-            app:tint="?attr/colorSecondary" />
+            android:alpha="1"
+            />
     </com.google.android.material.appbar.MaterialToolbar>
 
     <com.google.android.material.textfield.TextInputLayout

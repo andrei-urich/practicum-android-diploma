@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -24,5 +25,161 @@
             android:layout_marginStart="@dimen/space_16"
             android:text="@string/filter_settings_title_tv" />
     </com.google.android.material.appbar.MaterialToolbar>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edWorkPlaceLayout"
+        style="@style/Widget.EdText.TextInputLayout"
+        android:hint="@string/place_of_work_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edWorkPlace"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white_day_night"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:fontFamily="@font/ys_display_regular"
+            android:inputType="textNoSuggestions"
+            android:longClickable="false"
+            android:textColor="@color/black_day_night"
+            android:textSize="@dimen/font_16" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <ImageView
+        android:id="@+id/clearAreaButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/edWorkPlaceLayout"
+        app:layout_constraintEnd_toEndOf="@id/edWorkPlaceLayout"
+        app:layout_constraintTop_toTopOf="@id/edWorkPlaceLayout"
+        app:srcCompat="@drawable/close_icon"
+        app:tint="?attr/colorSecondary"
+        android:padding="@dimen/space_8"
+        android:layout_marginEnd="@dimen/space_8"
+        android:layout_marginBottom="@dimen/space_8"
+        android:background="?attr/colorSecondaryVariant"
+        android:visibility="gone"/>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edIndustryLayout"
+        style="@style/Widget.EdText.TextInputLayout"
+        android:hint="@string/industry_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edWorkPlaceLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edIndustry"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white_day_night"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:fontFamily="@font/ys_display_regular"
+            android:inputType="textNoSuggestions"
+            android:longClickable="false"
+            android:textColor="@color/black_day_night"
+            android:textSize="@dimen/font_16" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <ImageView
+        android:id="@+id/clearIndustryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/edIndustryLayout"
+        app:layout_constraintEnd_toEndOf="@id/edIndustryLayout"
+        app:layout_constraintTop_toTopOf="@id/edIndustryLayout"
+        app:srcCompat="@drawable/close_icon"
+        app:tint="?attr/colorSecondary"
+        android:padding="@dimen/space_8"
+        android:layout_marginEnd="@dimen/space_8"
+        android:layout_marginBottom="@dimen/space_8"
+        android:background="?attr/colorSecondaryVariant"
+        android:visibility="gone"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutSalary"
+        style="@style/Widget.App.SalaryInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_16"
+        android:layout_marginTop="@dimen/space_24"
+        android:hint="@string/expected_salary_hint_et"
+        android:minHeight="51dp"
+        app:endIconDrawable="@drawable/close_icon"
+        app:endIconMode="clear_text"
+        app:expandedHintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edIndustryLayout"
+        app:placeholderText="@string/amount_hint_et">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditTextSalary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tvSalaryNotShow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_16"
+        android:layout_marginTop="44dp"
+        android:fontFamily="@font/ys_display_regular"
+        android:text="@string/hide_without_salary_tv"
+        android:textColor="?attr/colorSecondary"
+        android:textSize="@dimen/font_16"
+        app:layout_constraintEnd_toStartOf="@id/checkBoxSalary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayoutSalary" />
+
+    <CheckBox
+        android:id="@+id/checkBoxSalary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/blue"
+        app:layout_constraintBottom_toBottomOf="@id/tvSalaryNotShow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvSalaryNotShow"
+        app:layout_constraintTop_toTopOf="@id/tvSalaryNotShow" />
+
+    <Button
+        android:id="@+id/btApply"
+        style="@style/bigBlueButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_17"
+        android:layout_marginBottom="@dimen/space_8"
+        android:letterSpacing="0"
+        android:text="@string/apply_btn"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/btClear"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btClear"
+        style="@style/whiteElements"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_17"
+        android:layout_marginBottom="@dimen/space_24"
+        android:letterSpacing="0"
+        android:text="@string/reset_btn"
+        android:textAllCaps="false"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

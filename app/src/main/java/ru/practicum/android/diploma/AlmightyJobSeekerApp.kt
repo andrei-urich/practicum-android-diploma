@@ -4,15 +4,21 @@ import android.app.Application
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import ru.practicum.android.diploma.di.favorite.favoriteDataModule
-import ru.practicum.android.diploma.di.favorite.favoriteInteractorModule
-import ru.practicum.android.diploma.di.favorite.favoriteRepositoryModule
 import ru.practicum.android.diploma.di.favorite.favoriteViewModelModule
+import ru.practicum.android.diploma.di.filters.filtersDataModule
+import ru.practicum.android.diploma.di.filters.filtersInteractorModule
+import ru.practicum.android.diploma.di.filters.filtersRepositoryModule
+import ru.practicum.android.diploma.di.filters.filtersViewModelModule
 import ru.practicum.android.diploma.di.search.searchDataModule
+import ru.practicum.android.diploma.di.search.searchInteractorModule
+import ru.practicum.android.diploma.di.search.searchRepositoryModule
 import ru.practicum.android.diploma.di.search.searchViewModelModule
 import ru.practicum.android.diploma.di.vacancydetails.vacancyDetailsDataModule
 import ru.practicum.android.diploma.di.vacancydetails.vacancyDetailsInteractorModule
 import ru.practicum.android.diploma.di.vacancydetails.vacancyDetailsRepositoryModule
 import ru.practicum.android.diploma.di.vacancydetails.vacancyDetailsViewModelModule
+
+const val FILTERS_ACTIVE = "FILTERS_ACTIVE"
 
 class AlmightyJobSeekerApp : Application() {
     override fun onCreate() {
@@ -22,15 +28,19 @@ class AlmightyJobSeekerApp : Application() {
             androidContext(this@AlmightyJobSeekerApp)
             modules(
                 searchDataModule,
+                searchViewModelModule,
+                searchInteractorModule,
+                searchRepositoryModule,
                 vacancyDetailsDataModule,
                 vacancyDetailsRepositoryModule,
                 vacancyDetailsInteractorModule,
                 vacancyDetailsViewModelModule,
                 favoriteDataModule,
-                favoriteRepositoryModule,
-                favoriteInteractorModule,
                 favoriteViewModelModule,
-                searchViewModelModule
+                filtersDataModule,
+                filtersInteractorModule,
+                filtersRepositoryModule,
+                filtersViewModelModule
             )
         }
     }

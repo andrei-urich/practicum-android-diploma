@@ -16,7 +16,6 @@ import ru.practicum.android.diploma.domain.vacancydetails.api.VacancyDetailsRepo
 import ru.practicum.android.diploma.domain.vacancydetails.models.Address
 import ru.practicum.android.diploma.domain.vacancydetails.models.Details
 import ru.practicum.android.diploma.domain.vacancydetails.models.VacancyDetails
-import ru.practicum.android.diploma.util.EMPTY_STRING
 
 class VacancyDetailsRepositoryImpl(private val networkClientDetails: NetworkRequestDetails) : VacancyDetailsRepository {
     override fun getVacancyDetails(vacancyId: String): Flow<ResourceDetails<VacancyDetails?>> = flow {
@@ -28,6 +27,41 @@ class VacancyDetailsRepositoryImpl(private val networkClientDetails: NetworkRequ
             else -> {
                 emit(ResourceDetails.Error(response.errorType))
             }
+        }
+    }
+
+    private fun transformSalaryInfo(salary: SalaryDto): SalaryInfo? {
+        return salary.let {
+            SalaryInfo(
+                salaryFrom = salary.from,
+                salaryTo = salary.to,
+                salaryCurrency = salary.currency
+            )
+        }
+    }
+
+    private fun transformAddress(addressDto: AddressDto?): Address {
+        return addressDto?.let {
+            Address(
+                city = it.city,
+                building = it.building,
+                street = it.street,
+                description = it.description
+            )
+        } ?: Address(
+            city = EMPTY_STRING,
+            building = EMPTY_STRING,
+            street = EMPTY_STRING,
+            description = EMPTY_STRING
+        )
+    }
+
+    private fun transformExperience(experience: NameInfoDto): NameInfo {
+        return experience.let {
+            NameInfo(
+                id = it.id ?: EMPTY_STRING,
+                name = it.name
+            )
         }
     }
 
@@ -69,36 +103,7 @@ class VacancyDetailsRepositoryImpl(private val networkClientDetails: NetworkRequ
         )
     }
 
-    private fun transformSalaryInfo(salary: SalaryDto): SalaryInfo? {
-        return SalaryInfo(
-            salaryFrom = salary.from,
-            salaryTo = salary.to,
-            salaryCurrency = salary.currency
-        )
-    }
-
-    private fun transformAddress(addressDto: AddressDto?): Address {
-        return addressDto?.let {
-            Address(
-                city = it.city,
-                building = it.building,
-                street = it.street,
-                description = it.description
-            )
-        } ?: Address(
-            city = EMPTY_STRING,
-            building = EMPTY_STRING,
-            street = EMPTY_STRING,
-            description = EMPTY_STRING
-        )
-    }
-
-    private fun transformExperience(experience: NameInfoDto): NameInfo {
-        return experience.let {
-            NameInfo(
-                id = it.id ?: EMPTY_STRING,
-                name = it.name
-            )
-        }
+    private companion object {
+        const val EMPTY_STRING = ""
     }
 }

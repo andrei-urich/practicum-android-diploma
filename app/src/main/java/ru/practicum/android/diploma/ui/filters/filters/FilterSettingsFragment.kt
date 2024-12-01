@@ -1,0 +1,110 @@
+package ru.practicum.android.diploma.ui.filters.filters
+
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.databinding.FragmentFilterBinding
+import ru.practicum.android.diploma.presentation.filters.settings.FilterSettingsViewModel
+import ru.practicum.android.diploma.presentation.filters.settings.FiltersUIModel
+import ru.practicum.android.diploma.util.debounce
+
+class FilterSettingsFragment : Fragment() {
+    private var _binding: FragmentFilterBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel by viewModel<FilterSettingsViewModel>()
+    private val saveSalaryTargetDebounce by lazy {
+        debounce<String>(SAVE_SALARY_TARGET_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, true) { newSalary ->
+            viewModel.saveNewSalaryTarget(newSalary)
+        }
+    }
+    private val textWatcher by lazy {
+        object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                println()
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                saveSalaryTargetDebounce(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                println()
+            }
+        }
+
+    }
+
+    companion object {
+        private const val SAVE_SALARY_TARGET_DEBOUNCE_DELAY = 100L
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentFilterBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.getIsFiltersOnLD().observe(viewLifecycleOwner) { if (it) showClearButton() else hideClearButton() }
+        viewModel.getFiltersConfigurationLD().observe(viewLifecycleOwner) { renderFilters(it) }
+        viewModel.getIsFiltresChangedLD().observe(viewLifecycleOwner) {
+            if (it) showApplyButton() else hideApplyButton()
+        }
+        viewModel.getFiltersConfiguration()
+        binding.edIndustry.addTextChangedListener {
+            if (it.isNullOrEmpty()) makeGone(binding.clearIndustryButton) else makeVisible(binding.clearIndustryButton)
+        }
+
+        binding.edWorkPlace.addTextChangedListener {
+            if (it.isNullOrEmpty()) makeGone(binding.clearAreaButton) else makeVisible(binding.clearAreaButton)
+        }
+        binding.clearAreaButton.setOnClickListener { viewModel.clearAreas() }
+        binding.clearIndustryButton.setOnClickListener { viewModel.clearIndustry() }
+        binding.checkBoxSalary.setOnClickListener {
+            viewModel.saveSalaryShowCheckFilter(binding.checkBoxSalary.isChecked)
+        }
+        binding.textInputEditTextSalary.addTextChangedListener(textWatcher)
+        binding.backFromFilter.setOnClickListener { findNavController().navigateUp() }
+        binding.edWorkPlace.setOnClickListener {
+            findNavController().navigate(R.id.action_filterSettingsFragment_to_areaFilterFragment)
+        }
+        binding.edIndustry.setOnClickListener {
+            findNavController().navigate(R.id.action_filterSettingsFragment_to_industryFilterFragment)
+        }
+        binding.btClear.setOnClickListener { viewModel.clearFilters() }
+        binding.btApply.setOnClickListener {
+            viewModel.fixFiltres()
+            viewModel.forceSearch()
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun hideClearButton() { makeGone(binding.btClear) }
+    private fun showClearButton() { makeVisible(binding.btClear) }
+    private fun hideApplyButton() { makeGone(binding.btApply) }
+    private fun showApplyButton() { makeVisible(binding.btApply) }
+    private fun renderFilters(filterUI: FiltersUIModel) {
+        with(binding) {
+            edWorkPlace.setText(filterUI.areaNCity)
+            edIndustry.setText(filterUI.industry)
+            textInputEditTextSalary.setText(filterUI.salaryTarget)
+            checkBoxSalary.isChecked = filterUI.salaryShowChecked
+        }
+    }
+    private fun makeVisible(view: View) {
+        view.visibility = View.VISIBLE
+    }
+
+    private fun makeGone(view: View) {
+        view.visibility = View.GONE
+    }
+}

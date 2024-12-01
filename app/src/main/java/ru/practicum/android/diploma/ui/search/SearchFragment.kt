@@ -20,11 +20,6 @@ import ru.practicum.android.diploma.domain.search.models.VacancyShort
 import ru.practicum.android.diploma.presentation.search.SearchState
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.ui.vacancydetails.VacancyDetailsFragment
-import ru.practicum.android.diploma.util.EMPTY_STRING
-import ru.practicum.android.diploma.util.RESULT_CODE_BAD_REQUEST
-import ru.practicum.android.diploma.util.RESULT_CODE_NO_INTERNET_ERROR
-import ru.practicum.android.diploma.util.RESULT_CODE_SERVER_ERROR
-import ru.practicum.android.diploma.util.ZERO
 
 class SearchFragment : Fragment() {
     private var searchText = EMPTY_STRING
@@ -53,7 +48,6 @@ class SearchFragment : Fragment() {
 
         startPlaceholderVisibility(true)
         binding.vacancyListRv.layoutManager = LinearLayoutManager(requireActivity())
-
         val searchTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 println()
@@ -61,7 +55,7 @@ class SearchFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchText = s.toString()
-                if (binding.searchEditText.hasFocus() && s?.isEmpty() == true) {
+                if (s?.isEmpty() == true) {
                     viewModel.clearScreen(true)
                     binding.vacancyListRv.visibility = View.GONE
                     binding.vacanciesFound.visibility = View.GONE
@@ -77,12 +71,22 @@ class SearchFragment : Fragment() {
         }
         binding.searchEditText.addTextChangedListener(searchTextWatcher)
 
-        viewModel.getSearchStateLiveData().observe(viewLifecycleOwner) { pair ->
-            changeContentVisibility(pair.first, pair.second)
+        viewModel.getSearchStateLiveData().observe(viewLifecycleOwner) { state ->
+            changeContentVisibility(state)
         }
 
         viewModel.getOpenTrigger().observe(viewLifecycleOwner) { vacancy ->
-            showVacancy(vacancy.vacancyId)
+            findNavController().navigate(
+                R.id.action_searchFragment_to_vacancyDetailsFragment,
+                VacancyDetailsFragment.createArgs(vacancy.vacancyId)
+            )
+        }
+        viewModel.getErrorLoadingNextPageTrigger().observe(viewLifecycleOwner) { errorCode ->
+            showSearchError(errorCode, true)
+        }
+
+        viewModel.getPositionNewPageToScroll().observe(viewLifecycleOwner) { position ->
+            setRecyclerPositionNextPage(position)
         }
 
         binding.vacancyListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -98,16 +102,28 @@ class SearchFragment : Fragment() {
                 }
             }
         })
+        setFilterIconAndCheckSearchText()
     }
 
-    private fun showVacancy(vacancyId: String?) {
-        findNavController().navigate(
-            R.id.action_searchFragment_to_vacancyDetailsFragment,
-            VacancyDetailsFragment.createArgs(vacancyId)
-        )
+    private fun setFilterIconAndCheckSearchText() {
+        binding.searchFilter.setOnClickListener {
+            findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
+        }
+        if (viewModel.checkFiltersNotEmpty()) {
+            binding.searchFilter.setImageResource(R.drawable.filter_on_icon)
+        } else {
+            binding.searchFilter.setImageResource(R.drawable.filter_off_icon)
+        }
+        if (searchText.isNotEmpty()) {
+            if (viewModel.isSearchForced()) {
+                viewModel.getSearchText(binding.searchEditText.text.toString())
+            } else {
+                println()
+            }
+        }
     }
 
-    private fun changeContentVisibility(searchState: SearchState, position: Int?) {
+    private fun changeContentVisibility(searchState: SearchState) {
         when (searchState) {
             is SearchState.Prepared -> {
                 clearScreen()
@@ -118,15 +134,11 @@ class SearchFragment : Fragment() {
                 showSearchError(searchState.resultCode, false)
             }
 
-            is SearchState.NextPageLoadingError -> {
-                showSearchError(searchState.resultCode, true)
-            }
-
             is SearchState.Content -> {
                 clearScreen()
                 vacancies.clear()
                 vacancies.addAll(searchState.vacancyList.toMutableList())
-                renderContent(vacancies, position)
+                renderContent(vacancies)
             }
 
             is SearchState.Loading -> {
@@ -210,7 +222,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun renderContent(vacancies: List<VacancyShort>, position: Int?) {
+    private fun renderContent(vacancies: List<VacancyShort>) {
         if (vacancies.isNotEmpty()) {
             binding.vacanciesFound.text = requireActivity().resources.getQuantityString(
                 R.plurals.vacancy_number,
@@ -222,9 +234,6 @@ class SearchFragment : Fragment() {
             binding.vacancyListRv.adapter = searchAdapter
             searchAdapter.notifyDataSetChanged()
 
-            if (position != null) {
-                binding.vacancyListRv.scrollToPosition(position)
-            }
         } else {
             showSearchError(null, false)
         }
@@ -233,5 +242,19 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         _viewBinding = null
         super.onDestroyView()
+    }
+
+    private fun setRecyclerPositionNextPage(position: Int) {
+        if (vacancies.size > position) {
+            binding.vacancyListRv.scrollToPosition(position)
+        }
+    }
+
+    private companion object {
+        const val EMPTY_STRING = ""
+        const val RESULT_CODE_BAD_REQUEST = 400
+        const val RESULT_CODE_NO_INTERNET_ERROR = 504
+        const val RESULT_CODE_SERVER_ERROR = 500
+        const val ZERO = 0
     }
 }

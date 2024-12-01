@@ -2,10 +2,6 @@ package ru.practicum.android.diploma.data.search.network
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import ru.practicum.android.diploma.util.CODE_200
-import ru.practicum.android.diploma.util.RESULT_CODE_BAD_REQUEST
-import ru.practicum.android.diploma.util.RESULT_CODE_NO_INTERNET_ERROR
-import ru.practicum.android.diploma.util.RESULT_CODE_SERVER_ERROR
 import java.io.IOException
 
 class RetrofitNetworkClient(
@@ -26,5 +22,11 @@ class RetrofitNetworkClient(
                 Response().apply { resultCode = RESULT_CODE_NO_INTERNET_ERROR }
             }
         }
+    }
+    private companion object {
+        const val RESULT_CODE_BAD_REQUEST = 400
+        const val RESULT_CODE_SERVER_ERROR = 500
+        const val RESULT_CODE_NO_INTERNET_ERROR = 504
+        const val CODE_200 = 200
     }
 }
