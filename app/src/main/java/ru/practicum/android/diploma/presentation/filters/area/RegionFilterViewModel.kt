@@ -101,8 +101,8 @@ class RegionFilterViewModel(
     }
 
     fun getAreaList() {
-        if (currentCountry.id.isBlank()) {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            if (currentCountry.id.isBlank()) {
                 interactor.getAllRegions().collect { pair ->
                     when (pair.first) {
                         null -> {
@@ -119,9 +119,7 @@ class RegionFilterViewModel(
                         }
                     }
                 }
-            }
-        } else {
-            viewModelScope.launch {
+            } else {
                 interactor.getInnerRegionsList(currentCountry.id).collect { pair ->
                     when (pair.first) {
                         null -> {
