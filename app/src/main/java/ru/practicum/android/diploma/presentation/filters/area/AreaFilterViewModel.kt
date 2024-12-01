@@ -14,12 +14,17 @@ class AreaFilterViewModel(
     private val filterValueLiveData = MutableLiveData<Pair<String, String>>()
     fun getFilterValueLiveData(): LiveData<Pair<String, String>> = filterValueLiveData
 
+    init {
+        getFilterSettings()
+    }
+
     fun getFilterSettings() {
         val currentFilterSettings = interactor.getFiltersConfiguration()
         val settings = currentFilterSettings.getArea()
-
         currentCountry = settings.first
         currentRegion = settings.second
         filterValueLiveData.postValue(Pair(currentCountry.name, currentRegion.name))
     }
+
+
 }
