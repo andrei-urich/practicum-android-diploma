@@ -35,14 +35,11 @@ class AreaFilterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.countryBtnTrailingIcon.setOnClickListener {
-            clearCountryField()
-            clearRegionField()
+            viewModel.clearCountry()
         }
         binding.regionBtnTrailingIcon.setOnClickListener {
-            clearRegionField()
+            viewModel.clearRegion()
         }
-
-        viewModel.getFilterSettings()
 
         binding.toolbar.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -60,8 +57,22 @@ class AreaFilterFragment : Fragment() {
             )
         }
 
+        binding.btApply.setOnClickListener {
+            viewModel.setFilter()
+        }
+
         viewModel.getFilterValueLiveData().observe(viewLifecycleOwner) {
             renderData(it)
+        }
+        viewModel.getButtonChoiceVisibilityLiveData().observe(viewLifecycleOwner) { flag ->
+            if (flag) {
+                binding.btApply.visibility = View.VISIBLE
+            } else {
+                binding.btApply.visibility = View.GONE
+            }
+        }
+        viewModel.getScreenExitTrigger().observe(viewLifecycleOwner) { flag ->
+            if (flag) requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 
@@ -77,6 +88,7 @@ class AreaFilterFragment : Fragment() {
         )
         binding.countryBtnTrailingIcon.isClickable = false
         countryIsBlank = true
+        binding.btApply.visibility = View.GONE
     }
 
     private fun clearRegionField() {
