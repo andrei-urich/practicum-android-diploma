@@ -21,8 +21,8 @@ class RegionsConverter {
         innerList.addAll(regionsDTOToAreaDTO(regionsWithChildes))
         regionsWithChildes.forEach { region ->
             innerList.addAll(getInnerList(region.innerRegions))
+            innerList.addAll(innerRegionsDTOToAreaDTO(region.innerRegions))
         }
-
         return innerList
     }
 
@@ -66,7 +66,18 @@ class RegionsConverter {
     }
 
     fun regionsDTOToAreaDTO(list: List<RegionDTO>): List<AreaDTO> {
-        var areas = list.map {
+        val areas = list.map {
+            AreaDTO(
+                id = it.id,
+                name = it.name,
+                parentId = it.parentId
+            )
+        }
+        return areas
+    }
+
+    private fun innerRegionsDTOToAreaDTO(list: List<InnerRegionDTO>): List<AreaDTO> {
+        val areas = list.map {
             AreaDTO(
                 id = it.id,
                 name = it.name,
