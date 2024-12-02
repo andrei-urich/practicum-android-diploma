@@ -66,7 +66,9 @@ class RegionFilterViewModel(
         if (regionsList.isNotEmpty()) {
             regionsListState.postValue(SearchAreaState.Loading)
             val regex = searchText.toRegex()
-            val filteredList = regionsList.filter { region -> region.name.lowercase(Locale.ROOT).contains(regex) }
+            val filteredList = regionsList.filter { region ->
+                region.name.lowercase(Locale.ROOT).contains(regex)
+            }
             if (filteredList.isNotEmpty()) {
                 regionsListState.postValue(SearchAreaState.Content(filteredList))
             } else {
@@ -76,7 +78,6 @@ class RegionFilterViewModel(
             regionsListState.postValue(SearchAreaState.Error(ERROR))
         }
     }
-
 
     fun setRegion(region: Region) {
         val newRegion = AreaFilterModel(region.id, region.name)
