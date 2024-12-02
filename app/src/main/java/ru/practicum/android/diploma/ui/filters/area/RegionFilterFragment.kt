@@ -76,7 +76,6 @@ class RegionFilterFragment : Fragment() {
             }
         }
         binding.searchEditText.addTextChangedListener(searchTextWatcher)
-
     }
 
     private fun renderState(state: SearchAreaState) {
@@ -108,7 +107,6 @@ class RegionFilterFragment : Fragment() {
                 clearScreen()
                 showError(state.resultCode)
             }
-
         }
     }
 
