@@ -14,6 +14,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentRegionFilterBinding
 import ru.practicum.android.diploma.domain.filters.area.model.Region
 import ru.practicum.android.diploma.presentation.filters.area.RegionFilterViewModel
+import ru.practicum.android.diploma.presentation.filters.area.SearchAreaState
 
 class RegionFilterFragment : Fragment() {
     private var _binding: FragmentRegionFilterBinding? = null
@@ -29,9 +30,7 @@ class RegionFilterFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRegionFilterBinding.inflate(inflater, container, false)
         return binding.root
@@ -78,31 +77,40 @@ class RegionFilterFragment : Fragment() {
 
     }
 
-    private fun renderState(pair: Pair<List<Region>?, Int?>) {
-        binding.pbRegion.visibility = View.GONE
-        when (pair.first) {
-            null -> {
-                binding.rvRegion.visibility = View.GONE
-                inputMethodManager?.hideSoftInputFromWindow(binding.regionFilter.windowToken, 0)
-                val errorCode = pair.second
-                if (errorCode != null) {
-                    showError(errorCode)
+    private fun renderState(state: SearchAreaState) {
+        when (state) {
+            SearchAreaState.Prepared -> {
+                clearScreenAndReload()
+            }
+
+            SearchAreaState.Loading -> {
+                clearScreen()
+                binding.pbRegion.visibility = View.VISIBLE
+            }
+
+            is SearchAreaState.Content -> {
+                clearScreen()
+                if (state.areaList.isNotEmpty()) {
+                    binding.rvRegion.visibility = View.VISIBLE
+                    binding.rvRegion.adapter = adapter
+                    regionList.clear()
+                    regionList.addAll(state.areaList as MutableList<Region>)
+                    adapter.notifyDataSetChanged()
+
                 } else {
-                    clearScreen()
+                    showError(NOTHING_FOUND)
                 }
             }
 
-            else -> {
-                binding.rvRegion.visibility = View.VISIBLE
-                binding.rvRegion.adapter = adapter
-                regionList.clear()
-                regionList.addAll(pair.first as MutableList<Region>)
-                adapter.notifyDataSetChanged()
+            is SearchAreaState.Error -> {
+                clearScreen()
+                showError(state.resultCode)
             }
+
         }
     }
 
-    private fun showError(error: Int) {
+    private fun showError(error: Int?) {
         when (error) {
             NOTHING_FOUND -> {
                 binding.errorNoRegion.visibility = View.VISIBLE
@@ -114,13 +122,19 @@ class RegionFilterFragment : Fragment() {
         }
     }
 
-    private fun clearScreen() {
+    private fun clearScreenAndReload() {
+        clearScreen()
         binding.iconSearch.visibility = View.VISIBLE
         binding.rvRegion.visibility = View.VISIBLE
+        viewModel.getAreaList()
+    }
+
+    private fun clearScreen() {
+        inputMethodManager?.hideSoftInputFromWindow(binding.regionFilter.windowToken, 0)
         binding.errorNoRegion.visibility = View.GONE
         binding.errorNoList.visibility = View.GONE
-        inputMethodManager?.hideSoftInputFromWindow(binding.regionFilter.windowToken, 0)
-        viewModel.getAreaList()
+        binding.rvRegion.visibility = View.GONE
+        binding.pbRegion.visibility = View.GONE
     }
 
     private companion object {
