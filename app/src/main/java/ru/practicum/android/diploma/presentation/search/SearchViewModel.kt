@@ -101,7 +101,7 @@ class SearchViewModel(
         }
         if (interactor.checkNet()) noNextPageLoadingError = true
         if (currentPage < pages) {
-            position = (currentPage) * PER_PAGE
+            position = currentPage * PER_PAGE
             request(SearchState.LoadingNextPage)
         }
     }
