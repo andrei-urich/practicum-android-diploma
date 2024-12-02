@@ -71,15 +71,15 @@ object Formatter {
     }
     private fun changeLanguage(language: String = Locale.getDefault().displayLanguage) {
         when (language) {
-            "Russian" -> {
-                SALARY_NOT_SPECIFIED = "Зарплата не указана"
-                FROM = "от "
-                TO = "до "
-            }
-            else -> {
+            "English" -> {
                 SALARY_NOT_SPECIFIED = "The salary is not specified"
                 FROM = "from "
                 TO = "to "
+            }
+            else -> {
+                SALARY_NOT_SPECIFIED = "Зарплата не указана"
+                FROM = "от "
+                TO = "до "
             }
         }
     }
