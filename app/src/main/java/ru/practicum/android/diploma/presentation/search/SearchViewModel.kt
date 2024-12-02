@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.search
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -39,6 +40,10 @@ class SearchViewModel(
 
     fun getSearchText(searchText: String) {
         if (searchText.isNotBlank() && (this.searchText != searchText || searchIsForcedByFilters)) {
+            currentPage = ZERO
+            pages = ZERO
+            position = ZERO
+            vacancyList.clear()
             this.searchText = searchText
             if (searchIsForcedByFilters) {
                 searchStateLiveData.postValue(SearchState.Loading)
@@ -78,8 +83,21 @@ class SearchViewModel(
                         else -> {
                             val vacancies: List<VacancyShort> = pair.first as List<VacancyShort>
                             vacancyList.addAll(vacancies)
+                            Log.d("MY", "______________________________________________________")
+                            Log.d("MY", "запросили страницу ${currentPage}")
+                            Log.d("MY", "нашлось элементов ${vacancies.size}")
+                            Log.d("MY", "!!!!!!!")
+                            Log.d("MY", "нашлось элементов ${vacancies.toString()}")
+                            Log.d("MY", "!!!!!!!")
+//                           Log.d("MY", "нашлось ВСЕГО ${vacancyList.get(0).found}")
+//                            Log.d("MY", "нашлось страниц ${vacancyList.get(0).pages}")
+//                            Log.d("MY", "показывается страница ${vacancyList.get(0).page}")
+
                             noNextPageLoading = true
                             currentPage++
+
+                            Log.d("MY", "новая страница ${currentPage}")
+
                             searchStateLiveData.postValue(SearchState.Content(vacancyList))
                             positionNewPageToScroll.postValue(position)
                         }
@@ -92,12 +110,18 @@ class SearchViewModel(
     fun getNextPage() {
         if (vacancyList.size > position) {
             pages = vacancyList[position].pages
+            Log.d("MY", "по новым данным нашлось страниц ${pages}")
+            Log.d("MY", "нашлось ВСЕГО ${vacancyList[position].found}")
+            Log.d("MY", "нашлось страниц ${vacancyList[position].pages}")
+            Log.d("MY", "показывается страница ${currentPage-1}")
+
         } else {
             pages = vacancyList[ZERO].pages
         }
         if (interactor.checkNet()) noNextPageLoadingError = true
         if (currentPage < pages) {
-            position = (currentPage - ONE) * PER_PAGE
+         //   position = (currentPage - ONE) * PER_PAGE
+            position = (currentPage) * PER_PAGE
             request(SearchState.LoadingNextPage)
         }
     }
@@ -109,10 +133,6 @@ class SearchViewModel(
     private fun searchDebounce(delay: Long) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            pages = ZERO
-            currentPage = ONE
-            position = ZERO
-            vacancyList.clear()
             delay(delay)
             request(SearchState.Loading)
         }
