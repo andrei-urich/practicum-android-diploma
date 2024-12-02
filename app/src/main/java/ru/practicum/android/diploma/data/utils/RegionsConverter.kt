@@ -26,21 +26,21 @@ class RegionsConverter {
         return innerList
     }
 
-    fun getChildlessRegionDTO(list: List<RegionDTO>): List<RegionDTO> {
+    private fun getChildlessRegionDTO(list: List<RegionDTO>): List<RegionDTO> {
         val countries = list.filter { region ->
             region.innerRegions.isEmpty()
         }
         return countries
     }
 
-    fun notEmptyRegions(list: List<RegionDTO>): List<RegionDTO> {
+    private fun notEmptyRegions(list: List<RegionDTO>): List<RegionDTO> {
         val regions = list.filter { region ->
             region.innerRegions.isNotEmpty()
         }
         return regions
     }
 
-    fun getInnerList(list: List<InnerRegionDTO>): List<AreaDTO> {
+    private fun getInnerList(list: List<InnerRegionDTO>): List<AreaDTO> {
         val innerList = mutableListOf<AreaDTO>()
         for (innerRegion in list) {
             if (innerRegion.innerRegions.isNotEmpty()) {
@@ -53,13 +53,6 @@ class RegionsConverter {
                         )
                     )
                 }
-                innerList.add(
-                    AreaDTO(
-                        id = innerRegion.id,
-                        name = innerRegion.name,
-                        parentId = innerRegion.parentId
-                    )
-                )
             }
         }
         return innerList

@@ -29,27 +29,27 @@ class RegionFilterViewModel(
         getFilterSettings()
     }
 
-    fun getFilterSettings() {
+    private fun getFilterSettings() {
         val currentFilterSettings = filtersInteractor.getFiltersConfiguration()
         val settings = currentFilterSettings.getArea()
         currentCountry = settings.first
     }
 
-    private val regionsListState = MutableLiveData<Pair<List<Region>?, Int?>>()
+    private val regionsListState = MutableLiveData<SearchAreaState>()
     private val screenExitTrigger = SingleEventLiveData<Boolean>()
-    fun getRegionsListState(): LiveData<Pair<List<Region>?, Int?>> = regionsListState
+    fun getRegionsListState(): LiveData<SearchAreaState> = regionsListState
     fun getScreenExitTrigger(): LiveData<Boolean> = screenExitTrigger
 
     fun getSearchText(searchText: String) {
         if (searchText.isNotBlank() && this.searchText != searchText) {
-            this.searchText = searchText
+            this.searchText = searchText.trim().lowercase()
             searchDebounce(SEARCH_DEBOUNCE_DELAY)
         }
     }
 
     fun clearScreen(flag: Boolean) {
         if (flag) {
-            regionsListState.postValue(Pair(null, null))
+            regionsListState.postValue(SearchAreaState.Prepared)
             searchJob?.cancel()
         }
     }
@@ -63,12 +63,19 @@ class RegionFilterViewModel(
     }
 
     private fun search() {
-        val regex = searchText.toRegex()
-        val filteredList = regionsList.filter { region -> region.name.lowercase(Locale.ROOT).contains(regex) }
-        if (filteredList.isNotEmpty()) {
-            regionsListState.postValue(Pair(filteredList, null))
+        if (regionsList.isNotEmpty()) {
+            regionsListState.postValue(SearchAreaState.Loading)
+            val regex = searchText.toRegex()
+            val filteredList = regionsList.filter { region ->
+                region.name.lowercase(Locale.ROOT).contains(regex)
+            }
+            if (filteredList.isNotEmpty()) {
+                regionsListState.postValue(SearchAreaState.Content(filteredList))
+            } else {
+                regionsListState.postValue(SearchAreaState.Error(NOTHING_FOUND))
+            }
         } else {
-            regionsListState.postValue(Pair(null, NOTHING_FOUND))
+            regionsListState.postValue(SearchAreaState.Error(ERROR))
         }
     }
 
@@ -88,7 +95,7 @@ class RegionFilterViewModel(
         var parentId = id
         var flag = true
         while (flag) {
-            var region = startList.find { region: Region -> region.id == parentId }
+            val region = startList.find { region: Region -> region.id == parentId }
             if (region != null) {
                 if (region.parentId == null) {
                     country = AreaFilterModel(region.id, region.name)
@@ -101,12 +108,13 @@ class RegionFilterViewModel(
     }
 
     fun getAreaList() {
+        regionsListState.postValue(SearchAreaState.Loading)
         viewModelScope.launch {
             if (currentCountry.id.isBlank()) {
                 interactor.getAllRegions().collect { pair ->
                     when (pair.first) {
                         null -> {
-                            regionsListState.postValue(Pair(null, pair.second))
+                            regionsListState.postValue(SearchAreaState.Error(pair.second))
                         }
 
                         else -> {
@@ -115,7 +123,7 @@ class RegionFilterViewModel(
                             val filteredList = regionsList.filter { region ->
                                 region.parentId != null
                             }
-                            regionsListState.postValue(Pair(filteredList, null))
+                            regionsListState.postValue(SearchAreaState.Content(filteredList))
                         }
                     }
                 }
@@ -123,7 +131,7 @@ class RegionFilterViewModel(
                 interactor.getInnerRegionsList(currentCountry.id).collect { pair ->
                     when (pair.first) {
                         null -> {
-                            regionsListState.postValue(Pair(null, pair.second))
+                            regionsListState.postValue(SearchAreaState.Error(pair.second))
                         }
 
                         else -> {
@@ -132,7 +140,7 @@ class RegionFilterViewModel(
                             val filteredList = regionsList.filter { region ->
                                 region.parentId != null
                             }
-                            regionsListState.postValue(Pair(filteredList, null))
+                            regionsListState.postValue(SearchAreaState.Content(filteredList))
                         }
                     }
                 }
@@ -144,5 +152,6 @@ class RegionFilterViewModel(
         const val EMPTY_STRING = ""
         const val SEARCH_DEBOUNCE_DELAY = 2000L
         const val NOTHING_FOUND = 0
+        const val ERROR = 1
     }
 }

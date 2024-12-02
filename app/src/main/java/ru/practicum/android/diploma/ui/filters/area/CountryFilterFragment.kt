@@ -37,6 +37,7 @@ class CountryFilterFragment : Fragment() {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.pbCountry.visibility = View.VISIBLE
+        binding.errorNoList.visibility = View.GONE
 
         viewModel.getAreaList()
 
@@ -55,6 +56,8 @@ class CountryFilterFragment : Fragment() {
         when (pair.first) {
             null -> {
                 binding.rvCountry.visibility = View.GONE
+                binding.errorNoList.visibility = View.VISIBLE
+
             }
 
             else -> {
