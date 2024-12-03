@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.filters.filters
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -62,11 +63,26 @@ class FilterSettingsFragment : Fragment() {
         }
         viewModel.getFiltersConfiguration()
         binding.edIndustry.addTextChangedListener {
-            if (it.isNullOrEmpty()) makeGone(binding.clearIndustryButton) else makeVisible(binding.clearIndustryButton)
+            if (it.isNullOrEmpty()) {makeGone(binding.clearIndustryButton)
+                binding.edIndustryLayout.defaultHintTextColor =
+                    ColorStateList.valueOf(requireActivity().getColor(R.color.grey))
+            } else {
+                makeVisible(binding.clearIndustryButton)
+                binding.edIndustryLayout.defaultHintTextColor =
+                    ColorStateList.valueOf(requireActivity().getColor(R.color.black_day_night))
+            }
         }
 
         binding.edWorkPlace.addTextChangedListener {
-            if (it.isNullOrEmpty()) makeGone(binding.clearAreaButton) else makeVisible(binding.clearAreaButton)
+            if (it.isNullOrEmpty()) {
+                makeGone(binding.clearAreaButton)
+                binding.edWorkPlaceLayout.defaultHintTextColor =
+                    ColorStateList.valueOf(requireActivity().getColor(R.color.grey))
+            } else {
+                makeVisible(binding.clearAreaButton)
+                binding.edWorkPlaceLayout.defaultHintTextColor =
+                    ColorStateList.valueOf(requireActivity().getColor(R.color.black_day_night))
+            }
         }
         binding.clearAreaButton.setOnClickListener { viewModel.clearAreas() }
         binding.clearIndustryButton.setOnClickListener { viewModel.clearIndustry() }
