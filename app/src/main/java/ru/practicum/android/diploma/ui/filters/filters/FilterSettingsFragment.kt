@@ -63,7 +63,7 @@ class FilterSettingsFragment : Fragment() {
         }
         viewModel.getFiltersConfiguration()
         binding.edIndustry.addTextChangedListener {
-            if (it.isNullOrEmpty()) {makeGone(binding.clearIndustryButton)
+            if (it.isNullOrEmpty()) { makeGone(binding.clearIndustryButton)
                 binding.edIndustryLayout.defaultHintTextColor =
                     ColorStateList.valueOf(requireActivity().getColor(R.color.grey))
             } else {
