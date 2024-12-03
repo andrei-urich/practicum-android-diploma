@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -42,7 +43,6 @@ class FilterSettingsFragment : Fragment() {
                 println()
             }
         }
-
     }
 
     companion object {
@@ -63,7 +63,8 @@ class FilterSettingsFragment : Fragment() {
         }
         viewModel.getFiltersConfiguration()
         binding.edIndustry.addTextChangedListener {
-            if (it.isNullOrEmpty()) { makeGone(binding.clearIndustryButton)
+            if (it.isNullOrEmpty()) {
+                makeGone(binding.clearIndustryButton)
                 binding.edIndustryLayout.defaultHintTextColor =
                     ColorStateList.valueOf(requireActivity().getColor(R.color.grey))
             } else {
@@ -108,12 +109,31 @@ class FilterSettingsFragment : Fragment() {
             viewModel.forceSearch()
             findNavController().navigateUp()
         }
+        binding.textInputEditTextSalary.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                binding.textInputLayoutSalary.clearFocus()
+                true
+            }
+            false
+        }
     }
 
-    private fun hideClearButton() { makeGone(binding.btClear) }
-    private fun showClearButton() { makeVisible(binding.btClear) }
-    private fun hideApplyButton() { makeGone(binding.btApply) }
-    private fun showApplyButton() { makeVisible(binding.btApply) }
+    private fun hideClearButton() {
+        makeGone(binding.btClear)
+    }
+
+    private fun showClearButton() {
+        makeVisible(binding.btClear)
+    }
+
+    private fun hideApplyButton() {
+        makeGone(binding.btApply)
+    }
+
+    private fun showApplyButton() {
+        makeVisible(binding.btApply)
+    }
+
     private fun renderFilters(filterUI: FiltersUIModel) {
         with(binding) {
             edWorkPlace.setText(filterUI.areaNCity)
@@ -122,6 +142,7 @@ class FilterSettingsFragment : Fragment() {
             checkBoxSalary.isChecked = filterUI.salaryShowChecked
         }
     }
+
     private fun makeVisible(view: View) {
         view.visibility = View.VISIBLE
     }
@@ -129,6 +150,7 @@ class FilterSettingsFragment : Fragment() {
     private fun makeGone(view: View) {
         view.visibility = View.GONE
     }
+
     private fun backPress() {
         viewModel.fixFiltres()
         findNavController().navigateUp()
