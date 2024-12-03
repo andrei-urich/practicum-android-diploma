@@ -39,6 +39,10 @@ class SearchViewModel(
 
     fun getSearchText(searchText: String) {
         if (searchText.isNotBlank() && (this.searchText != searchText || searchIsForcedByFilters)) {
+            currentPage = ZERO
+            pages = ZERO
+            position = ZERO
+            vacancyList.clear()
             this.searchText = searchText
             if (searchIsForcedByFilters) {
                 searchStateLiveData.postValue(SearchState.Loading)
@@ -64,7 +68,6 @@ class SearchViewModel(
                             noNextPageLoading = true
                             if (state is SearchState.Loading) {
                                 searchStateLiveData.postValue(SearchState.LoadingError(pair.second))
-
                             } else {
                                 noNextPageLoadingError = false
                                 searchStateLiveData.postValue(
@@ -92,12 +95,13 @@ class SearchViewModel(
     fun getNextPage() {
         if (vacancyList.size > position) {
             pages = vacancyList[position].pages
+
         } else {
             pages = vacancyList[ZERO].pages
         }
         if (interactor.checkNet()) noNextPageLoadingError = true
         if (currentPage < pages) {
-            position = (currentPage - ONE) * PER_PAGE
+            position = currentPage * PER_PAGE
             request(SearchState.LoadingNextPage)
         }
     }
@@ -109,10 +113,6 @@ class SearchViewModel(
     private fun searchDebounce(delay: Long) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            pages = ZERO
-            currentPage = ONE
-            position = ZERO
-            vacancyList.clear()
             delay(delay)
             request(SearchState.Loading)
         }

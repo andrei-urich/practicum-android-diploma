@@ -1,11 +1,13 @@
 package ru.practicum.android.diploma.ui.filters.filters
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -61,11 +63,26 @@ class FilterSettingsFragment : Fragment() {
         }
         viewModel.getFiltersConfiguration()
         binding.edIndustry.addTextChangedListener {
-            if (it.isNullOrEmpty()) makeGone(binding.clearIndustryButton) else makeVisible(binding.clearIndustryButton)
+            if (it.isNullOrEmpty()) { makeGone(binding.clearIndustryButton)
+                binding.edIndustryLayout.defaultHintTextColor =
+                    ColorStateList.valueOf(requireActivity().getColor(R.color.grey))
+            } else {
+                makeVisible(binding.clearIndustryButton)
+                binding.edIndustryLayout.defaultHintTextColor =
+                    ColorStateList.valueOf(requireActivity().getColor(R.color.black_day_night))
+            }
         }
 
         binding.edWorkPlace.addTextChangedListener {
-            if (it.isNullOrEmpty()) makeGone(binding.clearAreaButton) else makeVisible(binding.clearAreaButton)
+            if (it.isNullOrEmpty()) {
+                makeGone(binding.clearAreaButton)
+                binding.edWorkPlaceLayout.defaultHintTextColor =
+                    ColorStateList.valueOf(requireActivity().getColor(R.color.grey))
+            } else {
+                makeVisible(binding.clearAreaButton)
+                binding.edWorkPlaceLayout.defaultHintTextColor =
+                    ColorStateList.valueOf(requireActivity().getColor(R.color.black_day_night))
+            }
         }
         binding.clearAreaButton.setOnClickListener { viewModel.clearAreas() }
         binding.clearIndustryButton.setOnClickListener { viewModel.clearIndustry() }
@@ -73,7 +90,12 @@ class FilterSettingsFragment : Fragment() {
             viewModel.saveSalaryShowCheckFilter(binding.checkBoxSalary.isChecked)
         }
         binding.textInputEditTextSalary.addTextChangedListener(textWatcher)
-        binding.backFromFilter.setOnClickListener { findNavController().navigateUp() }
+        binding.backFromFilter.setOnClickListener { backPress() }
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                backPress()
+            }
+        })
         binding.edWorkPlace.setOnClickListener {
             findNavController().navigate(R.id.action_filterSettingsFragment_to_areaFilterFragment)
         }
@@ -106,5 +128,18 @@ class FilterSettingsFragment : Fragment() {
 
     private fun makeGone(view: View) {
         view.visibility = View.GONE
+    }
+    private fun backPress() {
+        viewModel.fixFiltres()
+        findNavController().navigateUp()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigateUp()
+            }
+        })
     }
 }

@@ -13,13 +13,15 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/size_60"
         android:layout_marginStart="@dimen/space_24"
-        android:layout_marginEnd="@dimen/size_60"
+        android:layout_marginEnd="@dimen/space_4"
         android:layout_weight="1"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:fontFamily="@font/ys_display_regular"
         android:gravity="center_vertical"
-        android:textColor="@color/grey"
+        android:textColor="@color/black_day_night"
         android:textSize="@dimen/font_16"
-        tools:text="Страна" />
+        tools:text="Страна, в которой мы живем, широка от края и до края" />
 
     <ImageView
         android:id="@+id/leadingIcon"

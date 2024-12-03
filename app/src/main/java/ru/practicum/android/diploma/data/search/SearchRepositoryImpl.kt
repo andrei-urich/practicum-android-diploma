@@ -67,7 +67,7 @@ class SearchRepositoryImpl(
         currentFiltersDTO = refreshFilters()
         val options: HashMap<String, String> = HashMap()
         options["text"] = searchText
-        if (currentPage != 1) {
+        if (currentPage != 0) {
             options["page"] = currentPage.toString()
         }
         options["per_page"] = PER_PAGE.toString()
