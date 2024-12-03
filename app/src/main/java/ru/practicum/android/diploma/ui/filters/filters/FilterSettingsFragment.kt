@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -36,6 +37,13 @@ class FilterSettingsFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 saveSalaryTargetDebounce(s.toString())
+                if (s.isNullOrEmpty() && !binding.textInputEditTextSalary.isFocused) {
+                    binding.textInputLayoutSalary.defaultHintTextColor =
+                        ColorStateList.valueOf(requireContext().getColor(R.color.grey))
+                } else if (!binding.textInputEditTextSalary.isFocused) {
+                    binding.textInputLayoutSalary.defaultHintTextColor =
+                        ColorStateList.valueOf(requireContext().getColor(R.color.black_universal))
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -63,13 +71,14 @@ class FilterSettingsFragment : Fragment() {
         }
         viewModel.getFiltersConfiguration()
         binding.edIndustry.addTextChangedListener {
-            if (it.isNullOrEmpty()) { makeGone(binding.clearIndustryButton)
+            if (it.isNullOrEmpty()) {
+                makeGone(binding.clearIndustryButton)
                 binding.edIndustryLayout.defaultHintTextColor =
-                    ColorStateList.valueOf(requireActivity().getColor(R.color.grey))
+                    ColorStateList.valueOf(requireContext().getColor(R.color.grey))
             } else {
                 makeVisible(binding.clearIndustryButton)
                 binding.edIndustryLayout.defaultHintTextColor =
-                    ColorStateList.valueOf(requireActivity().getColor(R.color.black_day_night))
+                    ColorStateList.valueOf(requireContext().getColor(R.color.black_day_night))
             }
         }
 
@@ -77,12 +86,32 @@ class FilterSettingsFragment : Fragment() {
             if (it.isNullOrEmpty()) {
                 makeGone(binding.clearAreaButton)
                 binding.edWorkPlaceLayout.defaultHintTextColor =
-                    ColorStateList.valueOf(requireActivity().getColor(R.color.grey))
+                    ColorStateList.valueOf(requireContext().getColor(R.color.grey))
             } else {
                 makeVisible(binding.clearAreaButton)
                 binding.edWorkPlaceLayout.defaultHintTextColor =
-                    ColorStateList.valueOf(requireActivity().getColor(R.color.black_day_night))
+                    ColorStateList.valueOf(requireContext().getColor(R.color.black_day_night))
             }
+        }
+        binding.textInputEditTextSalary.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.textInputLayoutSalary.defaultHintTextColor =
+                    ColorStateList.valueOf(requireContext().getColor(R.color.blue))
+            } else {
+                if (binding.textInputEditTextSalary.text.isNullOrEmpty()) {
+                    binding.textInputLayoutSalary.defaultHintTextColor =
+                        ColorStateList.valueOf(requireContext().getColor(R.color.grey))
+                } else {
+                    binding.textInputLayoutSalary.defaultHintTextColor =
+                        ColorStateList.valueOf(requireContext().getColor(R.color.black_universal))
+                }
+            }
+        }
+        binding.textInputEditTextSalary.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                binding.textInputLayoutSalary.clearFocus()
+            }
+            false
         }
         binding.clearAreaButton.setOnClickListener { viewModel.clearAreas() }
         binding.clearIndustryButton.setOnClickListener { viewModel.clearIndustry() }
