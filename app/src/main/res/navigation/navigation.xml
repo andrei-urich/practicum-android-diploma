@@ -41,10 +41,10 @@
         android:name="ru.practicum.android.diploma.ui.filters.filters.FilterSettingsFragment"
         android:label="FilterSettingsFragment" >
         <action
-            android:id="@+id/action_filterSettingsFragment_to_areaFilterFragment"
+            android:id="@+id/action_fltrSttngsFT_to_arFltrFT"
             app:destination="@id/areaFilterFragment" />
         <action
-            android:id="@+id/action_filterSettingsFragment_to_industryFilterFragment"
+            android:id="@+id/action_fltrSttngsFT_to_indFltrFT"
             app:destination="@id/industryFilterFragment" />
     </fragment>
     <fragment
