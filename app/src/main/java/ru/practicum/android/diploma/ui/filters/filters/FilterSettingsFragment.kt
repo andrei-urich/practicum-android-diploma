@@ -39,12 +39,14 @@ class FilterSettingsFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 saveSalaryTargetDebounce(s.toString())
-                if (s.isNullOrEmpty() && !binding.textInputETSlry.isFocused) {
-                    binding.textInputLTSlry.defaultHintTextColor =
-                        ColorStateList.valueOf(requireContext().getColor(R.color.grey))
-                } else if (!binding.textInputETSlry.isFocused) {
-                    binding.textInputLTSlry.defaultHintTextColor =
-                        ColorStateList.valueOf(requireContext().getColor(R.color.black_universal))
+                if (!binding.textInputETSlry.isFocused) {
+                    if (s.isNullOrEmpty()) {
+                        binding.textInputLTSlry.defaultHintTextColor =
+                            ColorStateList.valueOf(requireContext().getColor(R.color.search_hint_day_night))
+                    } else {
+                        binding.textInputLTSlry.defaultHintTextColor =
+                            ColorStateList.valueOf(requireContext().getColor(R.color.black_universal))
+                    }
                 }
             }
 
@@ -60,6 +62,9 @@ class FilterSettingsFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() { backPress() }
+        })
         _binding = FragmentFilterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -73,10 +78,12 @@ class FilterSettingsFragment : Fragment() {
         with(binding) {
             edIndustry.addTextChangedListener { clrArIndLT(it, edIndustryLayout, clearIndustryButton) }
             edWorkPlace.addTextChangedListener { clrArIndLT(it, edWorkPlaceLayout, clearAreaButton) }
-            textInputETSlry.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            val originalFocusListener = textInputETSlry.onFocusChangeListener
+            textInputETSlry.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+                originalFocusListener.onFocusChange(v, hasFocus)
                 if (hasFocus) { setHintColor(textInputLTSlry, R.color.blue) } else {
                     if (textInputETSlry.text.isNullOrEmpty()) {
-                        setHintColor(textInputLTSlry, R.color.grey)
+                        setHintColor(textInputLTSlry, R.color.search_hint_day_night)
                     } else { setHintColor(textInputLTSlry, R.color.black_universal) }
                 }
             }
@@ -90,9 +97,6 @@ class FilterSettingsFragment : Fragment() {
         binding.checkBoxSalary.setOnClickListener { viewModel.saveSalaryCheck(binding.checkBoxSalary.isChecked) }
         binding.textInputETSlry.addTextChangedListener(textWatcher)
         binding.backFromFilter.setOnClickListener { backPress() }
-        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() { backPress() }
-        })
         with(binding) {
             edWorkPlace.setOnClickListener { findNavController().navigate(R.id.action_fltrSttngsFT_to_arFltrFT) }
             edIndustry.setOnClickListener { findNavController().navigate(R.id.action_fltrSttngsFT_to_indFltrFT) }

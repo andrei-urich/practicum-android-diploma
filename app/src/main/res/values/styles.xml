@@ -164,7 +164,7 @@
         <item name="placeholderTextColor">@color/search_hint_day_night</item>
         <item name="placeholderTextAppearance">@style/TextAppearance.App.Subtitle</item>
         <item name="android:textColorHint">@color/search_hint_day_night</item>
-        <item name="hintTextColor">@color/blue</item>
+        <item name="hintTextColor">@color/search_hint_day_night</item>
         <item name="hintTextAppearance">@style/Widget.App.SalaryHint</item>
         <item name="endIconTint">@color/black_universal</item>
         <item name="cursorColor">?attr/colorPrimary</item>
