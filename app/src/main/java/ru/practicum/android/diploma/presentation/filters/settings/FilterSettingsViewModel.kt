@@ -40,7 +40,7 @@ class FilterSettingsViewModel(
         checkFiltresChanges()
     }
 
-    fun saveSalaryShowCheckFilter(newCheck: Boolean) {
+    fun saveSalaryCheck(newCheck: Boolean) {
         controlFiltersInteractor.saveSalaryShowCheckFilter(newCheck)
         checkIsFiltresOn()
         checkFiltresChanges()

@@ -34,12 +34,8 @@ class AreaFilterFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.countryBtnTrailingIcon.setOnClickListener {
-            viewModel.clearCountry()
-        }
-        binding.regionBtnTrailingIcon.setOnClickListener {
-            viewModel.clearRegion()
-        }
+        binding.countryBtnTrailingIcon.setOnClickListener { viewModel.clearCountry() }
+        binding.regionBtnTrailingIcon.setOnClickListener { viewModel.clearRegion() }
 
         binding.toolbar.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()

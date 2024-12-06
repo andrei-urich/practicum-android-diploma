@@ -12,8 +12,8 @@ class FiltersControlRepositoryImpls(
     private val sharedPreferences: SharedPreferences,
     private val gson: Gson
 ) : FiltersControlRepository, SearchFilterRepository {
-    private var currentFilters: Filters = Filters()
-    private var lastSavedFilters = Filters()
+    private var currentFilters: Filters = EMPTY_FILTER
+    private var lastSavedFilters = EMPTY_FILTER
     private var forcedSearchFlag = false
     private var firstRequest = true
 
@@ -74,9 +74,9 @@ class FiltersControlRepositoryImpls(
                         Filters::class.java
                     )
                 } catch (e: Exception) {
-                    val filtersJson = gson.toJson(Filters())
+                    val filtersJson = gson.toJson(EMPTY_FILTER)
                     sharedPreferences.edit().putString(FILTERS_ACTIVE, filtersJson).apply()
-                    Filters()
+                    EMPTY_FILTER
                 }
             lastSavedFilters = currentFilters
             firstRequest = false
@@ -102,5 +102,6 @@ class FiltersControlRepositoryImpls(
     companion object {
         private const val FILTERS_ACTIVE = "FILTERS_ACTIVE"
         private const val EMPTY_STRING = ""
+        private val EMPTY_FILTER = Filters()
     }
 }
